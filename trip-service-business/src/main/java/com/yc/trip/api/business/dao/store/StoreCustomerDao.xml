@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yc.trip.api.business.dao.store.StoreCustomerDao">
+
+    <!-- 对象与字段映射 -->
+    <resultMap type="com.yc.trip.api.business.dto.store.StoreCustomer" id="StoreCustomerMap">
+        <!--  -->
+        <result property="id" column="id" />
+        <!-- 门店Id -->
+        <result property="storeId" column="store_id" />
+        <!-- 是否VIP0否1是(枚举:YesNoStatus[core]) -->
+        <result property="isVip" column="is_vip"  javaType="com.yc.trip.api.core.enums.YesNoStatus"  typeHandler="org.go.api.core.typehandler.UniversalEnumHandler" />
+        <!-- 用户Id -->
+        <result property="userId" column="user_id" />
+        <!-- 创建时间 -->
+        <result property="createdTime" column="created_time" />
+        <!-- 更新时间 -->
+        <result property="updatedTime" column="updated_time" />
+    </resultMap>
+
+    <!-- 门店客户信息新增 -->
+    <insert id="add" parameterType="com.yc.trip.api.business.dto.store.StoreCustomer" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO `store_customer`(
+            store_id,
+            <if test="isVip!=null">is_vip,</if>
+            user_id,
+        )
+        VALUES(
+            #{storeId,jdbcType=NUMERIC},
+            <if test="isVip!=null">#{isVip, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC},</if>
+            #{userId,jdbcType=NUMERIC},
+        )	
+    </insert>
+	
+    <!-- 门店客户信息 修改-->
+	<update id="update" parameterType="com.yc.trip.api.business.dto.store.StoreCustomer">
+        UPDATE `store_customer`
+        <set>
+            <if test="storeId!=null ">
+            store_id=#{storeId,jdbcType=NUMERIC},
+            </if>
+            <if test="isVip!=null ">
+            is_vip=#{isVip, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC},
+            </if>
+            <if test="userId!=null ">
+            user_id=#{userId,jdbcType=NUMERIC},
+            </if>
+            <if test="createdTime!=null ">
+            created_time=#{createdTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedTime!=null ">
+            updated_time=#{updatedTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+            WHERE id=#{id,jdbcType=NUMERIC}	
+	</update>
+	
+    <!-- 门店客户信息 查询-->
+	<select id="get" parameterType="com.yc.trip.api.business.query.store.StoreCustomerQuery" resultMap="StoreCustomerMap">
+        SELECT id,store_id,is_vip,user_id,
+           created_time,updated_time
+        FROM `store_customer`
+        <where>
+            <if test="id!=null ">
+                AND id=#{id,jdbcType=NUMERIC}
+            </if>
+            <if test="storeId!=null ">
+                AND store_id=#{storeId,jdbcType=NUMERIC}
+            </if>
+            <if test="isVip!=null ">
+                AND is_vip=#{isVip, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
+            </if>
+            <if test="userId!=null ">
+                AND user_id=#{userId,jdbcType=NUMERIC}
+            </if>
+        </where>
+        LIMIT 2	
+	</select>
+	
+    <!-- 门店客户信息列表查询 -->
+    <select id="queryList" parameterType="com.yc.trip.api.business.query.store.StoreCustomerQuery" resultMap="StoreCustomerMap">
+            SELECT t.id,t.store_id,t.is_vip,t.user_id,
+            t.created_time,t.updated_time
+            FROM `store_customer` t 
+        <where>
+            <if test="storeId!=null ">
+                AND store_id=#{storeId,jdbcType=NUMERIC}
+            </if>
+            <if test="isVip!=null ">
+                AND is_vip=#{isVip, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
+            </if>
+            <if test="userId!=null ">
+                AND user_id=#{userId,jdbcType=NUMERIC}
+            </if>
+            <if test="keywords!=null and keywords!='' ">
+                AND (
+                 )
+            </if>
+            <if test="ids!=null and ids.size!=0 ">
+                AND id IN
+                    <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">  
+                        #{item}
+                    </foreach>
+            </if>
+        </where>	
+    </select>
+	
+</mapper>

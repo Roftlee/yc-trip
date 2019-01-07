@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yc.trip.api.business.dao.product.ProductDao">
+
+    <!-- 对象与字段映射 -->
+    <resultMap type="com.yc.trip.api.business.dto.product.Product" id="ProductMap">
+        <!--  -->
+        <result property="id" column="id" />
+        <!-- 产品名称 -->
+        <result property="name" column="name" />
+        <!-- 产品简介 -->
+        <result property="briefDesc" column="brief_desc" />
+        <!-- 所属分类Id -->
+        <result property="sortId" column="sort_id" />
+        <!-- 所属地区Id -->
+        <result property="regionId" column="region_id" />
+        <!-- 所属地区分类Id -->
+        <result property="regionSortId" column="region_sort_id" />
+        <!-- 所属供应商Id -->
+        <result property="providerId" column="provider_id" />
+        <!-- 商品成本 -->
+        <result property="cost" column="cost" />
+        <!-- 成交价 -->
+        <result property="strikePrice" column="strike_price" />
+        <!-- 售价 -->
+        <result property="price" column="price" />
+        <!-- 门店分成比例(百分比) -->
+        <result property="commissionRate" column="commission_rate" />
+        <!-- 图片链接 -->
+        <result property="imageUrl" column="image_url" />
+        <!-- 视频链接 -->
+        <result property="videoUrl" column="video_url" />
+        <!-- 产品描述 -->
+        <result property="description" column="description" />
+        <!-- 备注 -->
+        <result property="remark" column="remark" />
+        <!-- 是否删除0否1是(枚举:YesNoStatus[core]) -->
+        <result property="isDelete" column="is_delete"  javaType="com.yc.trip.api.core.enums.YesNoStatus"  typeHandler="org.go.api.core.typehandler.UniversalEnumHandler" />
+        <!-- 创建时间 -->
+        <result property="createdTime" column="created_time" />
+        <!-- 更新时间 -->
+        <result property="updatedTime" column="updated_time" />
+    </resultMap>
+
+    <!-- 产品信息新增 -->
+    <insert id="add" parameterType="com.yc.trip.api.business.dto.product.Product" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO `product`(
+            name,
+            brief_desc,
+            sort_id,
+            region_id,
+            region_sort_id,
+            provider_id,
+            cost,
+            strike_price,
+            price,
+            commission_rate,
+            image_url,
+            video_url,
+            description,
+            remark,
+            <if test="isDelete!=null">is_delete</if>
+        )
+        VALUES(
+            #{name,jdbcType=VARCHAR},
+            #{briefDesc,jdbcType=VARCHAR},
+            #{sortId,jdbcType=NUMERIC},
+            #{regionId,jdbcType=NUMERIC},
+            #{regionSortId,jdbcType=NUMERIC},
+            #{providerId,jdbcType=NUMERIC},
+            #{cost,jdbcType=NUMERIC},
+            #{strikePrice,jdbcType=NUMERIC},
+            #{price,jdbcType=NUMERIC},
+            #{commissionRate,jdbcType=NUMERIC},
+            #{imageUrl,jdbcType=VARCHAR},
+            #{videoUrl,jdbcType=VARCHAR},
+            #{description,jdbcType=VARCHAR},
+            #{remark,jdbcType=VARCHAR},
+            <if test="isDelete!=null">#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}</if>
+        )	
+    </insert>
+	
+    <!-- 产品信息 修改-->
+	<update id="update" parameterType="com.yc.trip.api.business.dto.product.Product">
+        UPDATE `product`
+        <set>
+            <if test="name!=null and name!='' ">
+            name=#{name,jdbcType=VARCHAR},
+            </if>
+            <if test="briefDesc!=null and briefDesc!='' ">
+            brief_desc=#{briefDesc,jdbcType=VARCHAR},
+            </if>
+            <if test="sortId!=null ">
+            sort_id=#{sortId,jdbcType=NUMERIC},
+            </if>
+            <if test="regionId!=null ">
+            region_id=#{regionId,jdbcType=NUMERIC},
+            </if>
+            <if test="regionSortId!=null ">
+            region_sort_id=#{regionSortId,jdbcType=NUMERIC},
+            </if>
+            <if test="providerId!=null ">
+            provider_id=#{providerId,jdbcType=NUMERIC},
+            </if>
+            <if test="cost!=null ">
+            cost=#{cost,jdbcType=NUMERIC},
+            </if>
+            <if test="strikePrice!=null ">
+            strike_price=#{strikePrice,jdbcType=NUMERIC},
+            </if>
+            <if test="price!=null ">
+            price=#{price,jdbcType=NUMERIC},
+            </if>
+            <if test="commissionRate!=null ">
+            commission_rate=#{commissionRate,jdbcType=NUMERIC},
+            </if>
+            <if test="imageUrl!=null and imageUrl!='' ">
+            image_url=#{imageUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="videoUrl!=null and videoUrl!='' ">
+            video_url=#{videoUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="description!=null ">
+            description=#{description,jdbcType=VARCHAR},
+            </if>
+            <if test="remark!=null and remark!='' ">
+            remark=#{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="isDelete!=null ">
+            is_delete=#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC},
+            </if>
+            <if test="createdTime!=null ">
+            created_time=#{createdTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedTime!=null ">
+            updated_time=#{updatedTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+            WHERE id=#{id,jdbcType=NUMERIC}	
+	</update>
+	
+    <!-- 产品信息 查询-->
+	<select id="get" parameterType="com.yc.trip.api.business.query.product.ProductQuery" resultMap="ProductMap">
+        SELECT id,name,brief_desc,sort_id,
+           region_id,region_sort_id,provider_id,cost,
+           strike_price,price,commission_rate,image_url,
+           video_url,description,remark,is_delete,
+           created_time,updated_time
+        FROM `product`
+        <where>
+            <if test="id!=null ">
+                AND id=#{id,jdbcType=NUMERIC}
+            </if>
+            <if test="name!=null and name!='' ">
+                AND name=#{name,jdbcType=VARCHAR}
+            </if>
+            <if test="briefDesc!=null and briefDesc!='' ">
+                AND brief_desc=#{briefDesc,jdbcType=VARCHAR}
+            </if>
+            <if test="sortId!=null ">
+                AND sort_id=#{sortId,jdbcType=NUMERIC}
+            </if>
+            <if test="regionId!=null ">
+                AND region_id=#{regionId,jdbcType=NUMERIC}
+            </if>
+            <if test="regionSortId!=null ">
+                AND region_sort_id=#{regionSortId,jdbcType=NUMERIC}
+            </if>
+            <if test="providerId!=null ">
+                AND provider_id=#{providerId,jdbcType=NUMERIC}
+            </if>
+            <if test="cost!=null ">
+                AND cost=#{cost,jdbcType=NUMERIC}
+            </if>
+            <if test="strikePrice!=null ">
+                AND strike_price=#{strikePrice,jdbcType=NUMERIC}
+            </if>
+            <if test="price!=null ">
+                AND price=#{price,jdbcType=NUMERIC}
+            </if>
+            <if test="commissionRate!=null ">
+                AND commission_rate=#{commissionRate,jdbcType=NUMERIC}
+            </if>
+            <if test="imageUrl!=null and imageUrl!='' ">
+                AND image_url=#{imageUrl,jdbcType=VARCHAR}
+            </if>
+            <if test="videoUrl!=null and videoUrl!='' ">
+                AND video_url=#{videoUrl,jdbcType=VARCHAR}
+            </if>
+            <if test="description!=null ">
+                AND description=#{description,jdbcType=VARCHAR}
+            </if>
+            <if test="remark!=null and remark!='' ">
+                AND remark=#{remark,jdbcType=VARCHAR}
+            </if>
+            <if test="isDelete!=null ">
+                AND is_delete=#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
+            </if>
+        </where>
+        LIMIT 2	
+	</select>
+	
+    <!-- 产品信息列表查询 -->
+    <select id="queryList" parameterType="com.yc.trip.api.business.query.product.ProductQuery" resultMap="ProductMap">
+            SELECT t.id,t.name,t.brief_desc,t.sort_id,
+            t.region_id,t.region_sort_id,t.provider_id,t.cost,
+            t.strike_price,t.price,t.commission_rate,t.image_url,
+            t.video_url,t.description,t.remark,t.is_delete,
+            t.created_time,t.updated_time
+            FROM `product` t 
+        <where>
+            <if test="name!=null and name!='' ">
+                AND name=#{name,jdbcType=VARCHAR}
+            </if>
+            <if test="briefDesc!=null and briefDesc!='' ">
+                AND brief_desc=#{briefDesc,jdbcType=VARCHAR}
+            </if>
+            <if test="sortId!=null ">
+                AND sort_id=#{sortId,jdbcType=NUMERIC}
+            </if>
+            <if test="regionId!=null ">
+                AND region_id=#{regionId,jdbcType=NUMERIC}
+            </if>
+            <if test="regionSortId!=null ">
+                AND region_sort_id=#{regionSortId,jdbcType=NUMERIC}
+            </if>
+            <if test="providerId!=null ">
+                AND provider_id=#{providerId,jdbcType=NUMERIC}
+            </if>
+            <if test="cost!=null ">
+                AND cost=#{cost,jdbcType=NUMERIC}
+            </if>
+            <if test="strikePrice!=null ">
+                AND strike_price=#{strikePrice,jdbcType=NUMERIC}
+            </if>
+            <if test="price!=null ">
+                AND price=#{price,jdbcType=NUMERIC}
+            </if>
+            <if test="commissionRate!=null ">
+                AND commission_rate=#{commissionRate,jdbcType=NUMERIC}
+            </if>
+            <if test="imageUrl!=null and imageUrl!='' ">
+                AND image_url=#{imageUrl,jdbcType=VARCHAR}
+            </if>
+            <if test="videoUrl!=null and videoUrl!='' ">
+                AND video_url=#{videoUrl,jdbcType=VARCHAR}
+            </if>
+            <if test="description!=null ">
+                AND description=#{description,jdbcType=VARCHAR}
+            </if>
+            <if test="remark!=null and remark!='' ">
+                AND remark=#{remark,jdbcType=VARCHAR}
+            </if>
+            <if test="isDelete!=null ">
+                AND is_delete=#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
+            </if>
+            <if test="keywords!=null and keywords!='' ">
+                AND (
+                     name LIKE CONCAT('%', #{keywords}, '%')
+                     OR brief_desc LIKE CONCAT('%', #{keywords}, '%')
+                     OR image_url LIKE CONCAT('%', #{keywords}, '%')
+                     OR video_url LIKE CONCAT('%', #{keywords}, '%')
+                     OR remark LIKE CONCAT('%', #{keywords}, '%')
+                 )
+            </if>
+            <if test="ids!=null and ids.size!=0 ">
+                AND id IN
+                    <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">  
+                        #{item}
+                    </foreach>
+            </if>
+        </where>	
+    </select>
+	
+</mapper>

@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yc.trip.api.business.dao.trip.TripShareDao">
+
+    <!-- 对象与字段映射 -->
+    <resultMap type="com.yc.trip.api.business.dto.trip.TripShare" id="TripShareMap">
+        <!--  -->
+        <result property="id" column="id" />
+        <!-- 用户Id -->
+        <result property="userId" column="user_id" />
+        <!-- 分享内容 -->
+        <result property="content" column="content" />
+        <!-- 地点 -->
+        <result property="location" column="location" />
+        <!-- 经度 -->
+        <result property="longitude" column="longitude" />
+        <!-- 纬度 -->
+        <result property="latitude" column="latitude" />
+        <!-- 是否删除0否1是(枚举:YesNoStatus[core]) -->
+        <result property="isDelete" column="is_delete"  javaType="com.yc.trip.api.core.enums.YesNoStatus"  typeHandler="org.go.api.core.typehandler.UniversalEnumHandler" />
+        <!-- 创建时间 -->
+        <result property="createdTime" column="created_time" />
+        <!-- 更新时间 -->
+        <result property="updatedTime" column="updated_time" />
+    </resultMap>
+
+    <!-- 旅游分享信息新增 -->
+    <insert id="add" parameterType="com.yc.trip.api.business.dto.trip.TripShare" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO `trip_share`(
+            user_id,
+            content,
+            location,
+            longitude,
+            latitude,
+            <if test="isDelete!=null">is_delete</if>
+        )
+        VALUES(
+            #{userId,jdbcType=NUMERIC},
+            #{content,jdbcType=VARCHAR},
+            #{location,jdbcType=VARCHAR},
+            #{longitude,jdbcType=NUMERIC},
+            #{latitude,jdbcType=NUMERIC},
+            <if test="isDelete!=null">#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}</if>
+        )	
+    </insert>
+	
+    <!-- 旅游分享信息 修改-->
+	<update id="update" parameterType="com.yc.trip.api.business.dto.trip.TripShare">
+        UPDATE `trip_share`
+        <set>
+            <if test="userId!=null ">
+            user_id=#{userId,jdbcType=NUMERIC},
+            </if>
+            <if test="content!=null ">
+            content=#{content,jdbcType=VARCHAR},
+            </if>
+            <if test="location!=null and location!='' ">
+            location=#{location,jdbcType=VARCHAR},
+            </if>
+            <if test="longitude!=null ">
+            longitude=#{longitude,jdbcType=NUMERIC},
+            </if>
+            <if test="latitude!=null ">
+            latitude=#{latitude,jdbcType=NUMERIC},
+            </if>
+            <if test="isDelete!=null ">
+            is_delete=#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC},
+            </if>
+            <if test="createdTime!=null ">
+            created_time=#{createdTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedTime!=null ">
+            updated_time=#{updatedTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+            WHERE id=#{id,jdbcType=NUMERIC}	
+	</update>
+	
+    <!-- 旅游分享信息 查询-->
+	<select id="get" parameterType="com.yc.trip.api.business.query.trip.TripShareQuery" resultMap="TripShareMap">
+        SELECT id,user_id,content,location,
+           longitude,latitude,is_delete,created_time,
+           updated_time
+        FROM `trip_share`
+        <where>
+            <if test="id!=null ">
+                AND id=#{id,jdbcType=NUMERIC}
+            </if>
+            <if test="userId!=null ">
+                AND user_id=#{userId,jdbcType=NUMERIC}
+            </if>
+            <if test="content!=null ">
+                AND content=#{content,jdbcType=VARCHAR}
+            </if>
+            <if test="location!=null and location!='' ">
+                AND location=#{location,jdbcType=VARCHAR}
+            </if>
+            <if test="longitude!=null ">
+                AND longitude=#{longitude,jdbcType=NUMERIC}
+            </if>
+            <if test="latitude!=null ">
+                AND latitude=#{latitude,jdbcType=NUMERIC}
+            </if>
+            <if test="isDelete!=null ">
+                AND is_delete=#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
+            </if>
+        </where>
+        LIMIT 2	
+	</select>
+	
+    <!-- 旅游分享信息列表查询 -->
+    <select id="queryList" parameterType="com.yc.trip.api.business.query.trip.TripShareQuery" resultMap="TripShareMap">
+            SELECT t.id,t.user_id,t.content,t.location,
+            t.longitude,t.latitude,t.is_delete,t.created_time,
+            t.updated_time
+            FROM `trip_share` t 
+        <where>
+            <if test="userId!=null ">
+                AND user_id=#{userId,jdbcType=NUMERIC}
+            </if>
+            <if test="content!=null ">
+                AND content=#{content,jdbcType=VARCHAR}
+            </if>
+            <if test="location!=null and location!='' ">
+                AND location=#{location,jdbcType=VARCHAR}
+            </if>
+            <if test="longitude!=null ">
+                AND longitude=#{longitude,jdbcType=NUMERIC}
+            </if>
+            <if test="latitude!=null ">
+                AND latitude=#{latitude,jdbcType=NUMERIC}
+            </if>
+            <if test="isDelete!=null ">
+                AND is_delete=#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
+            </if>
+            <if test="keywords!=null and keywords!='' ">
+                AND (
+                     location LIKE CONCAT('%', #{keywords}, '%')
+                 )
+            </if>
+            <if test="ids!=null and ids.size!=0 ">
+                AND id IN
+                    <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">  
+                        #{item}
+                    </foreach>
+            </if>
+        </where>	
+    </select>
+	
+</mapper>

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yc.trip.api.business.dao.product.ProductCommentImageDao">
+
+    <!-- 对象与字段映射 -->
+    <resultMap type="com.yc.trip.api.business.dto.product.ProductCommentImage" id="ProductCommentImageMap">
+        <!--  -->
+        <result property="id" column="id" />
+        <!-- 点评记录Id -->
+        <result property="commentId" column="comment_id" />
+        <!-- 图片链接 -->
+        <result property="imageUrl" column="image_url" />
+        <!-- 创建时间 -->
+        <result property="createdTime" column="created_time" />
+        <!-- 更新时间 -->
+        <result property="updatedTime" column="updated_time" />
+    </resultMap>
+
+    <!-- 产品评论图片信息新增 -->
+    <insert id="add" parameterType="com.yc.trip.api.business.dto.product.ProductCommentImage" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO `product_comment_image`(
+            comment_id,
+            image_url,
+        )
+        VALUES(
+            #{commentId,jdbcType=NUMERIC},
+            #{imageUrl,jdbcType=VARCHAR},
+        )	
+    </insert>
+	
+    <!-- 产品评论图片信息 修改-->
+	<update id="update" parameterType="com.yc.trip.api.business.dto.product.ProductCommentImage">
+        UPDATE `product_comment_image`
+        <set>
+            <if test="commentId!=null ">
+            comment_id=#{commentId,jdbcType=NUMERIC},
+            </if>
+            <if test="imageUrl!=null and imageUrl!='' ">
+            image_url=#{imageUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="createdTime!=null ">
+            created_time=#{createdTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedTime!=null ">
+            updated_time=#{updatedTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+            WHERE id=#{id,jdbcType=NUMERIC}	
+	</update>
+	
+    <!-- 产品评论图片信息 查询-->
+	<select id="get" parameterType="com.yc.trip.api.business.query.product.ProductCommentImageQuery" resultMap="ProductCommentImageMap">
+        SELECT id,comment_id,image_url,created_time,
+           updated_time
+        FROM `product_comment_image`
+        <where>
+            <if test="id!=null ">
+                AND id=#{id,jdbcType=NUMERIC}
+            </if>
+            <if test="commentId!=null ">
+                AND comment_id=#{commentId,jdbcType=NUMERIC}
+            </if>
+            <if test="imageUrl!=null and imageUrl!='' ">
+                AND image_url=#{imageUrl,jdbcType=VARCHAR}
+            </if>
+        </where>
+        LIMIT 2	
+	</select>
+	
+    <!-- 产品评论图片信息列表查询 -->
+    <select id="queryList" parameterType="com.yc.trip.api.business.query.product.ProductCommentImageQuery" resultMap="ProductCommentImageMap">
+            SELECT t.id,t.comment_id,t.image_url,t.created_time,
+            t.updated_time
+            FROM `product_comment_image` t 
+        <where>
+            <if test="commentId!=null ">
+                AND comment_id=#{commentId,jdbcType=NUMERIC}
+            </if>
+            <if test="imageUrl!=null and imageUrl!='' ">
+                AND image_url=#{imageUrl,jdbcType=VARCHAR}
+            </if>
+            <if test="keywords!=null and keywords!='' ">
+                AND (
+                     image_url LIKE CONCAT('%', #{keywords}, '%')
+                 )
+            </if>
+            <if test="ids!=null and ids.size!=0 ">
+                AND id IN
+                    <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">  
+                        #{item}
+                    </foreach>
+            </if>
+        </where>	
+    </select>
+	
+</mapper>

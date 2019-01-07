@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yc.trip.api.business.dao.wx.WxAppDao">
+
+    <!-- 对象与字段映射 -->
+    <resultMap type="com.yc.trip.api.business.dto.wx.WxApp" id="WxAppMap">
+        <!-- 微信AppId -->
+        <result property="wxAppId" column="wx_app_id" />
+        <!-- 微信App原始Id -->
+        <result property="wxOrigId" column="wx_orig_id" />
+        <!-- 微信应用名称 -->
+        <result property="wxAppName" column="wx_app_name" />
+        <!-- Token -->
+        <result property="wxAppToken" column="wx_app_token" />
+        <!-- 密钥 -->
+        <result property="wxAppSecret" column="wx_app_secret" />
+        <!-- 是否发布版0否1是(枚举:YesNoStatus[core]) -->
+        <result property="released" column="released"  javaType="com.yc.trip.api.core.enums.YesNoStatus"  typeHandler="org.go.api.core.typehandler.UniversalEnumHandler" />
+        <!-- 创建时间 -->
+        <result property="createTime" column="create_time" />
+        <!-- 更新时间 -->
+        <result property="updateTime" column="update_time" />
+    </resultMap>
+
+    <!-- 微信小程序信息新增 -->
+    <insert id="add" parameterType="com.yc.trip.api.business.dto.wx.WxApp">
+        INSERT INTO `wx_app`(
+            wx_app_id,
+            wx_orig_id,
+            wx_app_name,
+            wx_app_token,
+            wx_app_secret,
+            released,
+            create_time,
+            update_time,
+        )
+        VALUES(
+            #{wxAppId,jdbcType=VARCHAR},
+            #{wxOrigId,jdbcType=VARCHAR},
+            #{wxAppName,jdbcType=VARCHAR},
+            #{wxAppToken,jdbcType=VARCHAR},
+            #{wxAppSecret,jdbcType=VARCHAR},
+            #{released, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC},
+            #{createTime,jdbcType=TIMESTAMP},
+            #{updateTime,jdbcType=TIMESTAMP},
+        )	
+    </insert>
+	
+    <!-- 微信小程序信息 修改-->
+	<update id="update" parameterType="com.yc.trip.api.business.dto.wx.WxApp">
+        UPDATE `wx_app`
+        <set>
+            <if test="wxOrigId!=null and wxOrigId!='' ">
+            wx_orig_id=#{wxOrigId,jdbcType=VARCHAR},
+            </if>
+            <if test="wxAppName!=null and wxAppName!='' ">
+            wx_app_name=#{wxAppName,jdbcType=VARCHAR},
+            </if>
+            <if test="wxAppToken!=null and wxAppToken!='' ">
+            wx_app_token=#{wxAppToken,jdbcType=VARCHAR},
+            </if>
+            <if test="wxAppSecret!=null and wxAppSecret!='' ">
+            wx_app_secret=#{wxAppSecret,jdbcType=VARCHAR},
+            </if>
+            <if test="released!=null ">
+            released=#{released, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC},
+            </if>
+            <if test="createTime!=null ">
+            create_time=#{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime!=null ">
+            update_time=#{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+            WHERE wx_app_id=#{wxAppId,jdbcType=VARCHAR}	
+	</update>
+	
+    <!-- 微信小程序信息 查询-->
+	<select id="get" parameterType="com.yc.trip.api.business.query.wx.WxAppQuery" resultMap="WxAppMap">
+        SELECT wx_app_id,wx_orig_id,wx_app_name,wx_app_token,
+           wx_app_secret,released,create_time,update_time
+        FROM `wx_app`
+        <where>
+            <if test="wxAppId!=null and wxAppId!='' ">
+                AND wx_app_id=#{wxAppId,jdbcType=VARCHAR}
+            </if>
+            <if test="wxOrigId!=null and wxOrigId!='' ">
+                AND wx_orig_id=#{wxOrigId,jdbcType=VARCHAR}
+            </if>
+            <if test="wxAppName!=null and wxAppName!='' ">
+                AND wx_app_name=#{wxAppName,jdbcType=VARCHAR}
+            </if>
+            <if test="wxAppToken!=null and wxAppToken!='' ">
+                AND wx_app_token=#{wxAppToken,jdbcType=VARCHAR}
+            </if>
+            <if test="wxAppSecret!=null and wxAppSecret!='' ">
+                AND wx_app_secret=#{wxAppSecret,jdbcType=VARCHAR}
+            </if>
+            <if test="released!=null ">
+                AND released=#{released, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
+            </if>
+        </where>
+        LIMIT 2	
+	</select>
+	
+    <!-- 微信小程序信息列表查询 -->
+    <select id="queryList" parameterType="com.yc.trip.api.business.query.wx.WxAppQuery" resultMap="WxAppMap">
+            SELECT t.wx_app_id,t.wx_orig_id,t.wx_app_name,t.wx_app_token,
+            t.wx_app_secret,t.released,t.create_time,t.update_time
+            FROM `wx_app` t 
+        <where>
+            <if test="wxAppId!=null and wxAppId!='' ">
+                AND wx_app_id=#{wxAppId,jdbcType=VARCHAR}
+            </if>
+            <if test="wxOrigId!=null and wxOrigId!='' ">
+                AND wx_orig_id=#{wxOrigId,jdbcType=VARCHAR}
+            </if>
+            <if test="wxAppName!=null and wxAppName!='' ">
+                AND wx_app_name=#{wxAppName,jdbcType=VARCHAR}
+            </if>
+            <if test="wxAppToken!=null and wxAppToken!='' ">
+                AND wx_app_token=#{wxAppToken,jdbcType=VARCHAR}
+            </if>
+            <if test="wxAppSecret!=null and wxAppSecret!='' ">
+                AND wx_app_secret=#{wxAppSecret,jdbcType=VARCHAR}
+            </if>
+            <if test="released!=null ">
+                AND released=#{released, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
+            </if>
+            <if test="keywords!=null and keywords!='' ">
+                AND (
+                     wx_app_id LIKE CONCAT('%', #{keywords}, '%')
+                     OR wx_orig_id LIKE CONCAT('%', #{keywords}, '%')
+                     OR wx_app_name LIKE CONCAT('%', #{keywords}, '%')
+                     OR wx_app_token LIKE CONCAT('%', #{keywords}, '%')
+                     OR wx_app_secret LIKE CONCAT('%', #{keywords}, '%')
+                 )
+            </if>
+        </where>	
+    </select>
+	
+</mapper>

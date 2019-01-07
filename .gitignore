@@ -1,0 +1,9 @@
+.idea/
+*.iml
+trip-api-business/target/
+trip-service-business/target/
+trip-service-business/src/main/resources/config/
+trip-web-manage/src/main/resources/config/
+trip-web-manage/target/
+trip-web-mp/src/main/resources/config/
+trip-web-mp/target/

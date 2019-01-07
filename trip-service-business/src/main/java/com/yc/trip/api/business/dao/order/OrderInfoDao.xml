@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yc.trip.api.business.dao.order.OrderInfoDao">
+
+    <!-- 对象与字段映射 -->
+    <resultMap type="com.yc.trip.api.business.dto.order.OrderInfo" id="OrderInfoMap">
+        <!--  -->
+        <result property="id" column="id" />
+        <!-- 订单名称 -->
+        <result property="name" column="name" />
+        <!-- 产品Id -->
+        <result property="productId" column="product_id" />
+        <!-- 数量 -->
+        <result property="amout" column="amout" />
+        <!-- 客户姓名 -->
+        <result property="customer" column="customer" />
+        <!-- 联系方式 -->
+        <result property="phone" column="phone" />
+        <!-- 地址 -->
+        <result property="address" column="address" />
+        <!-- 所属供应商Id -->
+        <result property="providerId" column="provider_id" />
+        <!-- 所属门店Id -->
+        <result property="storeId" column="store_id" />
+        <!-- 销售人员Id -->
+        <result property="salesId" column="sales_id" />
+        <!-- 订单状态0待付款1待签约2待出行3待评价4已完成9已废除(枚举:OrderStatus) -->
+        <result property="orderStatus" column="order_status"  javaType="com.yc.trip.api.business.enums.order.OrderStatus"  typeHandler="org.go.api.core.typehandler.UniversalEnumHandler" />
+        <!-- 合同 -->
+        <result property="contract" column="contract" />
+        <!-- 确认编号 -->
+        <result property="vertifyCode" column="vertify_code" />
+        <!-- 通知书 -->
+        <result property="notification" column="notification" />
+        <!-- 是否删除0否1是(枚举:YesNoStatus[core]) -->
+        <result property="isDelete" column="is_delete"  javaType="com.yc.trip.api.core.enums.YesNoStatus"  typeHandler="org.go.api.core.typehandler.UniversalEnumHandler" />
+        <!-- 创建时间 -->
+        <result property="createdTime" column="created_time" />
+        <!-- 更新时间 -->
+        <result property="updatedTime" column="updated_time" />
+    </resultMap>
+
+    <!-- 订单信息新增 -->
+    <insert id="add" parameterType="com.yc.trip.api.business.dto.order.OrderInfo" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO `order_info`(
+            name,
+            product_id,
+            amout,
+            customer,
+            phone,
+            address,
+            provider_id,
+            store_id,
+            sales_id,
+            order_status,
+            contract,
+            vertify_code,
+            notification,
+            <if test="isDelete!=null">is_delete</if>
+        )
+        VALUES(
+            #{name,jdbcType=VARCHAR},
+            #{productId,jdbcType=NUMERIC},
+            #{amout,jdbcType=NUMERIC},
+            #{customer,jdbcType=VARCHAR},
+            #{phone,jdbcType=VARCHAR},
+            #{address,jdbcType=VARCHAR},
+            #{providerId,jdbcType=NUMERIC},
+            #{storeId,jdbcType=NUMERIC},
+            #{salesId,jdbcType=NUMERIC},
+            #{orderStatus, javaType=com.yc.trip.api.business.enums.order.OrderStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC},
+            #{contract,jdbcType=VARCHAR},
+            #{vertifyCode,jdbcType=VARCHAR},
+            #{notification,jdbcType=VARCHAR},
+            <if test="isDelete!=null">#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}</if>
+        )	
+    </insert>
+	
+    <!-- 订单信息 修改-->
+	<update id="update" parameterType="com.yc.trip.api.business.dto.order.OrderInfo">
+        UPDATE `order_info`
+        <set>
+            <if test="name!=null and name!='' ">
+            name=#{name,jdbcType=VARCHAR},
+            </if>
+            <if test="productId!=null ">
+            product_id=#{productId,jdbcType=NUMERIC},
+            </if>
+            <if test="amout!=null ">
+            amout=#{amout,jdbcType=NUMERIC},
+            </if>
+            <if test="customer!=null and customer!='' ">
+            customer=#{customer,jdbcType=VARCHAR},
+            </if>
+            <if test="phone!=null and phone!='' ">
+            phone=#{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="address!=null and address!='' ">
+            address=#{address,jdbcType=VARCHAR},
+            </if>
+            <if test="providerId!=null ">
+            provider_id=#{providerId,jdbcType=NUMERIC},
+            </if>
+            <if test="storeId!=null ">
+            store_id=#{storeId,jdbcType=NUMERIC},
+            </if>
+            <if test="salesId!=null ">
+            sales_id=#{salesId,jdbcType=NUMERIC},
+            </if>
+            <if test="orderStatus!=null ">
+            order_status=#{orderStatus, javaType=com.yc.trip.api.business.enums.order.OrderStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC},
+            </if>
+            <if test="contract!=null and contract!='' ">
+            contract=#{contract,jdbcType=VARCHAR},
+            </if>
+            <if test="vertifyCode!=null and vertifyCode!='' ">
+            vertify_code=#{vertifyCode,jdbcType=VARCHAR},
+            </if>
+            <if test="notification!=null and notification!='' ">
+            notification=#{notification,jdbcType=VARCHAR},
+            </if>
+            <if test="isDelete!=null ">
+            is_delete=#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC},
+            </if>
+            <if test="createdTime!=null ">
+            created_time=#{createdTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedTime!=null ">
+            updated_time=#{updatedTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+            WHERE id=#{id,jdbcType=NUMERIC}	
+	</update>
+	
+    <!-- 订单信息 查询-->
+	<select id="get" parameterType="com.yc.trip.api.business.query.order.OrderInfoQuery" resultMap="OrderInfoMap">
+        SELECT id,name,product_id,amout,
+           customer,phone,address,provider_id,
+           store_id,sales_id,order_status,contract,
+           vertify_code,notification,is_delete,created_time,
+           updated_time
+        FROM `order_info`
+        <where>
+            <if test="id!=null ">
+                AND id=#{id,jdbcType=NUMERIC}
+            </if>
+            <if test="name!=null and name!='' ">
+                AND name=#{name,jdbcType=VARCHAR}
+            </if>
+            <if test="productId!=null ">
+                AND product_id=#{productId,jdbcType=NUMERIC}
+            </if>
+            <if test="amout!=null ">
+                AND amout=#{amout,jdbcType=NUMERIC}
+            </if>
+            <if test="customer!=null and customer!='' ">
+                AND customer=#{customer,jdbcType=VARCHAR}
+            </if>
+            <if test="phone!=null and phone!='' ">
+                AND phone=#{phone,jdbcType=VARCHAR}
+            </if>
+            <if test="address!=null and address!='' ">
+                AND address=#{address,jdbcType=VARCHAR}
+            </if>
+            <if test="providerId!=null ">
+                AND provider_id=#{providerId,jdbcType=NUMERIC}
+            </if>
+            <if test="storeId!=null ">
+                AND store_id=#{storeId,jdbcType=NUMERIC}
+            </if>
+            <if test="salesId!=null ">
+                AND sales_id=#{salesId,jdbcType=NUMERIC}
+            </if>
+            <if test="orderStatus!=null ">
+                AND order_status=#{orderStatus, javaType=com.yc.trip.api.business.enums.order.OrderStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
+            </if>
+            <if test="contract!=null and contract!='' ">
+                AND contract=#{contract,jdbcType=VARCHAR}
+            </if>
+            <if test="vertifyCode!=null and vertifyCode!='' ">
+                AND vertify_code=#{vertifyCode,jdbcType=VARCHAR}
+            </if>
+            <if test="notification!=null and notification!='' ">
+                AND notification=#{notification,jdbcType=VARCHAR}
+            </if>
+            <if test="isDelete!=null ">
+                AND is_delete=#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
+            </if>
+        </where>
+        LIMIT 2	
+	</select>
+	
+    <!-- 订单信息列表查询 -->
+    <select id="queryList" parameterType="com.yc.trip.api.business.query.order.OrderInfoQuery" resultMap="OrderInfoMap">
+            SELECT t.id,t.name,t.product_id,t.amout,
+            t.customer,t.phone,t.address,t.provider_id,
+            t.store_id,t.sales_id,t.order_status,t.contract,
+            t.vertify_code,t.notification,t.is_delete,t.created_time,
+            t.updated_time
+            FROM `order_info` t 
+        <where>
+            <if test="name!=null and name!='' ">
+                AND name=#{name,jdbcType=VARCHAR}
+            </if>
+            <if test="productId!=null ">
+                AND product_id=#{productId,jdbcType=NUMERIC}
+            </if>
+            <if test="amout!=null ">
+                AND amout=#{amout,jdbcType=NUMERIC}
+            </if>
+            <if test="customer!=null and customer!='' ">
+                AND customer=#{customer,jdbcType=VARCHAR}
+            </if>
+            <if test="phone!=null and phone!='' ">
+                AND phone=#{phone,jdbcType=VARCHAR}
+            </if>
+            <if test="address!=null and address!='' ">
+                AND address=#{address,jdbcType=VARCHAR}
+            </if>
+            <if test="providerId!=null ">
+                AND provider_id=#{providerId,jdbcType=NUMERIC}
+            </if>
+            <if test="storeId!=null ">
+                AND store_id=#{storeId,jdbcType=NUMERIC}
+            </if>
+            <if test="salesId!=null ">
+                AND sales_id=#{salesId,jdbcType=NUMERIC}
+            </if>
+            <if test="orderStatus!=null ">
+                AND order_status=#{orderStatus, javaType=com.yc.trip.api.business.enums.order.OrderStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
+            </if>
+            <if test="contract!=null and contract!='' ">
+                AND contract=#{contract,jdbcType=VARCHAR}
+            </if>
+            <if test="vertifyCode!=null and vertifyCode!='' ">
+                AND vertify_code=#{vertifyCode,jdbcType=VARCHAR}
+            </if>
+            <if test="notification!=null and notification!='' ">
+                AND notification=#{notification,jdbcType=VARCHAR}
+            </if>
+            <if test="isDelete!=null ">
+                AND is_delete=#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
+            </if>
+            <if test="keywords!=null and keywords!='' ">
+                AND (
+                     name LIKE CONCAT('%', #{keywords}, '%')
+                     OR customer LIKE CONCAT('%', #{keywords}, '%')
+                     OR phone LIKE CONCAT('%', #{keywords}, '%')
+                     OR address LIKE CONCAT('%', #{keywords}, '%')
+                     OR contract LIKE CONCAT('%', #{keywords}, '%')
+                     OR vertify_code LIKE CONCAT('%', #{keywords}, '%')
+                     OR notification LIKE CONCAT('%', #{keywords}, '%')
+                 )
+            </if>
+            <if test="ids!=null and ids.size!=0 ">
+                AND id IN
+                    <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">  
+                        #{item}
+                    </foreach>
+            </if>
+        </where>	
+    </select>
+	
+</mapper>

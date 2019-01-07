@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yc.trip.api.business.dao.system.OperateLogDao">
+
+    <!-- 对象与字段映射 -->
+    <resultMap type="com.yc.trip.api.business.dto.system.OperateLog" id="OperateLogMap">
+        <!--  -->
+        <result property="id" column="id" />
+        <!-- 用户Id -->
+        <result property="userId" column="user_id" />
+        <!-- 用户名 -->
+        <result property="userName" column="user_name" />
+        <!-- 平台类型1管理后台(枚举:PlatformType) -->
+        <result property="platformType" column="platform_type"  javaType="com.yc.trip.api.business.enums.system.PlatformType"  typeHandler="org.go.api.core.typehandler.UniversalEnumHandler" />
+        <!-- 功能模块(枚举:OperTargetType[core]) -->
+        <result property="operTargetType" column="oper_target_type"  javaType="com.yc.trip.api.core.enums.OperTargetType"  typeHandler="org.go.api.core.typehandler.UniversalEnumHandler" />
+        <!-- 操作类型(枚举:OperType[core]) -->
+        <result property="operType" column="oper_type"  javaType="com.yc.trip.api.core.enums.OperType"  typeHandler="org.go.api.core.typehandler.UniversalEnumHandler" />
+        <!-- 操作描述 -->
+        <result property="operDesc" column="oper_desc" />
+        <!-- 访问IP -->
+        <result property="remoteIp" column="remote_ip" />
+        <!-- 请求地址 -->
+        <result property="requestUrl" column="request_url" />
+        <!-- 请求数据 -->
+        <result property="requestData" column="request_data" />
+        <!-- 创建时间 -->
+        <result property="createdTime" column="created_time" />
+        <!-- 更新时间 -->
+        <result property="updatedTime" column="updated_time" />
+    </resultMap>
+
+    <!-- 操作日志新增 -->
+    <insert id="add" parameterType="com.yc.trip.api.business.dto.system.OperateLog" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO `operate_log`(
+            user_id,
+            user_name,
+            platform_type,
+            oper_target_type,
+            oper_type,
+            oper_desc,
+            remote_ip,
+            request_url,
+            request_data,
+        )
+        VALUES(
+            #{userId,jdbcType=NUMERIC},
+            #{userName,jdbcType=VARCHAR},
+            #{platformType, javaType=com.yc.trip.api.business.enums.system.PlatformType, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC},
+            #{operTargetType, javaType=com.yc.trip.api.core.enums.OperTargetType, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC},
+            #{operType, javaType=com.yc.trip.api.core.enums.OperType, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC},
+            #{operDesc,jdbcType=VARCHAR},
+            #{remoteIp,jdbcType=VARCHAR},
+            #{requestUrl,jdbcType=VARCHAR},
+            #{requestData,jdbcType=VARCHAR},
+        )	
+    </insert>
+	
+    <!-- 操作日志 修改-->
+	<update id="update" parameterType="com.yc.trip.api.business.dto.system.OperateLog">
+        UPDATE `operate_log`
+        <set>
+            <if test="userId!=null ">
+            user_id=#{userId,jdbcType=NUMERIC},
+            </if>
+            <if test="userName!=null and userName!='' ">
+            user_name=#{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="platformType!=null ">
+            platform_type=#{platformType, javaType=com.yc.trip.api.business.enums.system.PlatformType, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC},
+            </if>
+            <if test="operTargetType!=null ">
+            oper_target_type=#{operTargetType, javaType=com.yc.trip.api.core.enums.OperTargetType, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC},
+            </if>
+            <if test="operType!=null ">
+            oper_type=#{operType, javaType=com.yc.trip.api.core.enums.OperType, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC},
+            </if>
+            <if test="operDesc!=null and operDesc!='' ">
+            oper_desc=#{operDesc,jdbcType=VARCHAR},
+            </if>
+            <if test="remoteIp!=null and remoteIp!='' ">
+            remote_ip=#{remoteIp,jdbcType=VARCHAR},
+            </if>
+            <if test="requestUrl!=null and requestUrl!='' ">
+            request_url=#{requestUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="requestData!=null ">
+            request_data=#{requestData,jdbcType=VARCHAR},
+            </if>
+            <if test="createdTime!=null ">
+            created_time=#{createdTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedTime!=null ">
+            updated_time=#{updatedTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+            WHERE id=#{id,jdbcType=NUMERIC}	
+	</update>
+	
+    <!-- 操作日志 查询-->
+	<select id="get" parameterType="com.yc.trip.api.business.query.system.OperateLogQuery" resultMap="OperateLogMap">
+        SELECT id,user_id,user_name,platform_type,
+           oper_target_type,oper_type,oper_desc,remote_ip,
+           request_url,request_data,created_time,updated_time
+        FROM `operate_log`
+        <where>
+            <if test="id!=null ">
+                AND id=#{id,jdbcType=NUMERIC}
+            </if>
+            <if test="userId!=null ">
+                AND user_id=#{userId,jdbcType=NUMERIC}
+            </if>
+            <if test="userName!=null and userName!='' ">
+                AND user_name=#{userName,jdbcType=VARCHAR}
+            </if>
+            <if test="platformType!=null ">
+                AND platform_type=#{platformType, javaType=com.yc.trip.api.business.enums.system.PlatformType, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
+            </if>
+            <if test="operTargetType!=null ">
+                AND oper_target_type=#{operTargetType, javaType=com.yc.trip.api.core.enums.OperTargetType, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
+            </if>
+            <if test="operType!=null ">
+                AND oper_type=#{operType, javaType=com.yc.trip.api.core.enums.OperType, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
+            </if>
+            <if test="operDesc!=null and operDesc!='' ">
+                AND oper_desc=#{operDesc,jdbcType=VARCHAR}
+            </if>
+            <if test="remoteIp!=null and remoteIp!='' ">
+                AND remote_ip=#{remoteIp,jdbcType=VARCHAR}
+            </if>
+            <if test="requestUrl!=null and requestUrl!='' ">
+                AND request_url=#{requestUrl,jdbcType=VARCHAR}
+            </if>
+            <if test="requestData!=null ">
+                AND request_data=#{requestData,jdbcType=VARCHAR}
+            </if>
+        </where>
+        LIMIT 2	
+	</select>
+	
+    <!-- 操作日志列表查询 -->
+    <select id="queryList" parameterType="com.yc.trip.api.business.query.system.OperateLogQuery" resultMap="OperateLogMap">
+            SELECT t.id,t.user_id,t.user_name,t.platform_type,
+            t.oper_target_type,t.oper_type,t.oper_desc,t.remote_ip,
+            t.request_url,t.request_data,t.created_time,t.updated_time
+            FROM `operate_log` t 
+        <where>
+            <if test="userId!=null ">
+                AND user_id=#{userId,jdbcType=NUMERIC}
+            </if>
+            <if test="userName!=null and userName!='' ">
+                AND user_name=#{userName,jdbcType=VARCHAR}
+            </if>
+            <if test="platformType!=null ">
+                AND platform_type=#{platformType, javaType=com.yc.trip.api.business.enums.system.PlatformType, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
+            </if>
+            <if test="operTargetType!=null ">
+                AND oper_target_type=#{operTargetType, javaType=com.yc.trip.api.core.enums.OperTargetType, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
+            </if>
+            <if test="operType!=null ">
+                AND oper_type=#{operType, javaType=com.yc.trip.api.core.enums.OperType, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
+            </if>
+            <if test="operDesc!=null and operDesc!='' ">
+                AND oper_desc=#{operDesc,jdbcType=VARCHAR}
+            </if>
+            <if test="remoteIp!=null and remoteIp!='' ">
+                AND remote_ip=#{remoteIp,jdbcType=VARCHAR}
+            </if>
+            <if test="requestUrl!=null and requestUrl!='' ">
+                AND request_url=#{requestUrl,jdbcType=VARCHAR}
+            </if>
+            <if test="requestData!=null ">
+                AND request_data=#{requestData,jdbcType=VARCHAR}
+            </if>
+            <if test="keywords!=null and keywords!='' ">
+                AND (
+                     user_name LIKE CONCAT('%', #{keywords}, '%')
+                     OR oper_desc LIKE CONCAT('%', #{keywords}, '%')
+                     OR remote_ip LIKE CONCAT('%', #{keywords}, '%')
+                     OR request_url LIKE CONCAT('%', #{keywords}, '%')
+                 )
+            </if>
+            <if test="ids!=null and ids.size!=0 ">
+                AND id IN
+                    <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">  
+                        #{item}
+                    </foreach>
+            </if>
+        </where>	
+    </select>
+	
+</mapper>

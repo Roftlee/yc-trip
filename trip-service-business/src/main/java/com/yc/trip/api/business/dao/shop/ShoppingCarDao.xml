@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yc.trip.api.business.dao.shop.ShoppingCarDao">
+
+    <!-- 对象与字段映射 -->
+    <resultMap type="com.yc.trip.api.business.dto.shop.ShoppingCar" id="ShoppingCarMap">
+        <!--  -->
+        <result property="id" column="id" />
+        <!-- 用户Id -->
+        <result property="userId" column="user_id" />
+        <!-- 产品Id -->
+        <result property="productId" column="product_id" />
+        <!-- 创建时间 -->
+        <result property="createdTime" column="created_time" />
+        <!-- 更新时间 -->
+        <result property="updatedTime" column="updated_time" />
+    </resultMap>
+
+    <!-- 购物车信息新增 -->
+    <insert id="add" parameterType="com.yc.trip.api.business.dto.shop.ShoppingCar" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO `shopping_car`(
+            user_id,
+            product_id,
+        )
+        VALUES(
+            #{userId,jdbcType=NUMERIC},
+            #{productId,jdbcType=NUMERIC},
+        )	
+    </insert>
+	
+    <!-- 购物车信息 修改-->
+	<update id="update" parameterType="com.yc.trip.api.business.dto.shop.ShoppingCar">
+        UPDATE `shopping_car`
+        <set>
+            <if test="userId!=null ">
+            user_id=#{userId,jdbcType=NUMERIC},
+            </if>
+            <if test="productId!=null ">
+            product_id=#{productId,jdbcType=NUMERIC},
+            </if>
+            <if test="createdTime!=null ">
+            created_time=#{createdTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedTime!=null ">
+            updated_time=#{updatedTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+            WHERE id=#{id,jdbcType=NUMERIC}	
+	</update>
+	
+    <!-- 购物车信息 查询-->
+	<select id="get" parameterType="com.yc.trip.api.business.query.shop.ShoppingCarQuery" resultMap="ShoppingCarMap">
+        SELECT id,user_id,product_id,created_time,
+           updated_time
+        FROM `shopping_car`
+        <where>
+            <if test="id!=null ">
+                AND id=#{id,jdbcType=NUMERIC}
+            </if>
+            <if test="userId!=null ">
+                AND user_id=#{userId,jdbcType=NUMERIC}
+            </if>
+            <if test="productId!=null ">
+                AND product_id=#{productId,jdbcType=NUMERIC}
+            </if>
+        </where>
+        LIMIT 2	
+	</select>
+	
+    <!-- 购物车信息列表查询 -->
+    <select id="queryList" parameterType="com.yc.trip.api.business.query.shop.ShoppingCarQuery" resultMap="ShoppingCarMap">
+            SELECT t.id,t.user_id,t.product_id,t.created_time,
+            t.updated_time
+            FROM `shopping_car` t 
+        <where>
+            <if test="userId!=null ">
+                AND user_id=#{userId,jdbcType=NUMERIC}
+            </if>
+            <if test="productId!=null ">
+                AND product_id=#{productId,jdbcType=NUMERIC}
+            </if>
+            <if test="keywords!=null and keywords!='' ">
+                AND (
+                 )
+            </if>
+            <if test="ids!=null and ids.size!=0 ">
+                AND id IN
+                    <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">  
+                        #{item}
+                    </foreach>
+            </if>
+        </where>	
+    </select>
+	
+</mapper>

@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yc.trip.api.business.dao.trip.TripInteractDao">
+
+    <!-- 对象与字段映射 -->
+    <resultMap type="com.yc.trip.api.business.dto.trip.TripInteract" id="TripInteractMap">
+        <!--  -->
+        <result property="id" column="id" />
+        <!-- 业务Id -->
+        <result property="businessId" column="business_id" />
+        <!-- 用户Id -->
+        <result property="userId" column="user_id" />
+        <!-- 互动类型1旅游攻略2趣分享(枚举:InteractType) -->
+        <result property="interactType" column="interact_type"  javaType="com.yc.trip.api.business.enums.trip.InteractType"  typeHandler="org.go.api.core.typehandler.UniversalEnumHandler" />
+        <!-- 操作类型1点赞2收藏3评论(枚举:InteractOperType) -->
+        <result property="interactOperType" column="interact_oper_type"  javaType="com.yc.trip.api.business.enums.trip.InteractOperType"  typeHandler="org.go.api.core.typehandler.UniversalEnumHandler" />
+        <!-- 评论内容 -->
+        <result property="comment" column="comment" />
+        <!-- 是否删除0否1是(枚举:YesNoStatus[core]) -->
+        <result property="isDelete" column="is_delete"  javaType="com.yc.trip.api.core.enums.YesNoStatus"  typeHandler="org.go.api.core.typehandler.UniversalEnumHandler" />
+        <!-- 创建时间 -->
+        <result property="createdTime" column="created_time" />
+        <!-- 更新时间 -->
+        <result property="updatedTime" column="updated_time" />
+    </resultMap>
+
+    <!-- 旅游互动信息新增 -->
+    <insert id="add" parameterType="com.yc.trip.api.business.dto.trip.TripInteract" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO `trip_interact`(
+            business_id,
+            user_id,
+            interact_type,
+            interact_oper_type,
+            comment,
+            <if test="isDelete!=null">is_delete</if>
+        )
+        VALUES(
+            #{businessId,jdbcType=NUMERIC},
+            #{userId,jdbcType=NUMERIC},
+            #{interactType, javaType=com.yc.trip.api.business.enums.trip.InteractType, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC},
+            #{interactOperType, javaType=com.yc.trip.api.business.enums.trip.InteractOperType, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC},
+            #{comment,jdbcType=VARCHAR},
+            <if test="isDelete!=null">#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}</if>
+        )	
+    </insert>
+	
+    <!-- 旅游互动信息 修改-->
+	<update id="update" parameterType="com.yc.trip.api.business.dto.trip.TripInteract">
+        UPDATE `trip_interact`
+        <set>
+            <if test="businessId!=null ">
+            business_id=#{businessId,jdbcType=NUMERIC},
+            </if>
+            <if test="userId!=null ">
+            user_id=#{userId,jdbcType=NUMERIC},
+            </if>
+            <if test="interactType!=null ">
+            interact_type=#{interactType, javaType=com.yc.trip.api.business.enums.trip.InteractType, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC},
+            </if>
+            <if test="interactOperType!=null ">
+            interact_oper_type=#{interactOperType, javaType=com.yc.trip.api.business.enums.trip.InteractOperType, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC},
+            </if>
+            <if test="comment!=null and comment!='' ">
+            comment=#{comment,jdbcType=VARCHAR},
+            </if>
+            <if test="isDelete!=null ">
+            is_delete=#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC},
+            </if>
+            <if test="createdTime!=null ">
+            created_time=#{createdTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedTime!=null ">
+            updated_time=#{updatedTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+            WHERE id=#{id,jdbcType=NUMERIC}	
+	</update>
+	
+    <!-- 旅游互动信息 查询-->
+	<select id="get" parameterType="com.yc.trip.api.business.query.trip.TripInteractQuery" resultMap="TripInteractMap">
+        SELECT id,business_id,user_id,interact_type,
+           interact_oper_type,comment,is_delete,created_time,
+           updated_time
+        FROM `trip_interact`
+        <where>
+            <if test="id!=null ">
+                AND id=#{id,jdbcType=NUMERIC}
+            </if>
+            <if test="businessId!=null ">
+                AND business_id=#{businessId,jdbcType=NUMERIC}
+            </if>
+            <if test="userId!=null ">
+                AND user_id=#{userId,jdbcType=NUMERIC}
+            </if>
+            <if test="interactType!=null ">
+                AND interact_type=#{interactType, javaType=com.yc.trip.api.business.enums.trip.InteractType, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
+            </if>
+            <if test="interactOperType!=null ">
+                AND interact_oper_type=#{interactOperType, javaType=com.yc.trip.api.business.enums.trip.InteractOperType, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
+            </if>
+            <if test="comment!=null and comment!='' ">
+                AND comment=#{comment,jdbcType=VARCHAR}
+            </if>
+            <if test="isDelete!=null ">
+                AND is_delete=#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
+            </if>
+        </where>
+        LIMIT 2	
+	</select>
+	
+    <!-- 旅游互动信息列表查询 -->
+    <select id="queryList" parameterType="com.yc.trip.api.business.query.trip.TripInteractQuery" resultMap="TripInteractMap">
+            SELECT t.id,t.business_id,t.user_id,t.interact_type,
+            t.interact_oper_type,t.comment,t.is_delete,t.created_time,
+            t.updated_time
+            FROM `trip_interact` t 
+        <where>
+            <if test="businessId!=null ">
+                AND business_id=#{businessId,jdbcType=NUMERIC}
+            </if>
+            <if test="userId!=null ">
+                AND user_id=#{userId,jdbcType=NUMERIC}
+            </if>
+            <if test="interactType!=null ">
+                AND interact_type=#{interactType, javaType=com.yc.trip.api.business.enums.trip.InteractType, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
+            </if>
+            <if test="interactOperType!=null ">
+                AND interact_oper_type=#{interactOperType, javaType=com.yc.trip.api.business.enums.trip.InteractOperType, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
+            </if>
+            <if test="comment!=null and comment!='' ">
+                AND comment=#{comment,jdbcType=VARCHAR}
+            </if>
+            <if test="isDelete!=null ">
+                AND is_delete=#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
+            </if>
+            <if test="keywords!=null and keywords!='' ">
+                AND (
+                     comment LIKE CONCAT('%', #{keywords}, '%')
+                 )
+            </if>
+            <if test="ids!=null and ids.size!=0 ">
+                AND id IN
+                    <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">  
+                        #{item}
+                    </foreach>
+            </if>
+        </where>	
+    </select>
+	
+</mapper>

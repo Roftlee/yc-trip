@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yc.trip.api.business.dao.user.UserDao">
+
+    <!-- 对象与字段映射 -->
+    <resultMap type="com.yc.trip.api.business.dto.user.User" id="UserMap">
+        <!--  -->
+        <result property="id" column="id" />
+        <!-- 小程序openid -->
+        <result property="openId" column="open_id" />
+        <!-- 名称 -->
+        <result property="name" column="name" />
+        <!-- 性别0男1女(枚举:Sex[core]) -->
+        <result property="sex" column="sex"  javaType="com.yc.trip.api.core.enums.Sex"  typeHandler="org.go.api.core.typehandler.UniversalEnumHandler" />
+        <!-- 手机号 -->
+        <result property="phone" column="phone" />
+        <!-- 用户类型1超管2供应商4供应商销售人员5门店老板6门店一级销售7门店二级销售8VIP销售9游客(枚举:UserType) -->
+        <result property="userType" column="user_type"  javaType="com.yc.trip.api.business.enums.user.UserType"  typeHandler="org.go.api.core.typehandler.UniversalEnumHandler" />
+        <!-- 头像 -->
+        <result property="avatar" column="avatar" />
+        <!-- 是否删除0否1是(枚举:YesNoStatus[core]) -->
+        <result property="isDelete" column="is_delete"  javaType="com.yc.trip.api.core.enums.YesNoStatus"  typeHandler="org.go.api.core.typehandler.UniversalEnumHandler" />
+        <!-- 创建时间 -->
+        <result property="createdTime" column="created_time" />
+        <!-- 更新时间 -->
+        <result property="updatedTime" column="updated_time" />
+    </resultMap>
+
+    <!-- 用户信息新增 -->
+    <insert id="add" parameterType="com.yc.trip.api.business.dto.user.User" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO `user`(
+            open_id,
+            name,
+            sex,
+            phone,
+            user_type,
+            avatar,
+            <if test="isDelete!=null">is_delete</if>
+        )
+        VALUES(
+            #{openId,jdbcType=VARCHAR},
+            #{name,jdbcType=VARCHAR},
+            #{sex, javaType=com.yc.trip.api.core.enums.Sex, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC},
+            #{phone,jdbcType=VARCHAR},
+            #{userType, javaType=com.yc.trip.api.business.enums.user.UserType, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC},
+            #{avatar,jdbcType=VARCHAR},
+            <if test="isDelete!=null">#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}</if>
+        )	
+    </insert>
+	
+    <!-- 用户信息 修改-->
+	<update id="update" parameterType="com.yc.trip.api.business.dto.user.User">
+        UPDATE `user`
+        <set>
+            <if test="openId!=null and openId!='' ">
+            open_id=#{openId,jdbcType=VARCHAR},
+            </if>
+            <if test="name!=null and name!='' ">
+            name=#{name,jdbcType=VARCHAR},
+            </if>
+            <if test="sex!=null ">
+            sex=#{sex, javaType=com.yc.trip.api.core.enums.Sex, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC},
+            </if>
+            <if test="phone!=null and phone!='' ">
+            phone=#{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="userType!=null ">
+            user_type=#{userType, javaType=com.yc.trip.api.business.enums.user.UserType, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC},
+            </if>
+            <if test="avatar!=null and avatar!='' ">
+            avatar=#{avatar,jdbcType=VARCHAR},
+            </if>
+            <if test="isDelete!=null ">
+            is_delete=#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC},
+            </if>
+            <if test="createdTime!=null ">
+            created_time=#{createdTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedTime!=null ">
+            updated_time=#{updatedTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+            WHERE id=#{id,jdbcType=NUMERIC}	
+	</update>
+	
+    <!-- 用户信息 查询-->
+	<select id="get" parameterType="com.yc.trip.api.business.query.user.UserQuery" resultMap="UserMap">
+        SELECT id,open_id,name,sex,
+           phone,user_type,avatar,is_delete,
+           created_time,updated_time
+        FROM `user`
+        <where>
+            <if test="id!=null ">
+                AND id=#{id,jdbcType=NUMERIC}
+            </if>
+            <if test="openId!=null and openId!='' ">
+                AND open_id=#{openId,jdbcType=VARCHAR}
+            </if>
+            <if test="name!=null and name!='' ">
+                AND name=#{name,jdbcType=VARCHAR}
+            </if>
+            <if test="sex!=null ">
+                AND sex=#{sex, javaType=com.yc.trip.api.core.enums.Sex, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
+            </if>
+            <if test="phone!=null and phone!='' ">
+                AND phone=#{phone,jdbcType=VARCHAR}
+            </if>
+            <if test="userType!=null ">
+                AND user_type=#{userType, javaType=com.yc.trip.api.business.enums.user.UserType, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
+            </if>
+            <if test="avatar!=null and avatar!='' ">
+                AND avatar=#{avatar,jdbcType=VARCHAR}
+            </if>
+            <if test="isDelete!=null ">
+                AND is_delete=#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
+            </if>
+        </where>
+        LIMIT 2	
+	</select>
+	
+    <!-- 用户信息列表查询 -->
+    <select id="queryList" parameterType="com.yc.trip.api.business.query.user.UserQuery" resultMap="UserMap">
+            SELECT t.id,t.open_id,t.name,t.sex,
+            t.phone,t.user_type,t.avatar,t.is_delete,
+            t.created_time,t.updated_time
+            FROM `user` t 
+        <where>
+            <if test="openId!=null and openId!='' ">
+                AND open_id=#{openId,jdbcType=VARCHAR}
+            </if>
+            <if test="name!=null and name!='' ">
+                AND name=#{name,jdbcType=VARCHAR}
+            </if>
+            <if test="sex!=null ">
+                AND sex=#{sex, javaType=com.yc.trip.api.core.enums.Sex, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
+            </if>
+            <if test="phone!=null and phone!='' ">
+                AND phone=#{phone,jdbcType=VARCHAR}
+            </if>
+            <if test="userType!=null ">
+                AND user_type=#{userType, javaType=com.yc.trip.api.business.enums.user.UserType, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
+            </if>
+            <if test="avatar!=null and avatar!='' ">
+                AND avatar=#{avatar,jdbcType=VARCHAR}
+            </if>
+            <if test="isDelete!=null ">
+                AND is_delete=#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
+            </if>
+            <if test="keywords!=null and keywords!='' ">
+                AND (
+                     open_id LIKE CONCAT('%', #{keywords}, '%')
+                     OR name LIKE CONCAT('%', #{keywords}, '%')
+                     OR phone LIKE CONCAT('%', #{keywords}, '%')
+                     OR avatar LIKE CONCAT('%', #{keywords}, '%')
+                 )
+            </if>
+            <if test="ids!=null and ids.size!=0 ">
+                AND id IN
+                    <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">  
+                        #{item}
+                    </foreach>
+            </if>
+        </where>	
+    </select>
+	
+</mapper>

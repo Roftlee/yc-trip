@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yc.trip.api.business.dao.sales.SpecialOfferDao">
+
+    <!-- 对象与字段映射 -->
+    <resultMap type="com.yc.trip.api.business.dto.sales.SpecialOffer" id="SpecialOfferMap">
+        <!--  -->
+        <result property="id" column="id" />
+        <!-- 标题 -->
+        <result property="title" column="title" />
+        <!-- 所属供应商Id -->
+        <result property="providerId" column="provider_id" />
+        <!-- 产品Id -->
+        <result property="productId" column="product_id" />
+        <!-- 活动图片 -->
+        <result property="imageUrl" column="image_url" />
+        <!-- 开始时间 -->
+        <result property="startTime" column="start_time" />
+        <!-- 结束时间 -->
+        <result property="endTime" column="end_time" />
+        <!-- 是否删除0否1是(枚举:YesNoStatus[core]) -->
+        <result property="isDelete" column="is_delete"  javaType="com.yc.trip.api.core.enums.YesNoStatus"  typeHandler="org.go.api.core.typehandler.UniversalEnumHandler" />
+        <!-- 创建时间 -->
+        <result property="createdTime" column="created_time" />
+        <!-- 更新时间 -->
+        <result property="updatedTime" column="updated_time" />
+    </resultMap>
+
+    <!-- 优惠活动信息新增 -->
+    <insert id="add" parameterType="com.yc.trip.api.business.dto.sales.SpecialOffer" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO `special_offer`(
+            title,
+            provider_id,
+            product_id,
+            image_url,
+            start_time,
+            end_time,
+            <if test="isDelete!=null">is_delete</if>
+        )
+        VALUES(
+            #{title,jdbcType=VARCHAR},
+            #{providerId,jdbcType=NUMERIC},
+            #{productId,jdbcType=NUMERIC},
+            #{imageUrl,jdbcType=VARCHAR},
+            #{startTime,jdbcType=TIMESTAMP},
+            #{endTime,jdbcType=TIMESTAMP},
+            <if test="isDelete!=null">#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}</if>
+        )	
+    </insert>
+	
+    <!-- 优惠活动信息 修改-->
+	<update id="update" parameterType="com.yc.trip.api.business.dto.sales.SpecialOffer">
+        UPDATE `special_offer`
+        <set>
+            <if test="title!=null and title!='' ">
+            title=#{title,jdbcType=VARCHAR},
+            </if>
+            <if test="providerId!=null ">
+            provider_id=#{providerId,jdbcType=NUMERIC},
+            </if>
+            <if test="productId!=null ">
+            product_id=#{productId,jdbcType=NUMERIC},
+            </if>
+            <if test="imageUrl!=null and imageUrl!='' ">
+            image_url=#{imageUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="startTime!=null ">
+            start_time=#{startTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="endTime!=null ">
+            end_time=#{endTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="isDelete!=null ">
+            is_delete=#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC},
+            </if>
+            <if test="createdTime!=null ">
+            created_time=#{createdTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedTime!=null ">
+            updated_time=#{updatedTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+            WHERE id=#{id,jdbcType=NUMERIC}	
+	</update>
+	
+    <!-- 优惠活动信息 查询-->
+	<select id="get" parameterType="com.yc.trip.api.business.query.sales.SpecialOfferQuery" resultMap="SpecialOfferMap">
+        SELECT id,title,provider_id,product_id,
+           image_url,start_time,end_time,is_delete,
+           created_time,updated_time
+        FROM `special_offer`
+        <where>
+            <if test="id!=null ">
+                AND id=#{id,jdbcType=NUMERIC}
+            </if>
+            <if test="title!=null and title!='' ">
+                AND title=#{title,jdbcType=VARCHAR}
+            </if>
+            <if test="providerId!=null ">
+                AND provider_id=#{providerId,jdbcType=NUMERIC}
+            </if>
+            <if test="productId!=null ">
+                AND product_id=#{productId,jdbcType=NUMERIC}
+            </if>
+            <if test="imageUrl!=null and imageUrl!='' ">
+                AND image_url=#{imageUrl,jdbcType=VARCHAR}
+            </if>
+            <if test="isDelete!=null ">
+                AND is_delete=#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
+            </if>
+        </where>
+        LIMIT 2	
+	</select>
+	
+    <!-- 优惠活动信息列表查询 -->
+    <select id="queryList" parameterType="com.yc.trip.api.business.query.sales.SpecialOfferQuery" resultMap="SpecialOfferMap">
+            SELECT t.id,t.title,t.provider_id,t.product_id,
+            t.image_url,t.start_time,t.end_time,t.is_delete,
+            t.created_time,t.updated_time
+            FROM `special_offer` t 
+        <where>
+            <if test="title!=null and title!='' ">
+                AND title=#{title,jdbcType=VARCHAR}
+            </if>
+            <if test="providerId!=null ">
+                AND provider_id=#{providerId,jdbcType=NUMERIC}
+            </if>
+            <if test="productId!=null ">
+                AND product_id=#{productId,jdbcType=NUMERIC}
+            </if>
+            <if test="imageUrl!=null and imageUrl!='' ">
+                AND image_url=#{imageUrl,jdbcType=VARCHAR}
+            </if>
+            <if test="isDelete!=null ">
+                AND is_delete=#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
+            </if>
+            <if test="keywords!=null and keywords!='' ">
+                AND (
+                     title LIKE CONCAT('%', #{keywords}, '%')
+                     OR image_url LIKE CONCAT('%', #{keywords}, '%')
+                 )
+            </if>
+            <if test="ids!=null and ids.size!=0 ">
+                AND id IN
+                    <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">  
+                        #{item}
+                    </foreach>
+            </if>
+        </where>	
+    </select>
+	
+</mapper>

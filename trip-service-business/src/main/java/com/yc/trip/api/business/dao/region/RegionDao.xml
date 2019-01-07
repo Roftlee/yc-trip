@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yc.trip.api.business.dao.region.RegionDao">
+
+    <!-- 对象与字段映射 -->
+    <resultMap type="com.yc.trip.api.business.dto.region.Region" id="RegionMap">
+        <!--  -->
+        <result property="id" column="id" />
+        <!-- 父Id -->
+        <result property="parentId" column="parent_id" />
+        <!-- 地区分类Id -->
+        <result property="regionSortId" column="region_sort_id" />
+        <!-- 地区名 -->
+        <result property="name" column="name" />
+        <!-- 是否热门0否1是(枚举:YesNoStatus[core]) -->
+        <result property="isHot" column="is_hot"  javaType="com.yc.trip.api.core.enums.YesNoStatus"  typeHandler="org.go.api.core.typehandler.UniversalEnumHandler" />
+        <!-- 是否删除0否1是(枚举:YesNoStatus[core]) -->
+        <result property="isDelete" column="is_delete"  javaType="com.yc.trip.api.core.enums.YesNoStatus"  typeHandler="org.go.api.core.typehandler.UniversalEnumHandler" />
+        <!-- 创建时间 -->
+        <result property="createdTime" column="created_time" />
+        <!-- 更新时间 -->
+        <result property="updatedTime" column="updated_time" />
+    </resultMap>
+
+    <!-- 地区信息新增 -->
+    <insert id="add" parameterType="com.yc.trip.api.business.dto.region.Region" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO `region`(
+            parent_id,
+            region_sort_id,
+            name,
+            <if test="isHot!=null">is_hot,</if>
+            <if test="isDelete!=null">is_delete</if>
+        )
+        VALUES(
+            #{parentId,jdbcType=NUMERIC},
+            #{regionSortId,jdbcType=NUMERIC},
+            #{name,jdbcType=VARCHAR},
+            <if test="isHot!=null">#{isHot, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC},</if>
+            <if test="isDelete!=null">#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}</if>
+        )	
+    </insert>
+	
+    <!-- 地区信息 修改-->
+	<update id="update" parameterType="com.yc.trip.api.business.dto.region.Region">
+        UPDATE `region`
+        <set>
+            <if test="parentId!=null ">
+            parent_id=#{parentId,jdbcType=NUMERIC},
+            </if>
+            <if test="regionSortId!=null ">
+            region_sort_id=#{regionSortId,jdbcType=NUMERIC},
+            </if>
+            <if test="name!=null and name!='' ">
+            name=#{name,jdbcType=VARCHAR},
+            </if>
+            <if test="isHot!=null ">
+            is_hot=#{isHot, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC},
+            </if>
+            <if test="isDelete!=null ">
+            is_delete=#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC},
+            </if>
+            <if test="createdTime!=null ">
+            created_time=#{createdTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedTime!=null ">
+            updated_time=#{updatedTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+            WHERE id=#{id,jdbcType=NUMERIC}	
+	</update>
+	
+    <!-- 地区信息 查询-->
+	<select id="get" parameterType="com.yc.trip.api.business.query.region.RegionQuery" resultMap="RegionMap">
+        SELECT id,parent_id,region_sort_id,name,
+           is_hot,is_delete,created_time,updated_time
+        FROM `region`
+        <where>
+            <if test="id!=null ">
+                AND id=#{id,jdbcType=NUMERIC}
+            </if>
+            <if test="parentId!=null ">
+                AND parent_id=#{parentId,jdbcType=NUMERIC}
+            </if>
+            <if test="regionSortId!=null ">
+                AND region_sort_id=#{regionSortId,jdbcType=NUMERIC}
+            </if>
+            <if test="name!=null and name!='' ">
+                AND name=#{name,jdbcType=VARCHAR}
+            </if>
+            <if test="isHot!=null ">
+                AND is_hot=#{isHot, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
+            </if>
+            <if test="isDelete!=null ">
+                AND is_delete=#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
+            </if>
+        </where>
+        LIMIT 2	
+	</select>
+	
+    <!-- 地区信息列表查询 -->
+    <select id="queryList" parameterType="com.yc.trip.api.business.query.region.RegionQuery" resultMap="RegionMap">
+            SELECT t.id,t.parent_id,t.region_sort_id,t.name,
+            t.is_hot,t.is_delete,t.created_time,t.updated_time
+            FROM `region` t 
+        <where>
+            <if test="parentId!=null ">
+                AND parent_id=#{parentId,jdbcType=NUMERIC}
+            </if>
+            <if test="regionSortId!=null ">
+                AND region_sort_id=#{regionSortId,jdbcType=NUMERIC}
+            </if>
+            <if test="name!=null and name!='' ">
+                AND name=#{name,jdbcType=VARCHAR}
+            </if>
+            <if test="isHot!=null ">
+                AND is_hot=#{isHot, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
+            </if>
+            <if test="isDelete!=null ">
+                AND is_delete=#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
+            </if>
+            <if test="keywords!=null and keywords!='' ">
+                AND (
+                     name LIKE CONCAT('%', #{keywords}, '%')
+                 )
+            </if>
+            <if test="ids!=null and ids.size!=0 ">
+                AND id IN
+                    <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">  
+                        #{item}
+                    </foreach>
+            </if>
+        </where>	
+    </select>
+	
+</mapper>

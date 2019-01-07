@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yc.trip.api.business.dao.role.RoleElementDao">
+
+    <!-- 对象与字段映射 -->
+    <resultMap type="com.yc.trip.api.business.dto.role.RoleElement" id="RoleElementMap">
+        <!--  -->
+        <result property="id" column="id" />
+        <!-- 角色Id -->
+        <result property="roleId" column="role_id" />
+        <!-- 权限Id -->
+        <result property="elementId" column="element_id" />
+        <!-- 创建时间 -->
+        <result property="createdTime" column="created_time" />
+        <!-- 更新时间 -->
+        <result property="updatedTime" column="updated_time" />
+    </resultMap>
+
+    <!-- 角色权限信息新增 -->
+    <insert id="add" parameterType="com.yc.trip.api.business.dto.role.RoleElement" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO `role_element`(
+            role_id,
+            element_id,
+        )
+        VALUES(
+            #{roleId,jdbcType=NUMERIC},
+            #{elementId,jdbcType=NUMERIC},
+        )	
+    </insert>
+	
+    <!-- 角色权限信息 修改-->
+	<update id="update" parameterType="com.yc.trip.api.business.dto.role.RoleElement">
+        UPDATE `role_element`
+        <set>
+            <if test="roleId!=null ">
+            role_id=#{roleId,jdbcType=NUMERIC},
+            </if>
+            <if test="elementId!=null ">
+            element_id=#{elementId,jdbcType=NUMERIC},
+            </if>
+            <if test="createdTime!=null ">
+            created_time=#{createdTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedTime!=null ">
+            updated_time=#{updatedTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+            WHERE id=#{id,jdbcType=NUMERIC}	
+	</update>
+	
+    <!-- 角色权限信息 查询-->
+	<select id="get" parameterType="com.yc.trip.api.business.query.role.RoleElementQuery" resultMap="RoleElementMap">
+        SELECT id,role_id,element_id,created_time,
+           updated_time
+        FROM `role_element`
+        <where>
+            <if test="id!=null ">
+                AND id=#{id,jdbcType=NUMERIC}
+            </if>
+            <if test="roleId!=null ">
+                AND role_id=#{roleId,jdbcType=NUMERIC}
+            </if>
+            <if test="elementId!=null ">
+                AND element_id=#{elementId,jdbcType=NUMERIC}
+            </if>
+        </where>
+        LIMIT 2	
+	</select>
+	
+    <!-- 角色权限信息列表查询 -->
+    <select id="queryList" parameterType="com.yc.trip.api.business.query.role.RoleElementQuery" resultMap="RoleElementMap">
+            SELECT t.id,t.role_id,t.element_id,t.created_time,
+            t.updated_time
+            FROM `role_element` t 
+        <where>
+            <if test="roleId!=null ">
+                AND role_id=#{roleId,jdbcType=NUMERIC}
+            </if>
+            <if test="elementId!=null ">
+                AND element_id=#{elementId,jdbcType=NUMERIC}
+            </if>
+            <if test="keywords!=null and keywords!='' ">
+                AND (
+                 )
+            </if>
+            <if test="ids!=null and ids.size!=0 ">
+                AND id IN
+                    <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">  
+                        #{item}
+                    </foreach>
+            </if>
+        </where>	
+    </select>
+	
+</mapper>

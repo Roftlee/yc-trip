@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yc.trip.api.business.dao.visa.VisaAttachmentDao">
+
+    <!-- 对象与字段映射 -->
+    <resultMap type="com.yc.trip.api.business.dto.visa.VisaAttachment" id="VisaAttachmentMap">
+        <!--  -->
+        <result property="id" column="id" />
+        <!-- 签证Id -->
+        <result property="visaId" column="visa_id" />
+        <!-- 文件链接 -->
+        <result property="fileUrl" column="file_url" />
+        <!-- 创建时间 -->
+        <result property="createdTime" column="created_time" />
+        <!-- 更新时间 -->
+        <result property="updatedTime" column="updated_time" />
+    </resultMap>
+
+    <!-- 签证附件信息新增 -->
+    <insert id="add" parameterType="com.yc.trip.api.business.dto.visa.VisaAttachment" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO `visa_attachment`(
+            visa_id,
+            file_url,
+        )
+        VALUES(
+            #{visaId,jdbcType=NUMERIC},
+            #{fileUrl,jdbcType=VARCHAR},
+        )	
+    </insert>
+	
+    <!-- 签证附件信息 修改-->
+	<update id="update" parameterType="com.yc.trip.api.business.dto.visa.VisaAttachment">
+        UPDATE `visa_attachment`
+        <set>
+            <if test="visaId!=null ">
+            visa_id=#{visaId,jdbcType=NUMERIC},
+            </if>
+            <if test="fileUrl!=null and fileUrl!='' ">
+            file_url=#{fileUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="createdTime!=null ">
+            created_time=#{createdTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedTime!=null ">
+            updated_time=#{updatedTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+            WHERE id=#{id,jdbcType=NUMERIC}	
+	</update>
+	
+    <!-- 签证附件信息 查询-->
+	<select id="get" parameterType="com.yc.trip.api.business.query.visa.VisaAttachmentQuery" resultMap="VisaAttachmentMap">
+        SELECT id,visa_id,file_url,created_time,
+           updated_time
+        FROM `visa_attachment`
+        <where>
+            <if test="id!=null ">
+                AND id=#{id,jdbcType=NUMERIC}
+            </if>
+            <if test="visaId!=null ">
+                AND visa_id=#{visaId,jdbcType=NUMERIC}
+            </if>
+            <if test="fileUrl!=null and fileUrl!='' ">
+                AND file_url=#{fileUrl,jdbcType=VARCHAR}
+            </if>
+        </where>
+        LIMIT 2	
+	</select>
+	
+    <!-- 签证附件信息列表查询 -->
+    <select id="queryList" parameterType="com.yc.trip.api.business.query.visa.VisaAttachmentQuery" resultMap="VisaAttachmentMap">
+            SELECT t.id,t.visa_id,t.file_url,t.created_time,
+            t.updated_time
+            FROM `visa_attachment` t 
+        <where>
+            <if test="visaId!=null ">
+                AND visa_id=#{visaId,jdbcType=NUMERIC}
+            </if>
+            <if test="fileUrl!=null and fileUrl!='' ">
+                AND file_url=#{fileUrl,jdbcType=VARCHAR}
+            </if>
+            <if test="keywords!=null and keywords!='' ">
+                AND (
+                     file_url LIKE CONCAT('%', #{keywords}, '%')
+                 )
+            </if>
+            <if test="ids!=null and ids.size!=0 ">
+                AND id IN
+                    <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">  
+                        #{item}
+                    </foreach>
+            </if>
+        </where>	
+    </select>
+	
+</mapper>

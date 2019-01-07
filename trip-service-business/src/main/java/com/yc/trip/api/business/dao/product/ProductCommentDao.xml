@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yc.trip.api.business.dao.product.ProductCommentDao">
+
+    <!-- 对象与字段映射 -->
+    <resultMap type="com.yc.trip.api.business.dto.product.ProductComment" id="ProductCommentMap">
+        <!--  -->
+        <result property="id" column="id" />
+        <!-- 订单Id -->
+        <result property="orderId" column="order_id" />
+        <!-- 产品Id -->
+        <result property="productId" column="product_id" />
+        <!-- 用户Id -->
+        <result property="userId" column="user_id" />
+        <!-- 评分 -->
+        <result property="credit" column="credit" />
+        <!-- 评价内容 -->
+        <result property="comment" column="comment" />
+        <!-- 是否删除0否1是(枚举:YesNoStatus[core]) -->
+        <result property="isDelete" column="is_delete"  javaType="com.yc.trip.api.core.enums.YesNoStatus"  typeHandler="org.go.api.core.typehandler.UniversalEnumHandler" />
+        <!-- 创建时间 -->
+        <result property="createdTime" column="created_time" />
+        <!-- 更新时间 -->
+        <result property="updatedTime" column="updated_time" />
+    </resultMap>
+
+    <!-- 产品评论信息新增 -->
+    <insert id="add" parameterType="com.yc.trip.api.business.dto.product.ProductComment" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO `product_comment`(
+            order_id,
+            product_id,
+            user_id,
+            credit,
+            comment,
+            <if test="isDelete!=null">is_delete</if>
+        )
+        VALUES(
+            #{orderId,jdbcType=NUMERIC},
+            #{productId,jdbcType=NUMERIC},
+            #{userId,jdbcType=NUMERIC},
+            #{credit,jdbcType=NUMERIC},
+            #{comment,jdbcType=VARCHAR},
+            <if test="isDelete!=null">#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}</if>
+        )	
+    </insert>
+	
+    <!-- 产品评论信息 修改-->
+	<update id="update" parameterType="com.yc.trip.api.business.dto.product.ProductComment">
+        UPDATE `product_comment`
+        <set>
+            <if test="orderId!=null ">
+            order_id=#{orderId,jdbcType=NUMERIC},
+            </if>
+            <if test="productId!=null ">
+            product_id=#{productId,jdbcType=NUMERIC},
+            </if>
+            <if test="userId!=null ">
+            user_id=#{userId,jdbcType=NUMERIC},
+            </if>
+            <if test="credit!=null ">
+            credit=#{credit,jdbcType=NUMERIC},
+            </if>
+            <if test="comment!=null and comment!='' ">
+            comment=#{comment,jdbcType=VARCHAR},
+            </if>
+            <if test="isDelete!=null ">
+            is_delete=#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC},
+            </if>
+            <if test="createdTime!=null ">
+            created_time=#{createdTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedTime!=null ">
+            updated_time=#{updatedTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+            WHERE id=#{id,jdbcType=NUMERIC}	
+	</update>
+	
+    <!-- 产品评论信息 查询-->
+	<select id="get" parameterType="com.yc.trip.api.business.query.product.ProductCommentQuery" resultMap="ProductCommentMap">
+        SELECT id,order_id,product_id,user_id,
+           credit,comment,is_delete,created_time,
+           updated_time
+        FROM `product_comment`
+        <where>
+            <if test="id!=null ">
+                AND id=#{id,jdbcType=NUMERIC}
+            </if>
+            <if test="orderId!=null ">
+                AND order_id=#{orderId,jdbcType=NUMERIC}
+            </if>
+            <if test="productId!=null ">
+                AND product_id=#{productId,jdbcType=NUMERIC}
+            </if>
+            <if test="userId!=null ">
+                AND user_id=#{userId,jdbcType=NUMERIC}
+            </if>
+            <if test="credit!=null ">
+                AND credit=#{credit,jdbcType=NUMERIC}
+            </if>
+            <if test="comment!=null and comment!='' ">
+                AND comment=#{comment,jdbcType=VARCHAR}
+            </if>
+            <if test="isDelete!=null ">
+                AND is_delete=#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
+            </if>
+        </where>
+        LIMIT 2	
+	</select>
+	
+    <!-- 产品评论信息列表查询 -->
+    <select id="queryList" parameterType="com.yc.trip.api.business.query.product.ProductCommentQuery" resultMap="ProductCommentMap">
+            SELECT t.id,t.order_id,t.product_id,t.user_id,
+            t.credit,t.comment,t.is_delete,t.created_time,
+            t.updated_time
+            FROM `product_comment` t 
+        <where>
+            <if test="orderId!=null ">
+                AND order_id=#{orderId,jdbcType=NUMERIC}
+            </if>
+            <if test="productId!=null ">
+                AND product_id=#{productId,jdbcType=NUMERIC}
+            </if>
+            <if test="userId!=null ">
+                AND user_id=#{userId,jdbcType=NUMERIC}
+            </if>
+            <if test="credit!=null ">
+                AND credit=#{credit,jdbcType=NUMERIC}
+            </if>
+            <if test="comment!=null and comment!='' ">
+                AND comment=#{comment,jdbcType=VARCHAR}
+            </if>
+            <if test="isDelete!=null ">
+                AND is_delete=#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
+            </if>
+            <if test="keywords!=null and keywords!='' ">
+                AND (
+                     comment LIKE CONCAT('%', #{keywords}, '%')
+                 )
+            </if>
+            <if test="ids!=null and ids.size!=0 ">
+                AND id IN
+                    <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">  
+                        #{item}
+                    </foreach>
+            </if>
+        </where>	
+    </select>
+	
+</mapper>

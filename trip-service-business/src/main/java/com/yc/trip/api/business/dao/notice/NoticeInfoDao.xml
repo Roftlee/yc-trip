@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yc.trip.api.business.dao.notice.NoticeInfoDao">
+
+    <!-- 对象与字段映射 -->
+    <resultMap type="com.yc.trip.api.business.dto.notice.NoticeInfo" id="NoticeInfoMap">
+        <!--  -->
+        <result property="id" column="id" />
+        <!-- 标题 -->
+        <result property="title" column="title" />
+        <!-- 内容 -->
+        <result property="content" column="content" />
+        <!-- 是否删除0否1是(枚举:YesNoStatus[core]) -->
+        <result property="isDelete" column="is_delete"  javaType="com.yc.trip.api.core.enums.YesNoStatus"  typeHandler="org.go.api.core.typehandler.UniversalEnumHandler" />
+        <!-- 创建时间 -->
+        <result property="createdTime" column="created_time" />
+        <!-- 更新时间 -->
+        <result property="updatedTime" column="updated_time" />
+    </resultMap>
+
+    <!-- 资讯新增 -->
+    <insert id="add" parameterType="com.yc.trip.api.business.dto.notice.NoticeInfo">
+        INSERT INTO `notice_info`(
+            id,
+            title,
+            content,
+            <if test="isDelete!=null">is_delete</if>
+        )
+        VALUES(
+            #{id,jdbcType=NUMERIC},
+            #{title,jdbcType=VARCHAR},
+            #{content,jdbcType=VARCHAR},
+            <if test="isDelete!=null">#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}</if>
+        )	
+    </insert>
+	
+    <!-- 资讯 修改-->
+	<update id="update" parameterType="com.yc.trip.api.business.dto.notice.NoticeInfo">
+        UPDATE `notice_info`
+        <set>
+            <if test="id!=null ">
+            id=#{id,jdbcType=NUMERIC},
+            </if>
+            <if test="title!=null and title!='' ">
+            title=#{title,jdbcType=VARCHAR},
+            </if>
+            <if test="content!=null ">
+            content=#{content,jdbcType=VARCHAR},
+            </if>
+            <if test="isDelete!=null ">
+            is_delete=#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC},
+            </if>
+            <if test="createdTime!=null ">
+            created_time=#{createdTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedTime!=null ">
+            updated_time=#{updatedTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+            WHERE 	
+	</update>
+	
+    <!-- 资讯 查询-->
+	<select id="get" parameterType="com.yc.trip.api.business.query.notice.NoticeInfoQuery" resultMap="NoticeInfoMap">
+        SELECT id,title,content,is_delete,
+           created_time,updated_time
+        FROM `notice_info`
+        <where>
+            <if test="id!=null ">
+                AND id=#{id,jdbcType=NUMERIC}
+            </if>
+            <if test="title!=null and title!='' ">
+                AND title=#{title,jdbcType=VARCHAR}
+            </if>
+            <if test="content!=null ">
+                AND content=#{content,jdbcType=VARCHAR}
+            </if>
+            <if test="isDelete!=null ">
+                AND is_delete=#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
+            </if>
+        </where>
+        LIMIT 2	
+	</select>
+	
+    <!-- 资讯列表查询 -->
+    <select id="queryList" parameterType="com.yc.trip.api.business.query.notice.NoticeInfoQuery" resultMap="NoticeInfoMap">
+            SELECT t.id,t.title,t.content,t.is_delete,
+            t.created_time,t.updated_time
+            FROM `notice_info` t 
+        <where>
+            <if test="id!=null ">
+                AND id=#{id,jdbcType=NUMERIC}
+            </if>
+            <if test="title!=null and title!='' ">
+                AND title=#{title,jdbcType=VARCHAR}
+            </if>
+            <if test="content!=null ">
+                AND content=#{content,jdbcType=VARCHAR}
+            </if>
+            <if test="isDelete!=null ">
+                AND is_delete=#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
+            </if>
+            <if test="keywords!=null and keywords!='' ">
+                AND (
+                     title LIKE CONCAT('%', #{keywords}, '%')
+                 )
+            </if>
+            <if test="ids!=null and ids.size!=0 ">
+                AND id IN
+                    <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">  
+                        #{item}
+                    </foreach>
+            </if>
+        </where>	
+    </select>
+	
+</mapper>

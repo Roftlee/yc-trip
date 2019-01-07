@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+    http://www.springframework.org/schema/tx
+    http://www.springframework.org/schema/tx/spring-tx-4.1.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context-4.1.xsd
+    http://www.springframework.org/schema/aop
+    http://www.springframework.org/schema/aop/spring-aop-4.1.xsd">
+
+
+    <import resource="classpath*:/spring/default-orm-config.xml"/>
+
+    <!-- 数据源的配置将有各个产品线自己来配置 -->
+
+    <bean id="dataSource" class="org.go.framework.base.dataroute.RoutingDataSource">
+        <!-- 业务库 -->
+        <property name="mainDataSource" ref="busDataSource"/>
+    </bean>
+
+    <!-- 业务库数据源，使用的是alibaba的Druid(德鲁伊)数据源 -->
+    <bean name="busDataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+        <property name="url" value="${bus.mysql.url}"/>
+        <property name="username" value="${bus.mysql.username.des}"/>
+        <property name="password" value="${bus.mysql.password.des}"/>
+        <!-- 初始化连接大小 -->
+        <property name="initialSize" value="${bus.mysql.initialSize}"/>
+        <!-- 连接池最大使用连接数量 -->
+        <property name="maxActive" value="${bus.mysql.maxActive}"/>
+        <!-- 连接池最大空闲 -->
+        <!--  <property name="maxIdle" value="20" /> -->
+        <!-- 连接池最小空闲 -->
+        <property name="minIdle" value="2"/>
+        <!-- 获取连接最大等待时间 -->
+        <property name="maxWait" value="60000"/>
+        <!-- 
+        <property name="poolPreparedStatements" value="true" /> 
+        <property name="maxPoolPreparedStatementPerConnectionSize" value="33" /> 
+        -->
+        <property name="validationQuery" value="SELECT 1"/>
+        <property name="testOnBorrow" value="false"/>
+        <property name="testOnReturn" value="false"/>
+        <property name="testWhileIdle" value="true"/>
+        <!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+        <property name="timeBetweenEvictionRunsMillis" value="60000"/>
+        <!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+        <property name="minEvictableIdleTimeMillis" value="25200000"/>
+        <!-- 打开removeAbandoned功能 -->
+        <property name="removeAbandoned" value="true"/>
+        <!-- 1800秒，也就是30分钟 -->
+        <property name="removeAbandonedTimeout" value="1800"/>
+        <!-- 关闭abanded连接时输出错误日志 -->
+        <property name="logAbandoned" value="true"/>
+        <!-- 监控数据库 -->
+        <!--属性类型是字符串，通过别名的方式配置扩展插件，常用的插件有：
+                 监控统计用的filter:stat
+                 日志用的filter:log4j
+                防御SQL注入的filter:wall -->
+        <property name="filters" value="mergeStat"/>
+    </bean>
+
+    <!-- ========================================分隔线========================================= -->
+    <!-- 业务库 配置Spring的事务管理器 -->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <!-- 配置Spring的事务模版每次新事务 -->
+    <bean id="newTransactionTemplate" class="org.go.framework.base.transaction.GigoldTransactionTemplate">
+        <property name="propagationBehaviorName" value="PROPAGATION_REQUIRES_NEW"/>
+        <property name="transactionManager">
+            <ref bean="transactionManager"/>
+        </property>
+    </bean>
+
+    <!-- 配置Spring的事务模版嵌套事务 -->
+    <bean id="nestedTransactionTemplate" class="org.go.framework.base.transaction.GigoldTransactionTemplate">
+        <property name="propagationBehaviorName" value="PROPAGATION_NESTED"/>
+        <property name="transactionManager">
+            <ref bean="transactionManager"/>
+        </property>
+    </bean>
+    <!-- ========================================分隔线========================================= -->
+    <!-- 线程池配置 -->
+    <bean id="threadPoolTaskExecutor"
+          class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+        <!-- 核心线程数，默认为1 -->
+        <property name="corePoolSize" value="100"/>
+        <!-- 最大线程数，默认为Integer.MAX_VALUE -->
+        <property name="maxPoolSize" value="200"/>
+        <!-- 队列最大长度，一般需要设置值>=notifyScheduledMainExecutor.maxNum；默认为Integer.MAX_VALUE 
+            <property name="queueCapacity" value="1000" />
+            -->
+        <!-- 线程池维护线程所允许的空闲时间，默认为60s -->
+        <property name="keepAliveSeconds" value="300"/>
+        <!-- 线程池对拒绝任务（无线程可用）的处理策略，目前只支持AbortPolicy、CallerRunsPolicy；默认为后者 -->
+        <property name="rejectedExecutionHandler">
+            <!-- AbortPolicy:直接抛出java.util.concurrent.RejectedExecutionException异常 -->
+            <!-- CallerRunsPolicy:主线程直接执行该任务，执行完之后尝试添加下一个任务到线程池中，可以有效降低向线程池内添加任务的速度 -->
+            <!-- DiscardOldestPolicy:抛弃旧的任务、暂不支持；会导致被丢弃的任务无法再次被执行 -->
+            <!-- DiscardPolicy:抛弃当前任务、暂不支持；会导致被丢弃的任务无法再次被执行 -->
+            <bean class="java.util.concurrent.ThreadPoolExecutor$DiscardPolicy"/>
+        </property>
+    </bean>
+</beans>

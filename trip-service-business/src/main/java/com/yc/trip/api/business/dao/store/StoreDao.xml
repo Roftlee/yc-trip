@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yc.trip.api.business.dao.store.StoreDao">
+
+    <!-- 对象与字段映射 -->
+    <resultMap type="com.yc.trip.api.business.dto.store.Store" id="StoreMap">
+        <!--  -->
+        <result property="id" column="id" />
+        <!-- 门店名称 -->
+        <result property="storeName" column="store_name" />
+        <!-- 联系人 -->
+        <result property="linkMan" column="link_man" />
+        <!-- 联系方式 -->
+        <result property="linkNum" column="link_num" />
+        <!-- 门店地址 -->
+        <result property="address" column="address" />
+        <!-- 有效天数 -->
+        <result property="totalDays" column="total_days" />
+        <!-- 到期时间 -->
+        <result property="endTime" column="end_time" />
+        <!-- 创建时间 -->
+        <result property="createdTime" column="created_time" />
+        <!-- 更新时间 -->
+        <result property="updatedTime" column="updated_time" />
+    </resultMap>
+
+    <!-- 门店信息新增 -->
+    <insert id="add" parameterType="com.yc.trip.api.business.dto.store.Store" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO `store`(
+            store_name,
+            link_man,
+            link_num,
+            address,
+            total_days,
+            end_time,
+        )
+        VALUES(
+            #{storeName,jdbcType=VARCHAR},
+            #{linkMan,jdbcType=VARCHAR},
+            #{linkNum,jdbcType=VARCHAR},
+            #{address,jdbcType=VARCHAR},
+            #{totalDays,jdbcType=NUMERIC},
+            #{endTime,jdbcType=TIMESTAMP},
+        )	
+    </insert>
+	
+    <!-- 门店信息 修改-->
+	<update id="update" parameterType="com.yc.trip.api.business.dto.store.Store">
+        UPDATE `store`
+        <set>
+            <if test="storeName!=null and storeName!='' ">
+            store_name=#{storeName,jdbcType=VARCHAR},
+            </if>
+            <if test="linkMan!=null and linkMan!='' ">
+            link_man=#{linkMan,jdbcType=VARCHAR},
+            </if>
+            <if test="linkNum!=null and linkNum!='' ">
+            link_num=#{linkNum,jdbcType=VARCHAR},
+            </if>
+            <if test="address!=null and address!='' ">
+            address=#{address,jdbcType=VARCHAR},
+            </if>
+            <if test="totalDays!=null ">
+            total_days=#{totalDays,jdbcType=NUMERIC},
+            </if>
+            <if test="endTime!=null ">
+            end_time=#{endTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createdTime!=null ">
+            created_time=#{createdTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedTime!=null ">
+            updated_time=#{updatedTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+            WHERE id=#{id,jdbcType=NUMERIC}	
+	</update>
+	
+    <!-- 门店信息 查询-->
+	<select id="get" parameterType="com.yc.trip.api.business.query.store.StoreQuery" resultMap="StoreMap">
+        SELECT id,store_name,link_man,link_num,
+           address,total_days,end_time,created_time,
+           updated_time
+        FROM `store`
+        <where>
+            <if test="id!=null ">
+                AND id=#{id,jdbcType=NUMERIC}
+            </if>
+            <if test="storeName!=null and storeName!='' ">
+                AND store_name=#{storeName,jdbcType=VARCHAR}
+            </if>
+            <if test="linkMan!=null and linkMan!='' ">
+                AND link_man=#{linkMan,jdbcType=VARCHAR}
+            </if>
+            <if test="linkNum!=null and linkNum!='' ">
+                AND link_num=#{linkNum,jdbcType=VARCHAR}
+            </if>
+            <if test="address!=null and address!='' ">
+                AND address=#{address,jdbcType=VARCHAR}
+            </if>
+            <if test="totalDays!=null ">
+                AND total_days=#{totalDays,jdbcType=NUMERIC}
+            </if>
+        </where>
+        LIMIT 2	
+	</select>
+	
+    <!-- 门店信息列表查询 -->
+    <select id="queryList" parameterType="com.yc.trip.api.business.query.store.StoreQuery" resultMap="StoreMap">
+            SELECT t.id,t.store_name,t.link_man,t.link_num,
+            t.address,t.total_days,t.end_time,t.created_time,
+            t.updated_time
+            FROM `store` t 
+        <where>
+            <if test="storeName!=null and storeName!='' ">
+                AND store_name=#{storeName,jdbcType=VARCHAR}
+            </if>
+            <if test="linkMan!=null and linkMan!='' ">
+                AND link_man=#{linkMan,jdbcType=VARCHAR}
+            </if>
+            <if test="linkNum!=null and linkNum!='' ">
+                AND link_num=#{linkNum,jdbcType=VARCHAR}
+            </if>
+            <if test="address!=null and address!='' ">
+                AND address=#{address,jdbcType=VARCHAR}
+            </if>
+            <if test="totalDays!=null ">
+                AND total_days=#{totalDays,jdbcType=NUMERIC}
+            </if>
+            <if test="keywords!=null and keywords!='' ">
+                AND (
+                     store_name LIKE CONCAT('%', #{keywords}, '%')
+                     OR link_man LIKE CONCAT('%', #{keywords}, '%')
+                     OR link_num LIKE CONCAT('%', #{keywords}, '%')
+                     OR address LIKE CONCAT('%', #{keywords}, '%')
+                 )
+            </if>
+            <if test="ids!=null and ids.size!=0 ">
+                AND id IN
+                    <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">  
+                        #{item}
+                    </foreach>
+            </if>
+        </where>	
+    </select>
+	
+</mapper>

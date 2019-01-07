@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yc.trip.api.business.dao.provider.ProviderBrandRelationDao">
+
+    <!-- 对象与字段映射 -->
+    <resultMap type="com.yc.trip.api.business.dto.provider.ProviderBrandRelation" id="ProviderBrandRelationMap">
+        <!--  -->
+        <result property="id" column="id" />
+        <!-- 供应商Id -->
+        <result property="providerId" column="provider_id" />
+        <!-- 品牌Id -->
+        <result property="brandId" column="brand_id" />
+        <!-- 创建时间 -->
+        <result property="createdTime" column="created_time" />
+        <!-- 更新时间 -->
+        <result property="updatedTime" column="updated_time" />
+    </resultMap>
+
+    <!-- 供应商品牌关联信息新增 -->
+    <insert id="add" parameterType="com.yc.trip.api.business.dto.provider.ProviderBrandRelation" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO `provider_brand_relation`(
+            provider_id,
+            brand_id,
+        )
+        VALUES(
+            #{providerId,jdbcType=NUMERIC},
+            #{brandId,jdbcType=NUMERIC},
+        )	
+    </insert>
+	
+    <!-- 供应商品牌关联信息 修改-->
+	<update id="update" parameterType="com.yc.trip.api.business.dto.provider.ProviderBrandRelation">
+        UPDATE `provider_brand_relation`
+        <set>
+            <if test="providerId!=null ">
+            provider_id=#{providerId,jdbcType=NUMERIC},
+            </if>
+            <if test="brandId!=null ">
+            brand_id=#{brandId,jdbcType=NUMERIC},
+            </if>
+            <if test="createdTime!=null ">
+            created_time=#{createdTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedTime!=null ">
+            updated_time=#{updatedTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+            WHERE id=#{id,jdbcType=NUMERIC}	
+	</update>
+	
+    <!-- 供应商品牌关联信息 查询-->
+	<select id="get" parameterType="com.yc.trip.api.business.query.provider.ProviderBrandRelationQuery" resultMap="ProviderBrandRelationMap">
+        SELECT id,provider_id,brand_id,created_time,
+           updated_time
+        FROM `provider_brand_relation`
+        <where>
+            <if test="id!=null ">
+                AND id=#{id,jdbcType=NUMERIC}
+            </if>
+            <if test="providerId!=null ">
+                AND provider_id=#{providerId,jdbcType=NUMERIC}
+            </if>
+            <if test="brandId!=null ">
+                AND brand_id=#{brandId,jdbcType=NUMERIC}
+            </if>
+        </where>
+        LIMIT 2	
+	</select>
+	
+    <!-- 供应商品牌关联信息列表查询 -->
+    <select id="queryList" parameterType="com.yc.trip.api.business.query.provider.ProviderBrandRelationQuery" resultMap="ProviderBrandRelationMap">
+            SELECT t.id,t.provider_id,t.brand_id,t.created_time,
+            t.updated_time
+            FROM `provider_brand_relation` t 
+        <where>
+            <if test="providerId!=null ">
+                AND provider_id=#{providerId,jdbcType=NUMERIC}
+            </if>
+            <if test="brandId!=null ">
+                AND brand_id=#{brandId,jdbcType=NUMERIC}
+            </if>
+            <if test="keywords!=null and keywords!='' ">
+                AND (
+                 )
+            </if>
+            <if test="ids!=null and ids.size!=0 ">
+                AND id IN
+                    <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">  
+                        #{item}
+                    </foreach>
+            </if>
+        </where>	
+    </select>
+	
+</mapper>

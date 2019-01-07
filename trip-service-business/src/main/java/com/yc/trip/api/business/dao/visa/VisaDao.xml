@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yc.trip.api.business.dao.visa.VisaDao">
+
+    <!-- 对象与字段映射 -->
+    <resultMap type="com.yc.trip.api.business.dto.visa.Visa" id="VisaMap">
+        <!--  -->
+        <result property="id" column="id" />
+        <!-- 签证分类Id -->
+        <result property="sortId" column="sort_id" />
+        <!-- 国家 -->
+        <result property="country" column="country" />
+        <!-- 是否删除0否1是(枚举:YesNoStatus[core]) -->
+        <result property="isDelete" column="is_delete"  javaType="com.yc.trip.api.core.enums.YesNoStatus"  typeHandler="org.go.api.core.typehandler.UniversalEnumHandler" />
+        <!-- 创建时间 -->
+        <result property="createdTime" column="created_time" />
+        <!-- 更新时间 -->
+        <result property="updatedTime" column="updated_time" />
+    </resultMap>
+
+    <!-- 签证信息新增 -->
+    <insert id="add" parameterType="com.yc.trip.api.business.dto.visa.Visa" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO `visa`(
+            sort_id,
+            country,
+            <if test="isDelete!=null">is_delete</if>
+        )
+        VALUES(
+            #{sortId,jdbcType=NUMERIC},
+            #{country,jdbcType=VARCHAR},
+            <if test="isDelete!=null">#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}</if>
+        )	
+    </insert>
+	
+    <!-- 签证信息 修改-->
+	<update id="update" parameterType="com.yc.trip.api.business.dto.visa.Visa">
+        UPDATE `visa`
+        <set>
+            <if test="sortId!=null ">
+            sort_id=#{sortId,jdbcType=NUMERIC},
+            </if>
+            <if test="country!=null and country!='' ">
+            country=#{country,jdbcType=VARCHAR},
+            </if>
+            <if test="isDelete!=null ">
+            is_delete=#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC},
+            </if>
+            <if test="createdTime!=null ">
+            created_time=#{createdTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedTime!=null ">
+            updated_time=#{updatedTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+            WHERE id=#{id,jdbcType=NUMERIC}	
+	</update>
+	
+    <!-- 签证信息 查询-->
+	<select id="get" parameterType="com.yc.trip.api.business.query.visa.VisaQuery" resultMap="VisaMap">
+        SELECT id,sort_id,country,is_delete,
+           created_time,updated_time
+        FROM `visa`
+        <where>
+            <if test="id!=null ">
+                AND id=#{id,jdbcType=NUMERIC}
+            </if>
+            <if test="sortId!=null ">
+                AND sort_id=#{sortId,jdbcType=NUMERIC}
+            </if>
+            <if test="country!=null and country!='' ">
+                AND country=#{country,jdbcType=VARCHAR}
+            </if>
+            <if test="isDelete!=null ">
+                AND is_delete=#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
+            </if>
+        </where>
+        LIMIT 2	
+	</select>
+	
+    <!-- 签证信息列表查询 -->
+    <select id="queryList" parameterType="com.yc.trip.api.business.query.visa.VisaQuery" resultMap="VisaMap">
+            SELECT t.id,t.sort_id,t.country,t.is_delete,
+            t.created_time,t.updated_time
+            FROM `visa` t 
+        <where>
+            <if test="sortId!=null ">
+                AND sort_id=#{sortId,jdbcType=NUMERIC}
+            </if>
+            <if test="country!=null and country!='' ">
+                AND country=#{country,jdbcType=VARCHAR}
+            </if>
+            <if test="isDelete!=null ">
+                AND is_delete=#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
+            </if>
+            <if test="keywords!=null and keywords!='' ">
+                AND (
+                     country LIKE CONCAT('%', #{keywords}, '%')
+                 )
+            </if>
+            <if test="ids!=null and ids.size!=0 ">
+                AND id IN
+                    <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">  
+                        #{item}
+                    </foreach>
+            </if>
+        </where>	
+    </select>
+	
+</mapper>
