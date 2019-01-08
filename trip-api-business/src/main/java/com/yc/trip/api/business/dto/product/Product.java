@@ -24,7 +24,7 @@ import lombok.NoArgsConstructor;
  * 产品信息Dto类
  * 
  * @author My-Toolkits
- * @since 2019-01-06 17:16
+ * @since 2019-01-08 21:01
  */
 @Builder
 @Data
@@ -93,6 +93,11 @@ public class Product extends AbstractEntityDto implements Serializable {
 	private Double price;
 
 	/**
+	 * 费用说明
+	 */
+	private String priceDesc;
+
+	/**
 	 * 门店分成比例(百分比)
 	 */
 	@InsertRequired
@@ -107,6 +112,16 @@ public class Product extends AbstractEntityDto implements Serializable {
 	 * 视频链接
 	 */
 	private String videoUrl;
+
+	/**
+	 * 行程介绍
+	 */
+	private String routeIntroduce;
+
+	/**
+	 * 行程特色
+	 */
+	private String routeFeature;
 
 	/**
 	 * 产品描述

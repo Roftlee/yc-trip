@@ -21,7 +21,7 @@ import lombok.NoArgsConstructor;
  * 产品信息Query类
  * 
  * @author My-Toolkits
- * @since 2019-01-06 17:16
+ * @since 2019-01-08 21:01
  */
 @Builder
 @Data
@@ -84,6 +84,11 @@ public class ProductQuery extends AbstractBasePageRequestDto {
 	private Double price;
 
 	/**
+	 * 费用说明
+	 */
+	private String priceDesc;
+
+	/**
 	 * 门店分成比例(百分比)
 	 */
 	private Integer commissionRate;
@@ -97,6 +102,16 @@ public class ProductQuery extends AbstractBasePageRequestDto {
 	 * 视频链接
 	 */
 	private String videoUrl;
+
+	/**
+	 * 行程介绍
+	 */
+	private String routeIntroduce;
+
+	/**
+	 * 行程特色
+	 */
+	private String routeFeature;
 
 	/**
 	 * 产品描述

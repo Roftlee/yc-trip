@@ -25,12 +25,18 @@
         <result property="strikePrice" column="strike_price" />
         <!-- 售价 -->
         <result property="price" column="price" />
+        <!-- 费用说明 -->
+        <result property="priceDesc" column="price_desc" />
         <!-- 门店分成比例(百分比) -->
         <result property="commissionRate" column="commission_rate" />
         <!-- 图片链接 -->
         <result property="imageUrl" column="image_url" />
         <!-- 视频链接 -->
         <result property="videoUrl" column="video_url" />
+        <!-- 行程介绍 -->
+        <result property="routeIntroduce" column="route_introduce" />
+        <!-- 行程特色 -->
+        <result property="routeFeature" column="route_feature" />
         <!-- 产品描述 -->
         <result property="description" column="description" />
         <!-- 备注 -->
@@ -55,9 +61,12 @@
             cost,
             strike_price,
             price,
+            price_desc,
             commission_rate,
             image_url,
             video_url,
+            route_introduce,
+            route_feature,
             description,
             remark,
             <if test="isDelete!=null">is_delete</if>
@@ -72,9 +81,12 @@
             #{cost,jdbcType=NUMERIC},
             #{strikePrice,jdbcType=NUMERIC},
             #{price,jdbcType=NUMERIC},
+            #{priceDesc,jdbcType=VARCHAR},
             #{commissionRate,jdbcType=NUMERIC},
             #{imageUrl,jdbcType=VARCHAR},
             #{videoUrl,jdbcType=VARCHAR},
+            #{routeIntroduce,jdbcType=VARCHAR},
+            #{routeFeature,jdbcType=VARCHAR},
             #{description,jdbcType=VARCHAR},
             #{remark,jdbcType=VARCHAR},
             <if test="isDelete!=null">#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}</if>
@@ -112,6 +124,9 @@
             <if test="price!=null ">
             price=#{price,jdbcType=NUMERIC},
             </if>
+            <if test="priceDesc!=null and priceDesc!='' ">
+            price_desc=#{priceDesc,jdbcType=VARCHAR},
+            </if>
             <if test="commissionRate!=null ">
             commission_rate=#{commissionRate,jdbcType=NUMERIC},
             </if>
@@ -120,6 +135,12 @@
             </if>
             <if test="videoUrl!=null and videoUrl!='' ">
             video_url=#{videoUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="routeIntroduce!=null ">
+            route_introduce=#{routeIntroduce,jdbcType=VARCHAR},
+            </if>
+            <if test="routeFeature!=null ">
+            route_feature=#{routeFeature,jdbcType=VARCHAR},
             </if>
             <if test="description!=null ">
             description=#{description,jdbcType=VARCHAR},
@@ -144,9 +165,10 @@
 	<select id="get" parameterType="com.yc.trip.api.business.query.product.ProductQuery" resultMap="ProductMap">
         SELECT id,name,brief_desc,sort_id,
            region_id,region_sort_id,provider_id,cost,
-           strike_price,price,commission_rate,image_url,
-           video_url,description,remark,is_delete,
-           created_time,updated_time
+           strike_price,price,price_desc,commission_rate,
+           image_url,video_url,route_introduce,route_feature,
+           description,remark,is_delete,created_time,
+           updated_time
         FROM `product`
         <where>
             <if test="id!=null ">
@@ -179,6 +201,9 @@
             <if test="price!=null ">
                 AND price=#{price,jdbcType=NUMERIC}
             </if>
+            <if test="priceDesc!=null and priceDesc!='' ">
+                AND price_desc=#{priceDesc,jdbcType=VARCHAR}
+            </if>
             <if test="commissionRate!=null ">
                 AND commission_rate=#{commissionRate,jdbcType=NUMERIC}
             </if>
@@ -187,6 +212,12 @@
             </if>
             <if test="videoUrl!=null and videoUrl!='' ">
                 AND video_url=#{videoUrl,jdbcType=VARCHAR}
+            </if>
+            <if test="routeIntroduce!=null ">
+                AND route_introduce=#{routeIntroduce,jdbcType=VARCHAR}
+            </if>
+            <if test="routeFeature!=null ">
+                AND route_feature=#{routeFeature,jdbcType=VARCHAR}
             </if>
             <if test="description!=null ">
                 AND description=#{description,jdbcType=VARCHAR}
@@ -205,9 +236,10 @@
     <select id="queryList" parameterType="com.yc.trip.api.business.query.product.ProductQuery" resultMap="ProductMap">
             SELECT t.id,t.name,t.brief_desc,t.sort_id,
             t.region_id,t.region_sort_id,t.provider_id,t.cost,
-            t.strike_price,t.price,t.commission_rate,t.image_url,
-            t.video_url,t.description,t.remark,t.is_delete,
-            t.created_time,t.updated_time
+            t.strike_price,t.price,t.price_desc,t.commission_rate,
+            t.image_url,t.video_url,t.route_introduce,t.route_feature,
+            t.description,t.remark,t.is_delete,t.created_time,
+            t.updated_time
             FROM `product` t 
         <where>
             <if test="name!=null and name!='' ">
@@ -237,6 +269,9 @@
             <if test="price!=null ">
                 AND price=#{price,jdbcType=NUMERIC}
             </if>
+            <if test="priceDesc!=null and priceDesc!='' ">
+                AND price_desc=#{priceDesc,jdbcType=VARCHAR}
+            </if>
             <if test="commissionRate!=null ">
                 AND commission_rate=#{commissionRate,jdbcType=NUMERIC}
             </if>
@@ -245,6 +280,12 @@
             </if>
             <if test="videoUrl!=null and videoUrl!='' ">
                 AND video_url=#{videoUrl,jdbcType=VARCHAR}
+            </if>
+            <if test="routeIntroduce!=null ">
+                AND route_introduce=#{routeIntroduce,jdbcType=VARCHAR}
+            </if>
+            <if test="routeFeature!=null ">
+                AND route_feature=#{routeFeature,jdbcType=VARCHAR}
             </if>
             <if test="description!=null ">
                 AND description=#{description,jdbcType=VARCHAR}
@@ -259,6 +300,7 @@
                 AND (
                      name LIKE CONCAT('%', #{keywords}, '%')
                      OR brief_desc LIKE CONCAT('%', #{keywords}, '%')
+                     OR price_desc LIKE CONCAT('%', #{keywords}, '%')
                      OR image_url LIKE CONCAT('%', #{keywords}, '%')
                      OR video_url LIKE CONCAT('%', #{keywords}, '%')
                      OR remark LIKE CONCAT('%', #{keywords}, '%')
