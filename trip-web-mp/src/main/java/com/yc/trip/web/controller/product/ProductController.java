@@ -5,6 +5,8 @@ import com.github.pagehelper.PageInfo;
 import com.yc.trip.api.business.facade.product.ProductFacade;
 import com.yc.trip.api.business.facade.product.ProductProfFacade;
 import com.yc.trip.api.business.item.product.ProductItem;
+import com.yc.trip.api.business.item.product.SpecialOfferItem;
+import com.yc.trip.api.business.request.common.IdRequest;
 import com.yc.trip.api.business.request.common.PageRequest;
 import com.yc.trip.web.controller.base.AbstractBaseController;
 import org.go.api.core.dto.ResDto;
@@ -57,5 +59,33 @@ public class ProductController extends AbstractBaseController {
     public ResDto<PageInfo<ProductItem>> querySuggestedProductPage(@RequestBody PageRequest request) throws PendingException {
 
         return new ResDto<>(productProfFacade.querySuggestedProductPage(request));
+    }
+
+    /**
+     * 热门优惠列表分页查询
+     *
+     * @param request
+     * @return
+     * @throws PendingException
+     */
+    @RequestMapping(value = "/querySpecialOfferProduct.do", method = RequestMethod.POST)
+    @MvcValidate
+    public ResDto<PageInfo<SpecialOfferItem>> querySpecialOfferProduct(@RequestBody PageRequest request) throws PendingException {
+
+        return new ResDto<>(productProfFacade.querySpecialOfferProduct(request));
+    }
+
+    /**
+     * 获取产品详情
+     *
+     * @param request
+     * @return
+     * @throws PendingException
+     */
+    @RequestMapping(value = "/getProductDetail.do", method = RequestMethod.POST)
+    @MvcValidate
+    public ResDto<ProductItem> getProductDetail(@RequestBody IdRequest request) throws PendingException {
+
+        return new ResDto<>(productProfFacade.getProductDetail(request));
     }
 }

@@ -18,7 +18,7 @@ import java.io.Serializable;
 public class ProductItem implements Serializable {
 
     /**
-     *
+     * id
      */
     private Long id;
 

@@ -2,6 +2,8 @@ package com.yc.trip.api.business.facade.product;
 
 import com.github.pagehelper.PageInfo;
 import com.yc.trip.api.business.item.product.ProductItem;
+import com.yc.trip.api.business.item.product.SpecialOfferItem;
+import com.yc.trip.api.business.request.common.IdRequest;
 import com.yc.trip.api.business.request.common.PageRequest;
 import org.go.framework.core.exception.PendingException;
 
@@ -21,4 +23,21 @@ public interface ProductProfFacade {
      * @throws PendingException
      */
     PageInfo<ProductItem> querySuggestedProductPage(PageRequest request) throws PendingException;
+
+    /**
+     * 查询优惠活动产品
+     *
+     * @return
+     * @throws PendingException
+     */
+    PageInfo<SpecialOfferItem> querySpecialOfferProduct(PageRequest request) throws PendingException;
+
+    /**
+     * 获取产品详情
+     *
+     * @param request
+     * @return
+     * @throws PendingException
+     */
+    ProductItem getProductDetail(IdRequest request) throws PendingException;
 }

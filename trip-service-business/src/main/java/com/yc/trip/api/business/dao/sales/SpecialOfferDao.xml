@@ -134,6 +134,8 @@
                         #{item}
                     </foreach>
             </if>
+
+            AND date_format(curdate(), '%Y-%m-%d') between date_format(t.start_time, '%Y-%m-%d') and date_format(t.end_time, '%Y-%m-%d')
         </where>	
     </select>
 	
