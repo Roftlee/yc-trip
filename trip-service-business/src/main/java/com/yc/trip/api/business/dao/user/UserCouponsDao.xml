@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yc.trip.api.business.dao.user.UserCouponsDao">
+
+    <!-- 对象与字段映射 -->
+    <resultMap type="com.yc.trip.api.business.dto.user.UserCoupons" id="UserCouponsMap">
+        <!-- id -->
+        <result property="id" column="id" />
+        <!-- 用户Id -->
+        <result property="userId" column="user_id" />
+        <!-- 优惠券Id -->
+        <result property="counponsId" column="counpons_id" />
+        <!-- 是否使用0否1是(枚举:YesNoStatus[core]) -->
+        <result property="isUsed" column="is_used"  javaType="com.yc.trip.api.core.enums.YesNoStatus"  typeHandler="org.go.api.core.typehandler.UniversalEnumHandler" />
+        <!-- 创建时间 -->
+        <result property="createdTime" column="created_time" />
+        <!-- 更新时间 -->
+        <result property="updatedTime" column="updated_time" />
+    </resultMap>
+
+    <!-- 用户优惠券新增 -->
+    <insert id="add" parameterType="com.yc.trip.api.business.dto.user.UserCoupons">
+        INSERT INTO `user_coupons`(
+            id,
+            user_id,
+            counpons_id,
+            is_used,
+        )
+        VALUES(
+            #{id,jdbcType=NUMERIC},
+            #{userId,jdbcType=NUMERIC},
+            #{counponsId,jdbcType=NUMERIC},
+            #{isUsed, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC},
+        )	
+    </insert>
+	
+    <!-- 用户优惠券 修改-->
+	<update id="update" parameterType="com.yc.trip.api.business.dto.user.UserCoupons">
+        UPDATE `user_coupons`
+        <set>
+            <if test="userId!=null ">
+            user_id=#{userId,jdbcType=NUMERIC},
+            </if>
+            <if test="counponsId!=null ">
+            counpons_id=#{counponsId,jdbcType=NUMERIC},
+            </if>
+            <if test="isUsed!=null ">
+            is_used=#{isUsed, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC},
+            </if>
+            <if test="createdTime!=null ">
+            created_time=#{createdTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedTime!=null ">
+            updated_time=#{updatedTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+            WHERE id=#{id,jdbcType=NUMERIC}	
+	</update>
+	
+    <!-- 用户优惠券 查询-->
+	<select id="get" parameterType="com.yc.trip.api.business.query.user.UserCouponsQuery" resultMap="UserCouponsMap">
+        SELECT id,user_id,counpons_id,is_used,
+           created_time,updated_time
+        FROM `user_coupons`
+        <where>
+            <if test="id!=null ">
+                AND id=#{id,jdbcType=NUMERIC}
+            </if>
+            <if test="userId!=null ">
+                AND user_id=#{userId,jdbcType=NUMERIC}
+            </if>
+            <if test="counponsId!=null ">
+                AND counpons_id=#{counponsId,jdbcType=NUMERIC}
+            </if>
+            <if test="isUsed!=null ">
+                AND is_used=#{isUsed, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
+            </if>
+        </where>
+        LIMIT 2	
+	</select>
+	
+    <!-- 用户优惠券列表查询 -->
+    <select id="queryList" parameterType="com.yc.trip.api.business.query.user.UserCouponsQuery" resultMap="UserCouponsMap">
+            SELECT t.id,t.user_id,t.counpons_id,t.is_used,
+            t.created_time,t.updated_time
+            FROM `user_coupons` t 
+        <where>
+            <if test="id!=null ">
+                AND id=#{id,jdbcType=NUMERIC}
+            </if>
+            <if test="userId!=null ">
+                AND user_id=#{userId,jdbcType=NUMERIC}
+            </if>
+            <if test="counponsId!=null ">
+                AND counpons_id=#{counponsId,jdbcType=NUMERIC}
+            </if>
+            <if test="isUsed!=null ">
+                AND is_used=#{isUsed, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
+            </if>
+            <if test="keywords!=null and keywords!='' ">
+                AND (
+                 )
+            </if>
+            <if test="ids!=null and ids.size!=0 ">
+                AND id IN
+                    <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">  
+                        #{item}
+                    </foreach>
+            </if>
+        </where>	
+    </select>
+	
+</mapper>

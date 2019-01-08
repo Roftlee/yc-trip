@@ -23,7 +23,7 @@ import com.yc.trip.api.business.facade.sales.SpecialOfferFacade;
  * 优惠活动信息相关接口实现
  * 
  * @author My-Toolkits
- * @since 2019-01-06 17:46
+ * @since 2019-01-08 23:30
  */
 @Service(version = "1.0.0")
 public class SpecialOfferFacadeImpl extends AbstractDubboNativeService implements SpecialOfferFacade {

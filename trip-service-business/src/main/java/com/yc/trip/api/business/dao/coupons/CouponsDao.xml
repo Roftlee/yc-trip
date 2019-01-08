@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yc.trip.api.business.dao.coupons.CouponsDao">
+
+    <!-- 对象与字段映射 -->
+    <resultMap type="com.yc.trip.api.business.dto.coupons.Coupons" id="CouponsMap">
+        <!-- id -->
+        <result property="id" column="id" />
+        <!-- 优惠券名称 -->
+        <result property="name" column="name" />
+        <!-- 优惠券描述 -->
+        <result property="description" column="description" />
+        <!-- 适用消费额 -->
+        <result property="limitCost" column="limit_cost" />
+        <!-- 优惠券金额 -->
+        <result property="amount" column="amount" />
+        <!-- 是否删除0否1是(枚举:YesNoStatus[core]) -->
+        <result property="isDelete" column="is_delete"  javaType="com.yc.trip.api.core.enums.YesNoStatus"  typeHandler="org.go.api.core.typehandler.UniversalEnumHandler" />
+        <!-- 创建时间 -->
+        <result property="createdTime" column="created_time" />
+        <!-- 更新时间 -->
+        <result property="updatedTime" column="updated_time" />
+    </resultMap>
+
+    <!-- 优惠券新增 -->
+    <insert id="add" parameterType="com.yc.trip.api.business.dto.coupons.Coupons">
+        INSERT INTO `coupons`(
+            id,
+            name,
+            description,
+            limit_cost,
+            amount,
+            <if test="isDelete!=null">is_delete</if>
+        )
+        VALUES(
+            #{id,jdbcType=NUMERIC},
+            #{name,jdbcType=VARCHAR},
+            #{description,jdbcType=VARCHAR},
+            #{limitCost,jdbcType=NUMERIC},
+            #{amount,jdbcType=NUMERIC},
+            <if test="isDelete!=null">#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}</if>
+        )	
+    </insert>
+	
+    <!-- 优惠券 修改-->
+	<update id="update" parameterType="com.yc.trip.api.business.dto.coupons.Coupons">
+        UPDATE `coupons`
+        <set>
+            <if test="name!=null and name!='' ">
+            name=#{name,jdbcType=VARCHAR},
+            </if>
+            <if test="description!=null ">
+            description=#{description,jdbcType=VARCHAR},
+            </if>
+            <if test="limitCost!=null ">
+            limit_cost=#{limitCost,jdbcType=NUMERIC},
+            </if>
+            <if test="amount!=null ">
+            amount=#{amount,jdbcType=NUMERIC},
+            </if>
+            <if test="isDelete!=null ">
+            is_delete=#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC},
+            </if>
+            <if test="createdTime!=null ">
+            created_time=#{createdTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedTime!=null ">
+            updated_time=#{updatedTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+            WHERE id=#{id,jdbcType=NUMERIC}	
+	</update>
+	
+    <!-- 优惠券 查询-->
+	<select id="get" parameterType="com.yc.trip.api.business.query.coupons.CouponsQuery" resultMap="CouponsMap">
+        SELECT id,name,description,limit_cost,
+           amount,is_delete,created_time,updated_time
+        FROM `coupons`
+        <where>
+            <if test="id!=null ">
+                AND id=#{id,jdbcType=NUMERIC}
+            </if>
+            <if test="name!=null and name!='' ">
+                AND name=#{name,jdbcType=VARCHAR}
+            </if>
+            <if test="description!=null ">
+                AND description=#{description,jdbcType=VARCHAR}
+            </if>
+            <if test="limitCost!=null ">
+                AND limit_cost=#{limitCost,jdbcType=NUMERIC}
+            </if>
+            <if test="amount!=null ">
+                AND amount=#{amount,jdbcType=NUMERIC}
+            </if>
+            <if test="isDelete!=null ">
+                AND is_delete=#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
+            </if>
+        </where>
+        LIMIT 2	
+	</select>
+	
+    <!-- 优惠券列表查询 -->
+    <select id="queryList" parameterType="com.yc.trip.api.business.query.coupons.CouponsQuery" resultMap="CouponsMap">
+            SELECT t.id,t.name,t.description,t.limit_cost,
+            t.amount,t.is_delete,t.created_time,t.updated_time
+            FROM `coupons` t 
+        <where>
+            <if test="id!=null ">
+                AND id=#{id,jdbcType=NUMERIC}
+            </if>
+            <if test="name!=null and name!='' ">
+                AND name=#{name,jdbcType=VARCHAR}
+            </if>
+            <if test="description!=null ">
+                AND description=#{description,jdbcType=VARCHAR}
+            </if>
+            <if test="limitCost!=null ">
+                AND limit_cost=#{limitCost,jdbcType=NUMERIC}
+            </if>
+            <if test="amount!=null ">
+                AND amount=#{amount,jdbcType=NUMERIC}
+            </if>
+            <if test="isDelete!=null ">
+                AND is_delete=#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
+            </if>
+            <if test="keywords!=null and keywords!='' ">
+                AND (
+                     name LIKE CONCAT('%', #{keywords}, '%')
+                 )
+            </if>
+            <if test="ids!=null and ids.size!=0 ">
+                AND id IN
+                    <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">  
+                        #{item}
+                    </foreach>
+            </if>
+        </where>	
+    </select>
+	
+</mapper>

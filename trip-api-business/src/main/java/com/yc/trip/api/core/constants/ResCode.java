@@ -166,6 +166,18 @@ public class ResCode extends Res {
     public static final ResBean wxAppDBError = new ResBean("B3602","数据库操作异常");
     public static final ResBean wxAppDBGetNull = new ResBean("B3603","未查询到微信小程序信息");
 
+    public static final ResBean couponsDBParamInvalid= new ResBean("B3701","参数未通过校验");
+    public static final ResBean couponsDBError = new ResBean("B3702","数据库操作异常");
+    public static final ResBean couponsDBGetNull = new ResBean("B3703","未查询到优惠券");
+
+    public static final ResBean userCouponsDBParamInvalid= new ResBean("B3801","参数未通过校验");
+    public static final ResBean userCouponsDBError = new ResBean("B3802","数据库操作异常");
+    public static final ResBean userCouponsDBGetNull = new ResBean("B3803","未查询到用户优惠券");
+
+    public static final ResBean specialOfferProductDBParamInvalid= new ResBean("B3901","参数未通过校验");
+    public static final ResBean specialOfferProductDBError = new ResBean("B3902","数据库操作异常");
+    public static final ResBean specialOfferProductDBGetNull = new ResBean("B3903","未查询到优惠活动产品信息");
+
 
     // ========================== business服务返回码 ===============================
 

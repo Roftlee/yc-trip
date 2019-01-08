@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yc.trip.api.business.dao.sales.SpecialOfferProductDao">
+
+    <!-- 对象与字段映射 -->
+    <resultMap type="com.yc.trip.api.business.dto.sales.SpecialOfferProduct" id="SpecialOfferProductMap">
+        <!-- id -->
+        <result property="id" column="id" />
+        <!-- 优惠活动Id -->
+        <result property="specialOfferId" column="special_offer_id" />
+        <!-- 产品Id -->
+        <result property="productId" column="product_id" />
+        <!-- 创建时间 -->
+        <result property="createdTime" column="created_time" />
+        <!-- 更新时间 -->
+        <result property="updatedTime" column="updated_time" />
+    </resultMap>
+
+    <!-- 优惠活动产品信息新增 -->
+    <insert id="add" parameterType="com.yc.trip.api.business.dto.sales.SpecialOfferProduct">
+        INSERT INTO `special_offer_product`(
+            id,
+            special_offer_id,
+            product_id,
+        )
+        VALUES(
+            #{id,jdbcType=NUMERIC},
+            #{specialOfferId,jdbcType=NUMERIC},
+            #{productId,jdbcType=NUMERIC},
+        )	
+    </insert>
+	
+    <!-- 优惠活动产品信息 修改-->
+	<update id="update" parameterType="com.yc.trip.api.business.dto.sales.SpecialOfferProduct">
+        UPDATE `special_offer_product`
+        <set>
+            <if test="specialOfferId!=null ">
+            special_offer_id=#{specialOfferId,jdbcType=NUMERIC},
+            </if>
+            <if test="productId!=null ">
+            product_id=#{productId,jdbcType=NUMERIC},
+            </if>
+            <if test="createdTime!=null ">
+            created_time=#{createdTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedTime!=null ">
+            updated_time=#{updatedTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+            WHERE id=#{id,jdbcType=NUMERIC}	
+	</update>
+	
+    <!-- 优惠活动产品信息 查询-->
+	<select id="get" parameterType="com.yc.trip.api.business.query.sales.SpecialOfferProductQuery" resultMap="SpecialOfferProductMap">
+        SELECT id,special_offer_id,product_id,created_time,
+           updated_time
+        FROM `special_offer_product`
+        <where>
+            <if test="id!=null ">
+                AND id=#{id,jdbcType=NUMERIC}
+            </if>
+            <if test="specialOfferId!=null ">
+                AND special_offer_id=#{specialOfferId,jdbcType=NUMERIC}
+            </if>
+            <if test="productId!=null ">
+                AND product_id=#{productId,jdbcType=NUMERIC}
+            </if>
+        </where>
+        LIMIT 2	
+	</select>
+	
+    <!-- 优惠活动产品信息列表查询 -->
+    <select id="queryList" parameterType="com.yc.trip.api.business.query.sales.SpecialOfferProductQuery" resultMap="SpecialOfferProductMap">
+            SELECT t.id,t.special_offer_id,t.product_id,t.created_time,
+            t.updated_time
+            FROM `special_offer_product` t 
+        <where>
+            <if test="id!=null ">
+                AND id=#{id,jdbcType=NUMERIC}
+            </if>
+            <if test="specialOfferId!=null ">
+                AND special_offer_id=#{specialOfferId,jdbcType=NUMERIC}
+            </if>
+            <if test="productId!=null ">
+                AND product_id=#{productId,jdbcType=NUMERIC}
+            </if>
+            <if test="keywords!=null and keywords!='' ">
+                AND (
+                 )
+            </if>
+            <if test="ids!=null and ids.size!=0 ">
+                AND id IN
+                    <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">  
+                        #{item}
+                    </foreach>
+            </if>
+        </where>	
+    </select>
+	
+</mapper>

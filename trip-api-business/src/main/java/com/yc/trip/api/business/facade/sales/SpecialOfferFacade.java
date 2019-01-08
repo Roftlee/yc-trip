@@ -11,7 +11,7 @@ import com.yc.trip.api.business.query.sales.SpecialOfferQuery;
 /**
  * 优惠活动信息相关接口
  * @author My-Toolkits
- * @since 2019-01-06 17:46
+ * @since 2019-01-08 23:30
  */
 public interface SpecialOfferFacade {
 

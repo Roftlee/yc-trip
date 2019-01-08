@@ -18,7 +18,7 @@ import java.io.Serializable;
 public class ProductItem implements Serializable {
 
     /**
-     * id
+     *
      */
     private Long id;
 
@@ -33,31 +33,6 @@ public class ProductItem implements Serializable {
     private String briefDesc;
 
     /**
-     * 所属分类Id
-     */
-    private Long sortId;
-
-    /**
-     * 所属地区Id
-     */
-    private Long regionId;
-
-    /**
-     * 所属地区分类Id
-     */
-    private Long regionSortId;
-
-    /**
-     * 所属供应商Id
-     */
-    private Long providerId;
-
-    /**
-     * 商品成本
-     */
-    private Double cost;
-
-    /**
      * 成交价
      */
     private Double strikePrice;
@@ -68,9 +43,9 @@ public class ProductItem implements Serializable {
     private Double price;
 
     /**
-     * 门店分成比例(百分比)
+     * 费用说明
      */
-    private Integer commissionRate;
+    private String priceDesc;
 
     /**
      * 图片链接
@@ -83,6 +58,16 @@ public class ProductItem implements Serializable {
     private String videoUrl;
 
     /**
+     * 行程介绍
+     */
+    private String routeIntroduce;
+
+    /**
+     * 行程特色
+     */
+    private String routeFeature;
+
+    /**
      * 产品描述
      */
     private String description;
@@ -91,4 +76,11 @@ public class ProductItem implements Serializable {
      * 备注
      */
     private String remark;
+
+    //-------------------- 扩展属性--------------------------
+
+    /**
+     * 客户赚差价
+     */
+    private Double diffPrice;
 }

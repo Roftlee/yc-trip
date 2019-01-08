@@ -9,10 +9,8 @@
         <result property="id" column="id" />
         <!-- 标题 -->
         <result property="title" column="title" />
-        <!-- 所属供应商Id -->
-        <result property="providerId" column="provider_id" />
-        <!-- 产品Id -->
-        <result property="productId" column="product_id" />
+        <!-- 所属门店Id -->
+        <result property="storeId" column="store_id" />
         <!-- 活动图片 -->
         <result property="imageUrl" column="image_url" />
         <!-- 开始时间 -->
@@ -31,8 +29,7 @@
     <insert id="add" parameterType="com.yc.trip.api.business.dto.sales.SpecialOffer" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO `special_offer`(
             title,
-            provider_id,
-            product_id,
+            store_id,
             image_url,
             start_time,
             end_time,
@@ -40,8 +37,7 @@
         )
         VALUES(
             #{title,jdbcType=VARCHAR},
-            #{providerId,jdbcType=NUMERIC},
-            #{productId,jdbcType=NUMERIC},
+            #{storeId,jdbcType=NUMERIC},
             #{imageUrl,jdbcType=VARCHAR},
             #{startTime,jdbcType=TIMESTAMP},
             #{endTime,jdbcType=TIMESTAMP},
@@ -56,11 +52,8 @@
             <if test="title!=null and title!='' ">
             title=#{title,jdbcType=VARCHAR},
             </if>
-            <if test="providerId!=null ">
-            provider_id=#{providerId,jdbcType=NUMERIC},
-            </if>
-            <if test="productId!=null ">
-            product_id=#{productId,jdbcType=NUMERIC},
+            <if test="storeId!=null ">
+            store_id=#{storeId,jdbcType=NUMERIC},
             </if>
             <if test="imageUrl!=null and imageUrl!='' ">
             image_url=#{imageUrl,jdbcType=VARCHAR},
@@ -86,9 +79,9 @@
 	
     <!-- 优惠活动信息 查询-->
 	<select id="get" parameterType="com.yc.trip.api.business.query.sales.SpecialOfferQuery" resultMap="SpecialOfferMap">
-        SELECT id,title,provider_id,product_id,
-           image_url,start_time,end_time,is_delete,
-           created_time,updated_time
+        SELECT id,title,store_id,image_url,
+           start_time,end_time,is_delete,created_time,
+           updated_time
         FROM `special_offer`
         <where>
             <if test="id!=null ">
@@ -97,11 +90,8 @@
             <if test="title!=null and title!='' ">
                 AND title=#{title,jdbcType=VARCHAR}
             </if>
-            <if test="providerId!=null ">
-                AND provider_id=#{providerId,jdbcType=NUMERIC}
-            </if>
-            <if test="productId!=null ">
-                AND product_id=#{productId,jdbcType=NUMERIC}
+            <if test="storeId!=null ">
+                AND store_id=#{storeId,jdbcType=NUMERIC}
             </if>
             <if test="imageUrl!=null and imageUrl!='' ">
                 AND image_url=#{imageUrl,jdbcType=VARCHAR}
@@ -115,19 +105,16 @@
 	
     <!-- 优惠活动信息列表查询 -->
     <select id="queryList" parameterType="com.yc.trip.api.business.query.sales.SpecialOfferQuery" resultMap="SpecialOfferMap">
-            SELECT t.id,t.title,t.provider_id,t.product_id,
-            t.image_url,t.start_time,t.end_time,t.is_delete,
-            t.created_time,t.updated_time
+            SELECT t.id,t.title,t.store_id,t.image_url,
+            t.start_time,t.end_time,t.is_delete,t.created_time,
+            t.updated_time
             FROM `special_offer` t 
         <where>
             <if test="title!=null and title!='' ">
                 AND title=#{title,jdbcType=VARCHAR}
             </if>
-            <if test="providerId!=null ">
-                AND provider_id=#{providerId,jdbcType=NUMERIC}
-            </if>
-            <if test="productId!=null ">
-                AND product_id=#{productId,jdbcType=NUMERIC}
+            <if test="storeId!=null ">
+                AND store_id=#{storeId,jdbcType=NUMERIC}
             </if>
             <if test="imageUrl!=null and imageUrl!='' ">
                 AND image_url=#{imageUrl,jdbcType=VARCHAR}

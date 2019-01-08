@@ -1,4 +1,4 @@
-package com.yc.trip.api.business.query.sales;
+package com.yc.trip.api.business.query.coupons;
 
 import java.util.Date;
 import java.util.List;
@@ -18,50 +18,45 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
- * 优惠活动信息Query类
+ * 优惠券Query类
  * 
  * @author My-Toolkits
- * @since 2019-01-08 23:30
+ * @since 2019-01-08 23:25
  */
 @Builder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper=false)
-public class SpecialOfferQuery extends AbstractBasePageRequestDto {
+public class CouponsQuery extends AbstractBasePageRequestDto {
 
     private static final long serialVersionUID = -1;
 
     
 	/**
-	 * 
+	 * id
 	 */
 	private Long id;
 
 	/**
-	 * 标题
+	 * 优惠券名称
 	 */
-	private String title;
+	private String name;
 
 	/**
-	 * 所属门店Id
+	 * 优惠券描述
 	 */
-	private Long storeId;
+	private String description;
 
 	/**
-	 * 活动图片
+	 * 适用消费额
 	 */
-	private String imageUrl;
+	private Double limitCost;
 
 	/**
-	 * 开始时间
+	 * 优惠券金额
 	 */
-	private Date startTime;
-
-	/**
-	 * 结束时间
-	 */
-	private Date endTime;
+	private Double amount;
 
 	/**
 	 * 是否删除0否1是(枚举:YesNoStatus[core])

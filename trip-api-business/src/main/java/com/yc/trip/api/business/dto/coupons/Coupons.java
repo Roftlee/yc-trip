@@ -1,4 +1,4 @@
-package com.yc.trip.api.business.dto.sales;
+package com.yc.trip.api.business.dto.coupons;
 
 import java.util.Date;
 import java.util.List;
@@ -21,54 +21,50 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
- * 优惠活动信息Dto类
+ * 优惠券Dto类
  * 
  * @author My-Toolkits
- * @since 2019-01-08 23:30
+ * @since 2019-01-08 23:25
  */
 @Builder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper=false)
-public class SpecialOffer extends AbstractEntityDto implements Serializable {
+public class Coupons extends AbstractEntityDto implements Serializable {
 
     private static final long serialVersionUID = -1;
 
     
 	/**
-	 * 
+	 * id
 	 */
+	@InsertRequired
 	private Long id;
 
 	/**
-	 * 标题
+	 * 优惠券名称
 	 */
 	@InsertRequired
-	private String title;
+	private String name;
 
 	/**
-	 * 所属门店Id
+	 * 优惠券描述
 	 */
 	@InsertRequired
-	private Long storeId;
+	private String description;
 
 	/**
-	 * 活动图片
-	 */
-	private String imageUrl;
-
-	/**
-	 * 开始时间
+	 * 适用消费额
 	 */
 	@InsertRequired
-	private Date startTime;
+	private Double limitCost;
 
 	/**
-	 * 结束时间
+	 * 优惠券金额
 	 */
 	@InsertRequired
-	private Date endTime;
+	private Double amount;
 
 	/**
 	 * 是否删除0否1是(枚举:YesNoStatus[core])

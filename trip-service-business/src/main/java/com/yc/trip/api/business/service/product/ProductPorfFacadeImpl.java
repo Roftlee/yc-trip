@@ -14,6 +14,8 @@ import org.go.framework.base.annotation.RpcClass;
 import org.go.framework.core.exception.PendingException;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.math.BigDecimal;
+
 /**
  * 产品高级服务
  *
@@ -44,6 +46,8 @@ public class ProductPorfFacadeImpl extends AbstractDubboIntegrationService imple
     private ProductItem transferToProductItem(Product product) {
 
         ProductItem item = BeanMapping.map(product, ProductItem.class);
+        // 计算差价
+        item.setDiffPrice(new BigDecimal(item.getPrice() - item.getStrikePrice()).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
 
         return item;
     }
