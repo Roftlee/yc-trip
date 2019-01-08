@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.yc.trip.api.business.dto.product.Product;
 import com.yc.trip.api.business.query.product.ProductQuery;
+import com.yc.trip.api.business.request.common.PageRequest;
 
 /**
  * 产品信息Dao类
@@ -34,4 +35,8 @@ public interface ProductDao {
      */
     List<Product> queryList(ProductQuery productQuery);
 
+    /**
+     * 随机查询产品列表
+     */
+    List<Product> queryProductListRandom(PageRequest pageRequest);
 }

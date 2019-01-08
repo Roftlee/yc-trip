@@ -272,5 +272,21 @@
             </if>
         </where>	
     </select>
+
+    <!-- 随机查询产品列表 -->
+    <select id="queryProductListRandom" parameterType="com.yc.trip.api.business.request.common.PageRequest" resultMap="ProductMap">
+        SELECT t.id,t.name,t.brief_desc,t.sort_id,
+               t.region_id,t.region_sort_id,t.provider_id,t.cost,
+               t.strike_price,t.price,t.commission_rate,t.image_url,
+               t.video_url,t.description,t.remark,t.is_delete,
+               t.created_time,t.updated_time
+        FROM product AS t1
+        JOIN (
+            SELECT ROUND(RAND() * ((SELECT MAX(id) FROM product) - (SELECT MIN(id) FROM product)) + (SELECT MIN(id) FROM product)) AS id
+            FROM product
+            LIMIT 50
+        ) AS t2 ON t1.id = t2.id
+        WHERE t1.is_delete = 0
+    </select>
 	
 </mapper>

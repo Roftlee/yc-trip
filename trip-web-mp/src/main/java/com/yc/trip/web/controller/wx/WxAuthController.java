@@ -8,6 +8,7 @@ import com.yc.mp.api.service.auth.MpAuthService;
 import com.yc.mp.api.service.security.MpSecurityService;
 import com.yc.trip.api.business.dto.user.User;
 import com.yc.trip.api.business.dto.wx.WxApp;
+import com.yc.trip.api.business.enums.user.UserType;
 import com.yc.trip.api.business.facade.user.UserFacade;
 import com.yc.trip.api.business.facade.wx.WxAppFacade;
 import com.yc.trip.api.business.query.user.UserQuery;
@@ -16,6 +17,7 @@ import com.yc.trip.api.business.request.auth.LoginRequest;
 import com.yc.trip.api.business.request.wx.WxCodeRequest;
 import com.yc.trip.api.business.request.wx.WxDecryptRequest;
 import com.yc.trip.api.core.constants.ResCode;
+import com.yc.trip.api.core.enums.Sex;
 import com.yc.trip.api.core.enums.YesNoStatus;
 import com.yc.trip.api.core.util.EmojiUtil;
 import com.yc.trip.web.bean.session.SessionUser;
@@ -88,7 +90,10 @@ public class WxAuthController extends AbstractBaseController {
             user = userFacade.add(User.builder()
                     .avatar(wxCodeRequest.getHeadImgUrl())
                     .openId(mpCodeResponse.getOpenId())
-
+                    .name(wxCodeRequest.getNickName())
+                    .phone("0")// 默认手机号为0
+                    .sex(Sex.Male)
+                    .userType(UserType.CUSTOMER)// 默认游客身份
                     .build());
         }
 
@@ -110,7 +115,7 @@ public class WxAuthController extends AbstractBaseController {
 
         //设置会话用户信息
         sessionUser.setSessionKey(mpCodeResponse.getSessionKey());
-        sessionService.setSessionUser(sessionUser);
+        setSessionUser(sessionUser);
         return new ResDto<>(Code2SessionResponse.builder().sessionId(request.getSession().getId()).sessionUser(sessionUser).build());
     }
 
@@ -126,7 +131,7 @@ public class WxAuthController extends AbstractBaseController {
     public ResDto<String> decryptPhoneNumber(@RequestBody WxDecryptRequest wxDecryptRequest) throws PendingException {
 
         return new ResDto<>(mpSecurityService.decryptPhoneNumber(MpDecryptRequest.builder()
-                .sessionKey(sessionService.getSessionUser().getSessionKey())
+                .sessionKey(getSessionUser().getSessionKey())
                 .encryptedData(wxDecryptRequest.getEncryptedData())
                 .iv(wxDecryptRequest.getIv())
                 .build()));
@@ -143,7 +148,7 @@ public class WxAuthController extends AbstractBaseController {
     @MvcValidate
     public ResDto<SessionUser> simulateLogin(@RequestBody LoginRequest loginRequest) throws PendingException {
         SessionUser sessionUser = SessionUser.from(userFacade.mustGet(UserQuery.builder().phone(loginRequest.getLoginName()).build()));
-        sessionService.setSessionUser(sessionUser);
+        setSessionUser(sessionUser);
         return new ResDto<>(sessionUser);
     }
 

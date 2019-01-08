@@ -1,6 +1,7 @@
 package com.yc.trip.web.bean.session;
 
 import com.yc.trip.api.business.dto.user.User;
+import com.yc.trip.api.business.enums.user.UserType;
 import lombok.*;
 
 import java.io.Serializable;
@@ -20,11 +21,6 @@ public class SessionUser implements Serializable {
     private static final long serialVersionUID = 2396036086105438381L;
 
     /**
-     * 应用Id
-     */
-    private Long appId;
-
-    /**
      * 微信openid
      */
     private String openId;
@@ -35,14 +31,9 @@ public class SessionUser implements Serializable {
     private Long userId;
 
     /**
-     * 昵称
+     * 名称
      */
-    private String nickname;
-
-    /**
-     * 真实姓名
-     */
-    private String realName;
+    private String name;
 
     /**
      * 手机号码
@@ -53,6 +44,11 @@ public class SessionUser implements Serializable {
      * 头像
      */
     private String avatar;
+
+    /**
+     * 用户类型
+     */
+    private UserType userType;
 
     /**
      * 小程序用户sessionKey
@@ -72,7 +68,8 @@ public class SessionUser implements Serializable {
                 .userId(user.getId())
                 .avatar(user.getAvatar())
                 .phone(user.getPhone())
-                .realName(user.getRealName())
+                .name(user.getName())
+                .userType(user.getUserType())
                 .build();
     }
 

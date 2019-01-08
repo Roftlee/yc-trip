@@ -3,6 +3,7 @@ package com.yc.trip.api.business.service.product;
 import java.util.List;
 
 
+import com.yc.trip.api.business.request.common.PageRequest;
 import org.go.api.core.integration.AbstractDubboNativeService;
 import org.go.api.core.util.BeanMapping;
 import org.go.framework.core.exception.PendingException;
@@ -148,6 +149,50 @@ public class ProductFacadeImpl extends AbstractDubboNativeService implements Pro
         } catch (Exception ex) {
             // 对异常进行处理
             throw transferException(ex, ResCode.productDBError, "产品信息分页查询失败");
+        }
+    }
+
+    /**
+     * 随机查询产品列表
+     *
+     * @throws PendingException
+     */
+    @Override
+    public List<Product> queryProductListRandom(PageRequest pageRequest) throws PendingException {
+        try {
+            // 调数据库接口查询列表
+            return productDao.queryProductListRandom(pageRequest);
+        } catch (Exception ex) {
+            // 对异常进行处理
+            throw transferException(ex, ResCode.productDBError, "随机查询产品列表失败");
+        }
+    }
+
+    /**
+     * 随机查询产品列表(分页查询)
+     *
+     * @throws PendingException
+     */
+    @Override
+    public PageInfo<Product> queryProductListRandomPage(PageRequest pageRequest) throws PendingException {
+        try {
+            // 对请求参数进行校验
+            if (pageRequest.getPageNo() <= 0 || pageRequest.getPageSize() <= 0) {
+                ResCode.productDBParamInvalid.throwException("分页参数设置有误");
+            }
+            // 在上下文中设置分页信息
+            PageHelper.startPage(pageRequest.getPageNo(), pageRequest.getPageSize());
+            // 在上下文中设置排序信息
+            if (StringUtil.isNotBlank(pageRequest.getOrderby())) {
+                PageHelper.orderBy(pageRequest.getOrderby());
+            }
+            // 调数据库接口查询列表
+            List<Product> resultList = productDao.queryProductListRandom(pageRequest);
+            // 生成分页对象
+            return new PageInfo<Product>(resultList);
+        } catch (Exception ex) {
+            // 对异常进行处理
+            throw transferException(ex, ResCode.productDBError, "随机查询产品列表)失败(分页查询)");
         }
     }
 

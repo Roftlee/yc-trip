@@ -7,4 +7,5 @@ package com.yc.trip.api.core.constants;
  */
 public class R {
 
+    public static final String productPorfFacade = "R0101";// 产品高级服务
 }

@@ -2,6 +2,7 @@ package com.yc.trip.api.business.facade.product;
 
 import java.util.List;
 
+import com.yc.trip.api.business.request.common.PageRequest;
 import org.go.framework.core.exception.PendingException;
 
 import com.github.pagehelper.PageInfo;
@@ -51,5 +52,15 @@ public interface ProductFacade {
      * @throws PendingException 
      */
     PageInfo<Product> queryPage(ProductQuery productQuery) throws PendingException;
+
+    /**
+     * 随机查询产品列表
+     */
+    List<Product> queryProductListRandom(PageRequest pageRequest) throws PendingException;
+
+    /**
+     * 随机查询产品列表(分页查询)
+     */
+    PageInfo<Product> queryProductListRandomPage(PageRequest pageRequest) throws PendingException;
 
 }
