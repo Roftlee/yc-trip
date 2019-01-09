@@ -45,6 +45,11 @@ public class SpecialOfferItem implements Serializable {
     private Date endTime;
 
     /**
+     * 创建时间
+     */
+    private Date createdTime;
+
+    /**
      * 优惠活动产品列表
      */
     private List<SpecialOfferProductItem> specialOfferProductItems;

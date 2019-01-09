@@ -41,4 +41,9 @@ public class SpecialOfferProductItem implements Serializable {
      * 图片链接
      */
     private String imageUrl;
+
+    /**
+     * 所属供应商
+     */
+    private String providerName;
 }
