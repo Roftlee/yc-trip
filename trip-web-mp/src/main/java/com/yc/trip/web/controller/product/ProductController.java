@@ -2,12 +2,16 @@ package com.yc.trip.web.controller.product;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.github.pagehelper.PageInfo;
+import com.yc.trip.api.business.dto.product.ProductSort;
 import com.yc.trip.api.business.facade.product.ProductFacade;
 import com.yc.trip.api.business.facade.product.ProductProfFacade;
+import com.yc.trip.api.business.facade.product.ProductSortFacade;
 import com.yc.trip.api.business.item.product.ProductItem;
 import com.yc.trip.api.business.item.product.SpecialOfferItem;
+import com.yc.trip.api.business.query.product.ProductSortQuery;
 import com.yc.trip.api.business.request.common.IdRequest;
 import com.yc.trip.api.business.request.common.PageRequest;
+import com.yc.trip.api.core.enums.YesNoStatus;
 import com.yc.trip.web.controller.base.AbstractBaseController;
 import org.go.api.core.dto.ResDto;
 import org.go.framework.base.annotation.MvcValidate;
@@ -16,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * 产品服务
@@ -33,8 +39,11 @@ public class ProductController extends AbstractBaseController {
     @Reference(version = "1.0.0")
     private ProductProfFacade productProfFacade;// 产品高级服务
 
+    @Reference(version = "1.0.0")
+    private ProductSortFacade productSortFacade;// 产品分类服务
+
     /**
-     * 低价超值产品列表分页查询
+     * 首页-低价超值产品列表分页查询
      *
      * @param request
      * @return
@@ -48,7 +57,7 @@ public class ProductController extends AbstractBaseController {
     }
 
     /**
-     * 猜你喜欢产品列表分页查询
+     * 首页-猜你喜欢产品列表分页查询
      *
      * @param request
      * @return
@@ -62,7 +71,7 @@ public class ProductController extends AbstractBaseController {
     }
 
     /**
-     * 热门优惠列表分页查询
+     * 首页-热门优惠列表分页查询
      *
      * @param request
      * @return
@@ -87,5 +96,18 @@ public class ProductController extends AbstractBaseController {
     public ResDto<ProductItem> getProductDetail(@RequestBody IdRequest request) throws PendingException {
 
         return new ResDto<>(productProfFacade.getProductDetail(request));
+    }
+
+    /**
+     * 首页-查询产品分类列表
+     *
+     * @return
+     * @throws PendingException
+     */
+    @RequestMapping(value = "/queryProductSortList.do", method = RequestMethod.POST)
+    @MvcValidate
+    public ResDto<List<ProductSort>> queryProductSortList() throws PendingException {
+
+        return new ResDto<>(productSortFacade.queryList(ProductSortQuery.builder().isDelete(YesNoStatus.NO).build()));
     }
 }

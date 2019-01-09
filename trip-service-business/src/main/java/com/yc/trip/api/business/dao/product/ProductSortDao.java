@@ -9,7 +9,7 @@ import com.yc.trip.api.business.query.product.ProductSortQuery;
  * 产品分类信息Dao类
  * 
  * @author My-Toolkits
- * @since 2019-01-06 17:22
+ * @since 2019-01-09 19:52
  *
  */
 public interface ProductSortDao {

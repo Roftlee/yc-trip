@@ -21,7 +21,7 @@ import lombok.NoArgsConstructor;
  * 产品分类信息Query类
  * 
  * @author My-Toolkits
- * @since 2019-01-06 17:22
+ * @since 2019-01-09 19:52
  */
 @Builder
 @Data
@@ -42,6 +42,11 @@ public class ProductSortQuery extends AbstractBasePageRequestDto {
 	 * 分类名
 	 */
 	private String name;
+
+	/**
+	 * 图标
+	 */
+	private String icon;
 
 	/**
 	 * 是否删除0否1是(枚举:YesNoStatus[core])

@@ -24,7 +24,7 @@ import lombok.NoArgsConstructor;
  * 产品分类信息Dto类
  * 
  * @author My-Toolkits
- * @since 2019-01-06 17:22
+ * @since 2019-01-09 19:52
  */
 @Builder
 @Data
@@ -46,6 +46,12 @@ public class ProductSort extends AbstractEntityDto implements Serializable {
 	 */
 	@InsertRequired
 	private String name;
+
+	/**
+	 * 图标
+	 */
+	@InsertRequired
+	private String icon;
 
 	/**
 	 * 是否删除0否1是(枚举:YesNoStatus[core])

@@ -9,6 +9,8 @@
         <result property="id" column="id" />
         <!-- 分类名 -->
         <result property="name" column="name" />
+        <!-- 图标 -->
+        <result property="icon" column="icon" />
         <!-- 是否删除0否1是(枚举:YesNoStatus[core]) -->
         <result property="isDelete" column="is_delete"  javaType="com.yc.trip.api.core.enums.YesNoStatus"  typeHandler="org.go.api.core.typehandler.UniversalEnumHandler" />
         <!-- 创建时间 -->
@@ -21,10 +23,12 @@
     <insert id="add" parameterType="com.yc.trip.api.business.dto.product.ProductSort" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO `product_sort`(
             name,
+            icon,
             <if test="isDelete!=null">is_delete</if>
         )
         VALUES(
             #{name,jdbcType=VARCHAR},
+            #{icon,jdbcType=VARCHAR},
             <if test="isDelete!=null">#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}</if>
         )	
     </insert>
@@ -35,6 +39,9 @@
         <set>
             <if test="name!=null and name!='' ">
             name=#{name,jdbcType=VARCHAR},
+            </if>
+            <if test="icon!=null and icon!='' ">
+            icon=#{icon,jdbcType=VARCHAR},
             </if>
             <if test="isDelete!=null ">
             is_delete=#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC},
@@ -51,8 +58,8 @@
 	
     <!-- 产品分类信息 查询-->
 	<select id="get" parameterType="com.yc.trip.api.business.query.product.ProductSortQuery" resultMap="ProductSortMap">
-        SELECT id,name,is_delete,created_time,
-           updated_time
+        SELECT id,name,icon,is_delete,
+           created_time,updated_time
         FROM `product_sort`
         <where>
             <if test="id!=null ">
@@ -60,6 +67,9 @@
             </if>
             <if test="name!=null and name!='' ">
                 AND name=#{name,jdbcType=VARCHAR}
+            </if>
+            <if test="icon!=null and icon!='' ">
+                AND icon=#{icon,jdbcType=VARCHAR}
             </if>
             <if test="isDelete!=null ">
                 AND is_delete=#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
@@ -70,12 +80,15 @@
 	
     <!-- 产品分类信息列表查询 -->
     <select id="queryList" parameterType="com.yc.trip.api.business.query.product.ProductSortQuery" resultMap="ProductSortMap">
-            SELECT t.id,t.name,t.is_delete,t.created_time,
-            t.updated_time
+            SELECT t.id,t.name,t.icon,t.is_delete,
+            t.created_time,t.updated_time
             FROM `product_sort` t 
         <where>
             <if test="name!=null and name!='' ">
                 AND name=#{name,jdbcType=VARCHAR}
+            </if>
+            <if test="icon!=null and icon!='' ">
+                AND icon=#{icon,jdbcType=VARCHAR}
             </if>
             <if test="isDelete!=null ">
                 AND is_delete=#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
@@ -83,6 +96,7 @@
             <if test="keywords!=null and keywords!='' ">
                 AND (
                      name LIKE CONCAT('%', #{keywords}, '%')
+                     OR icon LIKE CONCAT('%', #{keywords}, '%')
                  )
             </if>
             <if test="ids!=null and ids.size!=0 ">

@@ -23,7 +23,7 @@ import com.yc.trip.api.business.facade.product.ProductSortFacade;
  * 产品分类信息相关接口实现
  * 
  * @author My-Toolkits
- * @since 2019-01-06 17:22
+ * @since 2019-01-09 19:52
  */
 @Service(version = "1.0.0")
 public class ProductSortFacadeImpl extends AbstractDubboNativeService implements ProductSortFacade {
