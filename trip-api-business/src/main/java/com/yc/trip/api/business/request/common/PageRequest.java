@@ -1,9 +1,11 @@
 package com.yc.trip.api.business.request.common;
 
 import com.yc.trip.api.core.constants.ResCode;
+import com.yc.trip.api.core.enums.Nullable;
 import lombok.*;
 import org.go.api.core.bean.ResBean;
 import org.go.api.core.dto.AbstractBasePageRequestDto;
+import org.go.framework.base.annotation.MvcIgnore;
 
 /**
  * 分页查询请求
@@ -17,6 +19,12 @@ import org.go.api.core.dto.AbstractBasePageRequestDto;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 public class PageRequest extends AbstractBasePageRequestDto {
+
+    /**
+     * 占位，无实际作用
+     */
+    @MvcIgnore
+    private Nullable nullable;
 
     @Override
     public ResBean validateParam() {

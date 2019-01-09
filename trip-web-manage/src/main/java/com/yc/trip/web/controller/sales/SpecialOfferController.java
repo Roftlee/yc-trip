@@ -1,4 +1,4 @@
-package com.yc.trip.web.controller.product;
+package com.yc.trip.web.controller.sales;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.github.pagehelper.PageInfo;
