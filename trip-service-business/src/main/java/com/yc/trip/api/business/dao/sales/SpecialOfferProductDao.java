@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.yc.trip.api.business.dto.sales.SpecialOfferProduct;
 import com.yc.trip.api.business.query.sales.SpecialOfferProductQuery;
+import com.yc.trip.api.business.request.common.IdRequest;
 
 /**
  * 优惠活动产品信息Dao类
@@ -34,4 +35,8 @@ public interface SpecialOfferProductDao {
      */
     List<SpecialOfferProduct> queryList(SpecialOfferProductQuery specialOfferProductQuery);
 
+    /**
+     * 删除优惠活动产品
+     */
+    void deleteSpecialOfferProduct(IdRequest idRequest);
 }

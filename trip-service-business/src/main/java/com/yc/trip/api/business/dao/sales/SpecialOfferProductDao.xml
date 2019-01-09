@@ -97,5 +97,10 @@
             </if>
         </where>	
     </select>
+
+    <!-- 删除优惠活动产品 -->
+    <delete id="deleteSpecialOfferProduct" parameterType="com.yc.trip.api.business.request.common.IdRequest">
+        delete from special_offer_product where special_offer_id = #{id}
+    </delete>
 	
 </mapper>

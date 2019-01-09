@@ -3,6 +3,7 @@ package com.yc.trip.api.business.service.sales;
 import java.util.List;
 
 
+import com.yc.trip.api.business.request.common.IdRequest;
 import org.go.api.core.integration.AbstractDubboNativeService;
 import org.go.api.core.util.BeanMapping;
 import org.go.framework.core.exception.PendingException;
@@ -151,4 +152,19 @@ public class SpecialOfferProductFacadeImpl extends AbstractDubboNativeService im
         }
     }
 
+    /**
+     * 删除优惠活动产品
+     *
+     * @throws PendingException
+     */
+    @Override
+    public void deleteSpecialOfferProduct(IdRequest idRequest) throws PendingException {
+        try {
+            // 调数据库接口进行新增操作
+            specialOfferProductDao.deleteSpecialOfferProduct(idRequest);
+        } catch (Exception ex) {
+            // 对异常进行处理
+            throw transferException(ex, ResCode.specialOfferProductDBError, "删除优惠活动产品失败");
+        }
+    }
 }

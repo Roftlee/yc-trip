@@ -1,4 +1,4 @@
-package com.yc.trip.api.business.item.product;
+package com.yc.trip.api.business.item.sales;
 
 import lombok.*;
 

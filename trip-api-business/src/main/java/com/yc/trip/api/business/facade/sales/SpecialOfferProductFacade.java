@@ -2,6 +2,7 @@ package com.yc.trip.api.business.facade.sales;
 
 import java.util.List;
 
+import com.yc.trip.api.business.request.common.IdRequest;
 import org.go.framework.core.exception.PendingException;
 
 import com.github.pagehelper.PageInfo;
@@ -52,4 +53,9 @@ public interface SpecialOfferProductFacade {
      */
     PageInfo<SpecialOfferProduct> queryPage(SpecialOfferProductQuery specialOfferProductQuery) throws PendingException;
 
+    /**
+     * 删除优惠活动产品
+     * @throws PendingException
+     */
+    void deleteSpecialOfferProduct(IdRequest idRequest) throws PendingException;
 }

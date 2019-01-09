@@ -6,10 +6,12 @@ import com.yc.trip.api.business.dto.product.ProductSort;
 import com.yc.trip.api.business.facade.product.ProductFacade;
 import com.yc.trip.api.business.facade.product.ProductProfFacade;
 import com.yc.trip.api.business.facade.product.ProductSortFacade;
+import com.yc.trip.api.business.facade.sales.SpecialOfferProfFacade;
 import com.yc.trip.api.business.item.product.ProductItem;
-import com.yc.trip.api.business.item.product.SpecialOfferItem;
+import com.yc.trip.api.business.item.sales.SpecialOfferItem;
 import com.yc.trip.api.business.query.product.ProductSortQuery;
 import com.yc.trip.api.business.request.common.IdRequest;
+import com.yc.trip.api.business.request.common.KeywordsPageRequest;
 import com.yc.trip.api.business.request.common.PageRequest;
 import com.yc.trip.api.core.enums.YesNoStatus;
 import com.yc.trip.web.controller.base.AbstractBaseController;
@@ -41,6 +43,9 @@ public class ProductController extends AbstractBaseController {
 
     @Reference(version = "1.0.0")
     private ProductSortFacade productSortFacade;// 产品分类服务
+
+    @Reference(version = "1.0.0")
+    private SpecialOfferProfFacade specialOfferProfFacade;// 优惠活动高级服务
 
     /**
      * 首页-低价超值产品列表分页查询
@@ -79,9 +84,9 @@ public class ProductController extends AbstractBaseController {
      */
     @RequestMapping(value = "/querySpecialOfferProduct.do", method = RequestMethod.POST)
     @MvcValidate
-    public ResDto<PageInfo<SpecialOfferItem>> querySpecialOfferProduct(@RequestBody PageRequest request) throws PendingException {
+    public ResDto<PageInfo<SpecialOfferItem>> querySpecialOfferProduct(@RequestBody KeywordsPageRequest request) throws PendingException {
 
-        return new ResDto<>(productProfFacade.querySpecialOfferProduct(request));
+        return new ResDto<>(specialOfferProfFacade.querySpecialOfferPage(request));
     }
 
     /**
