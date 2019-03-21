@@ -2,36 +2,35 @@ package com.yc.trip.api.business.dao.user;
 
 import java.util.List;
 
-import com.yc.trip.api.business.dto.user.UserPassword;
-import com.yc.trip.api.business.query.user.UserPasswordQuery;
+import com.yc.trip.api.business.bo.user.UserPasswordDomain;
 
 /**
- * 用户密码信息Dao类
+ * 用户密码Dao类
  * 
  * @author My-Toolkits
- * @since 2019-01-06 18:08
+ * @since 2019-03-21 22:33
  *
  */
 public interface UserPasswordDao {
 
     /**
-     * 用户密码信息新增
+     * 新增用户密码
      */
-    void add(UserPassword userPassword);
+    void addUserPassword(UserPasswordDomain userPasswordDomain);
 
     /**
-     * 用户密码信息修改
+     * 修改用户密码
      */
-    void update(UserPassword userPassword);
+    void updateUserPassword(UserPasswordDomain userPasswordDomain);
     
     /**
-     * 用户密码信息查询
+     * 查询用户密码
      */
-    UserPassword get(UserPasswordQuery userPasswordQuery);
+    UserPasswordDomain getUserPassword(UserPasswordDomain userPasswordDomain);
 
     /**
-     * 用户密码信息列表查询
+     * 查询用户密码列表
      */
-    List<UserPassword> queryList(UserPasswordQuery userPasswordQuery);
+    List<UserPasswordDomain> queryUserPasswordList(UserPasswordDomain userPasswordDomain);
 
 }

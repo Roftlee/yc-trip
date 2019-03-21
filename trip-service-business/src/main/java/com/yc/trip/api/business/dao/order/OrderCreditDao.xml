@@ -4,7 +4,7 @@
 <mapper namespace="com.yc.trip.api.business.dao.order.OrderCreditDao">
 
     <!-- 对象与字段映射 -->
-    <resultMap type="com.yc.trip.api.business.dto.order.OrderCredit" id="OrderCreditMap">
+    <resultMap type="com.yc.trip.api.business.bo.order.OrderCreditDomain" id="OrderCreditMap">
         <!--  -->
         <result property="id" column="id" />
         <!-- 订单Id -->
@@ -29,8 +29,8 @@
         <result property="updatedTime" column="updated_time" />
     </resultMap>
 
-    <!-- 订单积分信息新增 -->
-    <insert id="add" parameterType="com.yc.trip.api.business.dto.order.OrderCredit" useGeneratedKeys="true" keyProperty="id">
+    <!-- 新增订单积分信息 -->
+    <insert id="addOrderCredit" parameterType="com.yc.trip.api.business.bo.order.OrderCreditDomain" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO `order_credit`(
             order_id,
             credit,
@@ -39,8 +39,7 @@
             sales_commission_rate,
             sales_credit,
             allot_status,
-            <if test="isDelete!=null">is_delete</if>
-        )
+            is_delete)
         VALUES(
             #{orderId,jdbcType=NUMERIC},
             #{credit,jdbcType=NUMERIC},
@@ -49,12 +48,12 @@
             #{salesCommissionRate,jdbcType=NUMERIC},
             #{salesCredit,jdbcType=NUMERIC},
             #{allotStatus, javaType=com.yc.trip.api.business.enums.order.AllotStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC},
-            <if test="isDelete!=null">#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}</if>
+            #{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
         )	
     </insert>
 	
-    <!-- 订单积分信息 修改-->
-	<update id="update" parameterType="com.yc.trip.api.business.dto.order.OrderCredit">
+    <!-- 修改订单积分信息 -->
+	<update id="updateOrderCredit" parameterType="com.yc.trip.api.business.bo.order.OrderCreditDomain">
         UPDATE `order_credit`
         <set>
             <if test="orderId!=null ">
@@ -91,46 +90,46 @@
             WHERE id=#{id,jdbcType=NUMERIC}	
 	</update>
 	
-    <!-- 订单积分信息 查询-->
-	<select id="get" parameterType="com.yc.trip.api.business.query.order.OrderCreditQuery" resultMap="OrderCreditMap">
+    <!-- 查询订单积分信息 -->
+	<select id="getOrderCredit" parameterType="com.yc.trip.api.business.bo.order.OrderCreditDomain" resultMap="OrderCreditMap">
         SELECT id,order_id,credit,invite_commission_rate,
            invite_credit,sales_commission_rate,sales_credit,allot_status,
            is_delete,created_time,updated_time
         FROM `order_credit`
         <where>
             <if test="id!=null ">
-                AND id=#{id,jdbcType=NUMERIC}
+                and id=#{id,jdbcType=NUMERIC}
             </if>
             <if test="orderId!=null ">
-                AND order_id=#{orderId,jdbcType=NUMERIC}
+                and order_id=#{orderId,jdbcType=NUMERIC}
             </if>
             <if test="credit!=null ">
-                AND credit=#{credit,jdbcType=NUMERIC}
+                and credit=#{credit,jdbcType=NUMERIC}
             </if>
             <if test="inviteCommissionRate!=null ">
-                AND invite_commission_rate=#{inviteCommissionRate,jdbcType=NUMERIC}
+                and invite_commission_rate=#{inviteCommissionRate,jdbcType=NUMERIC}
             </if>
             <if test="inviteCredit!=null ">
-                AND invite_credit=#{inviteCredit,jdbcType=NUMERIC}
+                and invite_credit=#{inviteCredit,jdbcType=NUMERIC}
             </if>
             <if test="salesCommissionRate!=null ">
-                AND sales_commission_rate=#{salesCommissionRate,jdbcType=NUMERIC}
+                and sales_commission_rate=#{salesCommissionRate,jdbcType=NUMERIC}
             </if>
             <if test="salesCredit!=null ">
-                AND sales_credit=#{salesCredit,jdbcType=NUMERIC}
+                and sales_credit=#{salesCredit,jdbcType=NUMERIC}
             </if>
             <if test="allotStatus!=null ">
-                AND allot_status=#{allotStatus, javaType=com.yc.trip.api.business.enums.order.AllotStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
+                and allot_status=#{allotStatus, javaType=com.yc.trip.api.business.enums.order.AllotStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
             </if>
             <if test="isDelete!=null ">
-                AND is_delete=#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
+                and is_delete=#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
             </if>
         </where>
         LIMIT 2	
 	</select>
 	
-    <!-- 订单积分信息列表查询 -->
-    <select id="queryList" parameterType="com.yc.trip.api.business.query.order.OrderCreditQuery" resultMap="OrderCreditMap">
+    <!-- 查询订单积分信息列表 -->
+    <select id="queryOrderCreditList" parameterType="com.yc.trip.api.business.bo.order.OrderCreditDomain" resultMap="OrderCreditMap">
             SELECT t.id,t.order_id,t.credit,t.invite_commission_rate,
             t.invite_credit,t.sales_commission_rate,t.sales_credit,t.allot_status,
             t.is_delete,t.created_time,t.updated_time

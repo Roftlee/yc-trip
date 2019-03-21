@@ -4,12 +4,9 @@ import java.util.Date;
 import java.util.List;
 
 import org.go.api.core.bean.ResBean;
-import org.go.api.core.dto.AbstractEntityDto;
-import org.go.api.core.annotation.InsertRequired;
+import org.go.api.core.dto.AbstractBasePageRequestDto;
 
 import com.yc.trip.api.core.constants.ResCode;
-
-import java.io.Serializable;
 
 
 
@@ -23,14 +20,14 @@ import lombok.NoArgsConstructor;
  * 优惠活动产品信息Dto类
  * 
  * @author My-Toolkits
- * @since 2019-01-08 23:31
+ * @since 2019-03-21 22:21
  */
 @Builder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper=false)
-public class SpecialOfferProduct extends AbstractEntityDto implements Serializable {
+public class SpecialOfferProduct extends AbstractBasePageRequestDto {
 
     private static final long serialVersionUID = -1;
 
@@ -38,19 +35,16 @@ public class SpecialOfferProduct extends AbstractEntityDto implements Serializab
 	/**
 	 * id
 	 */
-	@InsertRequired
 	private Long id;
 
 	/**
 	 * 优惠活动Id
 	 */
-	@InsertRequired
 	private Long specialOfferId;
 
 	/**
 	 * 产品Id
 	 */
-	@InsertRequired
 	private Long productId;
 
 	/**
@@ -65,5 +59,33 @@ public class SpecialOfferProduct extends AbstractEntityDto implements Serializab
 	 */
 	private Date updatedTime;
 
+    
+    //-------------------- 扩展属性--------------------------
+     /**
+     * id列表
+     */
+    private List<Long> ids;
 
+    /**
+     * 关键字
+     */
+    private String keywords;
+    
+    @Override
+    public ResBean validateParam() {
+        return ResCode.success;
+    }
+    
+    /**
+     * 流式设置排序字段
+     * @param orderby
+     * @return 
+     */
+    public SpecialOfferProduct orderBy(String orderby){
+        if(getPageNo() == null) setPageNo(1);
+        if(getPageSize() == null) setPageSize(1000);
+        setOrderby(orderby);
+        return this;
+    }
+        
 }

@@ -4,7 +4,7 @@
 <mapper namespace="com.yc.trip.api.business.dao.notice.NoticeInfoDao">
 
     <!-- 对象与字段映射 -->
-    <resultMap type="com.yc.trip.api.business.dto.notice.NoticeInfo" id="NoticeInfoMap">
+    <resultMap type="com.yc.trip.api.business.bo.notice.NoticeInfoDomain" id="NoticeInfoMap">
         <!--  -->
         <result property="id" column="id" />
         <!-- 标题 -->
@@ -19,24 +19,23 @@
         <result property="updatedTime" column="updated_time" />
     </resultMap>
 
-    <!-- 资讯新增 -->
-    <insert id="add" parameterType="com.yc.trip.api.business.dto.notice.NoticeInfo">
+    <!-- 新增资讯 -->
+    <insert id="addNoticeInfo" parameterType="com.yc.trip.api.business.bo.notice.NoticeInfoDomain">
         INSERT INTO `notice_info`(
             id,
             title,
             content,
-            <if test="isDelete!=null">is_delete</if>
-        )
+            is_delete)
         VALUES(
             #{id,jdbcType=NUMERIC},
             #{title,jdbcType=VARCHAR},
             #{content,jdbcType=VARCHAR},
-            <if test="isDelete!=null">#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}</if>
+            #{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
         )	
     </insert>
 	
-    <!-- 资讯 修改-->
-	<update id="update" parameterType="com.yc.trip.api.business.dto.notice.NoticeInfo">
+    <!-- 修改资讯 -->
+	<update id="updateNoticeInfo" parameterType="com.yc.trip.api.business.bo.notice.NoticeInfoDomain">
         UPDATE `notice_info`
         <set>
             <if test="id!=null ">
@@ -61,30 +60,30 @@
             WHERE 	
 	</update>
 	
-    <!-- 资讯 查询-->
-	<select id="get" parameterType="com.yc.trip.api.business.query.notice.NoticeInfoQuery" resultMap="NoticeInfoMap">
+    <!-- 查询资讯 -->
+	<select id="getNoticeInfo" parameterType="com.yc.trip.api.business.bo.notice.NoticeInfoDomain" resultMap="NoticeInfoMap">
         SELECT id,title,content,is_delete,
            created_time,updated_time
         FROM `notice_info`
         <where>
             <if test="id!=null ">
-                AND id=#{id,jdbcType=NUMERIC}
+                and id=#{id,jdbcType=NUMERIC}
             </if>
             <if test="title!=null and title!='' ">
-                AND title=#{title,jdbcType=VARCHAR}
+                and title=#{title,jdbcType=VARCHAR}
             </if>
             <if test="content!=null ">
-                AND content=#{content,jdbcType=VARCHAR}
+                and content=#{content,jdbcType=VARCHAR}
             </if>
             <if test="isDelete!=null ">
-                AND is_delete=#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
+                and is_delete=#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
             </if>
         </where>
         LIMIT 2	
 	</select>
 	
-    <!-- 资讯列表查询 -->
-    <select id="queryList" parameterType="com.yc.trip.api.business.query.notice.NoticeInfoQuery" resultMap="NoticeInfoMap">
+    <!-- 查询资讯列表 -->
+    <select id="queryNoticeInfoList" parameterType="com.yc.trip.api.business.bo.notice.NoticeInfoDomain" resultMap="NoticeInfoMap">
             SELECT t.id,t.title,t.content,t.is_delete,
             t.created_time,t.updated_time
             FROM `notice_info` t 

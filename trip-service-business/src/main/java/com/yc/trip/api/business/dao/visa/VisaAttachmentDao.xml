@@ -4,7 +4,7 @@
 <mapper namespace="com.yc.trip.api.business.dao.visa.VisaAttachmentDao">
 
     <!-- 对象与字段映射 -->
-    <resultMap type="com.yc.trip.api.business.dto.visa.VisaAttachment" id="VisaAttachmentMap">
+    <resultMap type="com.yc.trip.api.business.bo.visa.VisaAttachmentDomain" id="VisaAttachmentMap">
         <!--  -->
         <result property="id" column="id" />
         <!-- 签证Id -->
@@ -17,20 +17,19 @@
         <result property="updatedTime" column="updated_time" />
     </resultMap>
 
-    <!-- 签证附件信息新增 -->
-    <insert id="add" parameterType="com.yc.trip.api.business.dto.visa.VisaAttachment" useGeneratedKeys="true" keyProperty="id">
+    <!-- 新增签证附件信息 -->
+    <insert id="addVisaAttachment" parameterType="com.yc.trip.api.business.bo.visa.VisaAttachmentDomain" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO `visa_attachment`(
             visa_id,
-            file_url,
-        )
+            file_url)
         VALUES(
             #{visaId,jdbcType=NUMERIC},
-            #{fileUrl,jdbcType=VARCHAR},
+            #{fileUrl,jdbcType=VARCHAR}
         )	
     </insert>
 	
-    <!-- 签证附件信息 修改-->
-	<update id="update" parameterType="com.yc.trip.api.business.dto.visa.VisaAttachment">
+    <!-- 修改签证附件信息 -->
+	<update id="updateVisaAttachment" parameterType="com.yc.trip.api.business.bo.visa.VisaAttachmentDomain">
         UPDATE `visa_attachment`
         <set>
             <if test="visaId!=null ">
@@ -49,27 +48,27 @@
             WHERE id=#{id,jdbcType=NUMERIC}	
 	</update>
 	
-    <!-- 签证附件信息 查询-->
-	<select id="get" parameterType="com.yc.trip.api.business.query.visa.VisaAttachmentQuery" resultMap="VisaAttachmentMap">
+    <!-- 查询签证附件信息 -->
+	<select id="getVisaAttachment" parameterType="com.yc.trip.api.business.bo.visa.VisaAttachmentDomain" resultMap="VisaAttachmentMap">
         SELECT id,visa_id,file_url,created_time,
            updated_time
         FROM `visa_attachment`
         <where>
             <if test="id!=null ">
-                AND id=#{id,jdbcType=NUMERIC}
+                and id=#{id,jdbcType=NUMERIC}
             </if>
             <if test="visaId!=null ">
-                AND visa_id=#{visaId,jdbcType=NUMERIC}
+                and visa_id=#{visaId,jdbcType=NUMERIC}
             </if>
             <if test="fileUrl!=null and fileUrl!='' ">
-                AND file_url=#{fileUrl,jdbcType=VARCHAR}
+                and file_url=#{fileUrl,jdbcType=VARCHAR}
             </if>
         </where>
         LIMIT 2	
 	</select>
 	
-    <!-- 签证附件信息列表查询 -->
-    <select id="queryList" parameterType="com.yc.trip.api.business.query.visa.VisaAttachmentQuery" resultMap="VisaAttachmentMap">
+    <!-- 查询签证附件信息列表 -->
+    <select id="queryVisaAttachmentList" parameterType="com.yc.trip.api.business.bo.visa.VisaAttachmentDomain" resultMap="VisaAttachmentMap">
             SELECT t.id,t.visa_id,t.file_url,t.created_time,
             t.updated_time
             FROM `visa_attachment` t 

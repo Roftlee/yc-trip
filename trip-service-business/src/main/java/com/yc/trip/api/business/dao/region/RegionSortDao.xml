@@ -4,7 +4,7 @@
 <mapper namespace="com.yc.trip.api.business.dao.region.RegionSortDao">
 
     <!-- 对象与字段映射 -->
-    <resultMap type="com.yc.trip.api.business.dto.region.RegionSort" id="RegionSortMap">
+    <resultMap type="com.yc.trip.api.business.bo.region.RegionSortDomain" id="RegionSortMap">
         <!--  -->
         <result property="id" column="id" />
         <!-- 分类名 -->
@@ -17,20 +17,19 @@
         <result property="updatedTime" column="updated_time" />
     </resultMap>
 
-    <!-- 地区分类信息新增 -->
-    <insert id="add" parameterType="com.yc.trip.api.business.dto.region.RegionSort" useGeneratedKeys="true" keyProperty="id">
+    <!-- 新增地区分类信息 -->
+    <insert id="addRegionSort" parameterType="com.yc.trip.api.business.bo.region.RegionSortDomain" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO `region_sort`(
             name,
-            <if test="isDelete!=null">is_delete</if>
-        )
+            is_delete)
         VALUES(
             #{name,jdbcType=VARCHAR},
-            <if test="isDelete!=null">#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}</if>
+            #{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
         )	
     </insert>
 	
-    <!-- 地区分类信息 修改-->
-	<update id="update" parameterType="com.yc.trip.api.business.dto.region.RegionSort">
+    <!-- 修改地区分类信息 -->
+	<update id="updateRegionSort" parameterType="com.yc.trip.api.business.bo.region.RegionSortDomain">
         UPDATE `region_sort`
         <set>
             <if test="name!=null and name!='' ">
@@ -49,27 +48,27 @@
             WHERE id=#{id,jdbcType=NUMERIC}	
 	</update>
 	
-    <!-- 地区分类信息 查询-->
-	<select id="get" parameterType="com.yc.trip.api.business.query.region.RegionSortQuery" resultMap="RegionSortMap">
+    <!-- 查询地区分类信息 -->
+	<select id="getRegionSort" parameterType="com.yc.trip.api.business.bo.region.RegionSortDomain" resultMap="RegionSortMap">
         SELECT id,name,is_delete,created_time,
            updated_time
         FROM `region_sort`
         <where>
             <if test="id!=null ">
-                AND id=#{id,jdbcType=NUMERIC}
+                and id=#{id,jdbcType=NUMERIC}
             </if>
             <if test="name!=null and name!='' ">
-                AND name=#{name,jdbcType=VARCHAR}
+                and name=#{name,jdbcType=VARCHAR}
             </if>
             <if test="isDelete!=null ">
-                AND is_delete=#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
+                and is_delete=#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
             </if>
         </where>
         LIMIT 2	
 	</select>
 	
-    <!-- 地区分类信息列表查询 -->
-    <select id="queryList" parameterType="com.yc.trip.api.business.query.region.RegionSortQuery" resultMap="RegionSortMap">
+    <!-- 查询地区分类信息列表 -->
+    <select id="queryRegionSortList" parameterType="com.yc.trip.api.business.bo.region.RegionSortDomain" resultMap="RegionSortMap">
             SELECT t.id,t.name,t.is_delete,t.created_time,
             t.updated_time
             FROM `region_sort` t 

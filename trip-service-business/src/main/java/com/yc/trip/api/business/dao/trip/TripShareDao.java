@@ -2,36 +2,35 @@ package com.yc.trip.api.business.dao.trip;
 
 import java.util.List;
 
-import com.yc.trip.api.business.dto.trip.TripShare;
-import com.yc.trip.api.business.query.trip.TripShareQuery;
+import com.yc.trip.api.business.bo.trip.TripShareDomain;
 
 /**
  * 旅游分享信息Dao类
  * 
  * @author My-Toolkits
- * @since 2019-01-06 17:59
+ * @since 2019-03-21 22:30
  *
  */
 public interface TripShareDao {
 
     /**
-     * 旅游分享信息新增
+     * 新增旅游分享信息
      */
-    void add(TripShare tripShare);
+    void addTripShare(TripShareDomain tripShareDomain);
 
     /**
-     * 旅游分享信息修改
+     * 修改旅游分享信息
      */
-    void update(TripShare tripShare);
+    void updateTripShare(TripShareDomain tripShareDomain);
     
     /**
-     * 旅游分享信息查询
+     * 查询旅游分享信息
      */
-    TripShare get(TripShareQuery tripShareQuery);
+    TripShareDomain getTripShare(TripShareDomain tripShareDomain);
 
     /**
-     * 旅游分享信息列表查询
+     * 查询旅游分享信息列表
      */
-    List<TripShare> queryList(TripShareQuery tripShareQuery);
+    List<TripShareDomain> queryTripShareList(TripShareDomain tripShareDomain);
 
 }

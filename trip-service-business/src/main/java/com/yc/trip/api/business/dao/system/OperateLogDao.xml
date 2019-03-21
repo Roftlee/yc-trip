@@ -4,7 +4,7 @@
 <mapper namespace="com.yc.trip.api.business.dao.system.OperateLogDao">
 
     <!-- 对象与字段映射 -->
-    <resultMap type="com.yc.trip.api.business.dto.system.OperateLog" id="OperateLogMap">
+    <resultMap type="com.yc.trip.api.business.bo.system.OperateLogDomain" id="OperateLogMap">
         <!--  -->
         <result property="id" column="id" />
         <!-- 用户Id -->
@@ -31,8 +31,8 @@
         <result property="updatedTime" column="updated_time" />
     </resultMap>
 
-    <!-- 操作日志新增 -->
-    <insert id="add" parameterType="com.yc.trip.api.business.dto.system.OperateLog" useGeneratedKeys="true" keyProperty="id">
+    <!-- 新增操作日志 -->
+    <insert id="addOperateLog" parameterType="com.yc.trip.api.business.bo.system.OperateLogDomain" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO `operate_log`(
             user_id,
             user_name,
@@ -42,8 +42,7 @@
             oper_desc,
             remote_ip,
             request_url,
-            request_data,
-        )
+            request_data)
         VALUES(
             #{userId,jdbcType=NUMERIC},
             #{userName,jdbcType=VARCHAR},
@@ -53,12 +52,12 @@
             #{operDesc,jdbcType=VARCHAR},
             #{remoteIp,jdbcType=VARCHAR},
             #{requestUrl,jdbcType=VARCHAR},
-            #{requestData,jdbcType=VARCHAR},
+            #{requestData,jdbcType=VARCHAR}
         )	
     </insert>
 	
-    <!-- 操作日志 修改-->
-	<update id="update" parameterType="com.yc.trip.api.business.dto.system.OperateLog">
+    <!-- 修改操作日志 -->
+	<update id="updateOperateLog" parameterType="com.yc.trip.api.business.bo.system.OperateLogDomain">
         UPDATE `operate_log`
         <set>
             <if test="userId!=null ">
@@ -98,49 +97,49 @@
             WHERE id=#{id,jdbcType=NUMERIC}	
 	</update>
 	
-    <!-- 操作日志 查询-->
-	<select id="get" parameterType="com.yc.trip.api.business.query.system.OperateLogQuery" resultMap="OperateLogMap">
+    <!-- 查询操作日志 -->
+	<select id="getOperateLog" parameterType="com.yc.trip.api.business.bo.system.OperateLogDomain" resultMap="OperateLogMap">
         SELECT id,user_id,user_name,platform_type,
            oper_target_type,oper_type,oper_desc,remote_ip,
            request_url,request_data,created_time,updated_time
         FROM `operate_log`
         <where>
             <if test="id!=null ">
-                AND id=#{id,jdbcType=NUMERIC}
+                and id=#{id,jdbcType=NUMERIC}
             </if>
             <if test="userId!=null ">
-                AND user_id=#{userId,jdbcType=NUMERIC}
+                and user_id=#{userId,jdbcType=NUMERIC}
             </if>
             <if test="userName!=null and userName!='' ">
-                AND user_name=#{userName,jdbcType=VARCHAR}
+                and user_name=#{userName,jdbcType=VARCHAR}
             </if>
             <if test="platformType!=null ">
-                AND platform_type=#{platformType, javaType=com.yc.trip.api.business.enums.system.PlatformType, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
+                and platform_type=#{platformType, javaType=com.yc.trip.api.business.enums.system.PlatformType, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
             </if>
             <if test="operTargetType!=null ">
-                AND oper_target_type=#{operTargetType, javaType=com.yc.trip.api.core.enums.OperTargetType, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
+                and oper_target_type=#{operTargetType, javaType=com.yc.trip.api.core.enums.OperTargetType, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
             </if>
             <if test="operType!=null ">
-                AND oper_type=#{operType, javaType=com.yc.trip.api.core.enums.OperType, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
+                and oper_type=#{operType, javaType=com.yc.trip.api.core.enums.OperType, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
             </if>
             <if test="operDesc!=null and operDesc!='' ">
-                AND oper_desc=#{operDesc,jdbcType=VARCHAR}
+                and oper_desc=#{operDesc,jdbcType=VARCHAR}
             </if>
             <if test="remoteIp!=null and remoteIp!='' ">
-                AND remote_ip=#{remoteIp,jdbcType=VARCHAR}
+                and remote_ip=#{remoteIp,jdbcType=VARCHAR}
             </if>
             <if test="requestUrl!=null and requestUrl!='' ">
-                AND request_url=#{requestUrl,jdbcType=VARCHAR}
+                and request_url=#{requestUrl,jdbcType=VARCHAR}
             </if>
             <if test="requestData!=null ">
-                AND request_data=#{requestData,jdbcType=VARCHAR}
+                and request_data=#{requestData,jdbcType=VARCHAR}
             </if>
         </where>
         LIMIT 2	
 	</select>
 	
-    <!-- 操作日志列表查询 -->
-    <select id="queryList" parameterType="com.yc.trip.api.business.query.system.OperateLogQuery" resultMap="OperateLogMap">
+    <!-- 查询操作日志列表 -->
+    <select id="queryOperateLogList" parameterType="com.yc.trip.api.business.bo.system.OperateLogDomain" resultMap="OperateLogMap">
             SELECT t.id,t.user_id,t.user_name,t.platform_type,
             t.oper_target_type,t.oper_type,t.oper_desc,t.remote_ip,
             t.request_url,t.request_data,t.created_time,t.updated_time

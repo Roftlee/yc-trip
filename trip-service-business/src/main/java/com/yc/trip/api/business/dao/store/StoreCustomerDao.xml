@@ -4,7 +4,7 @@
 <mapper namespace="com.yc.trip.api.business.dao.store.StoreCustomerDao">
 
     <!-- 对象与字段映射 -->
-    <resultMap type="com.yc.trip.api.business.dto.store.StoreCustomer" id="StoreCustomerMap">
+    <resultMap type="com.yc.trip.api.business.bo.store.StoreCustomerDomain" id="StoreCustomerMap">
         <!--  -->
         <result property="id" column="id" />
         <!-- 门店Id -->
@@ -19,22 +19,21 @@
         <result property="updatedTime" column="updated_time" />
     </resultMap>
 
-    <!-- 门店客户信息新增 -->
-    <insert id="add" parameterType="com.yc.trip.api.business.dto.store.StoreCustomer" useGeneratedKeys="true" keyProperty="id">
+    <!-- 新增门店客户信息 -->
+    <insert id="addStoreCustomer" parameterType="com.yc.trip.api.business.bo.store.StoreCustomerDomain" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO `store_customer`(
             store_id,
-            <if test="isVip!=null">is_vip,</if>
-            user_id,
-        )
+            is_vip,
+            user_id)
         VALUES(
             #{storeId,jdbcType=NUMERIC},
-            <if test="isVip!=null">#{isVip, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC},</if>
-            #{userId,jdbcType=NUMERIC},
+            #{isVip, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC},
+            #{userId,jdbcType=NUMERIC}
         )	
     </insert>
 	
-    <!-- 门店客户信息 修改-->
-	<update id="update" parameterType="com.yc.trip.api.business.dto.store.StoreCustomer">
+    <!-- 修改门店客户信息 -->
+	<update id="updateStoreCustomer" parameterType="com.yc.trip.api.business.bo.store.StoreCustomerDomain">
         UPDATE `store_customer`
         <set>
             <if test="storeId!=null ">
@@ -56,30 +55,30 @@
             WHERE id=#{id,jdbcType=NUMERIC}	
 	</update>
 	
-    <!-- 门店客户信息 查询-->
-	<select id="get" parameterType="com.yc.trip.api.business.query.store.StoreCustomerQuery" resultMap="StoreCustomerMap">
+    <!-- 查询门店客户信息 -->
+	<select id="getStoreCustomer" parameterType="com.yc.trip.api.business.bo.store.StoreCustomerDomain" resultMap="StoreCustomerMap">
         SELECT id,store_id,is_vip,user_id,
            created_time,updated_time
         FROM `store_customer`
         <where>
             <if test="id!=null ">
-                AND id=#{id,jdbcType=NUMERIC}
+                and id=#{id,jdbcType=NUMERIC}
             </if>
             <if test="storeId!=null ">
-                AND store_id=#{storeId,jdbcType=NUMERIC}
+                and store_id=#{storeId,jdbcType=NUMERIC}
             </if>
             <if test="isVip!=null ">
-                AND is_vip=#{isVip, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
+                and is_vip=#{isVip, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
             </if>
             <if test="userId!=null ">
-                AND user_id=#{userId,jdbcType=NUMERIC}
+                and user_id=#{userId,jdbcType=NUMERIC}
             </if>
         </where>
         LIMIT 2	
 	</select>
 	
-    <!-- 门店客户信息列表查询 -->
-    <select id="queryList" parameterType="com.yc.trip.api.business.query.store.StoreCustomerQuery" resultMap="StoreCustomerMap">
+    <!-- 查询门店客户信息列表 -->
+    <select id="queryStoreCustomerList" parameterType="com.yc.trip.api.business.bo.store.StoreCustomerDomain" resultMap="StoreCustomerMap">
             SELECT t.id,t.store_id,t.is_vip,t.user_id,
             t.created_time,t.updated_time
             FROM `store_customer` t 

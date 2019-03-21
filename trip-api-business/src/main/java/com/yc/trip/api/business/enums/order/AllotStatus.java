@@ -16,7 +16,7 @@ import com.google.common.collect.ImmutableMap;
  * AllotStatus枚举类
  *
  * @author My-Toolkits
- * @since 2019-01-06 17:12
+ * @since 2019-03-21 21:45
  */
 public enum AllotStatus implements BaseEnum<Enum<AllotStatus>, Integer>{
     ALL(-1, "全部"),

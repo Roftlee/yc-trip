@@ -70,7 +70,7 @@ public class OperateLogAspect extends AbstractService {
             operateLog.setRequestUrl(request.getRequestURI().replace(request.getContextPath(), ""));
             // 获取用户IP
             operateLog.setRemoteIp(WebUtils.getClientIp(request));
-            operateLogFacade.add(operateLog);
+            operateLogFacade.addOperateLog(operateLog);
         } catch (Exception ex) {
             error("记录操作日志信息失败", ex);
         }

@@ -58,7 +58,7 @@ public class SessionUser implements Serializable {
     public static SessionUser from(User user) {
         return SessionUser.builder()
                 .userId(user.getId())
-                .name(user.getRealName())
+                .name(user.getName())
                 .phone(user.getPhone())
                 .build();
     }

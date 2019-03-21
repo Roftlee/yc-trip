@@ -4,7 +4,7 @@
 <mapper namespace="com.yc.trip.api.business.dao.order.OrderInfoDao">
 
     <!-- 对象与字段映射 -->
-    <resultMap type="com.yc.trip.api.business.dto.order.OrderInfo" id="OrderInfoMap">
+    <resultMap type="com.yc.trip.api.business.bo.order.OrderInfoDomain" id="OrderInfoMap">
         <!--  -->
         <result property="id" column="id" />
         <!-- 订单名称 -->
@@ -41,8 +41,8 @@
         <result property="updatedTime" column="updated_time" />
     </resultMap>
 
-    <!-- 订单信息新增 -->
-    <insert id="add" parameterType="com.yc.trip.api.business.dto.order.OrderInfo" useGeneratedKeys="true" keyProperty="id">
+    <!-- 新增订单信息 -->
+    <insert id="addOrderInfo" parameterType="com.yc.trip.api.business.bo.order.OrderInfoDomain" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO `order_info`(
             name,
             product_id,
@@ -57,8 +57,7 @@
             contract,
             vertify_code,
             notification,
-            <if test="isDelete!=null">is_delete</if>
-        )
+            is_delete)
         VALUES(
             #{name,jdbcType=VARCHAR},
             #{productId,jdbcType=NUMERIC},
@@ -73,12 +72,12 @@
             #{contract,jdbcType=VARCHAR},
             #{vertifyCode,jdbcType=VARCHAR},
             #{notification,jdbcType=VARCHAR},
-            <if test="isDelete!=null">#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}</if>
+            #{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
         )	
     </insert>
 	
-    <!-- 订单信息 修改-->
-	<update id="update" parameterType="com.yc.trip.api.business.dto.order.OrderInfo">
+    <!-- 修改订单信息 -->
+	<update id="updateOrderInfo" parameterType="com.yc.trip.api.business.bo.order.OrderInfoDomain">
         UPDATE `order_info`
         <set>
             <if test="name!=null and name!='' ">
@@ -133,8 +132,8 @@
             WHERE id=#{id,jdbcType=NUMERIC}	
 	</update>
 	
-    <!-- 订单信息 查询-->
-	<select id="get" parameterType="com.yc.trip.api.business.query.order.OrderInfoQuery" resultMap="OrderInfoMap">
+    <!-- 查询订单信息 -->
+	<select id="getOrderInfo" parameterType="com.yc.trip.api.business.bo.order.OrderInfoDomain" resultMap="OrderInfoMap">
         SELECT id,name,product_id,amout,
            customer,phone,address,provider_id,
            store_id,sales_id,order_status,contract,
@@ -143,56 +142,56 @@
         FROM `order_info`
         <where>
             <if test="id!=null ">
-                AND id=#{id,jdbcType=NUMERIC}
+                and id=#{id,jdbcType=NUMERIC}
             </if>
             <if test="name!=null and name!='' ">
-                AND name=#{name,jdbcType=VARCHAR}
+                and name=#{name,jdbcType=VARCHAR}
             </if>
             <if test="productId!=null ">
-                AND product_id=#{productId,jdbcType=NUMERIC}
+                and product_id=#{productId,jdbcType=NUMERIC}
             </if>
             <if test="amout!=null ">
-                AND amout=#{amout,jdbcType=NUMERIC}
+                and amout=#{amout,jdbcType=NUMERIC}
             </if>
             <if test="customer!=null and customer!='' ">
-                AND customer=#{customer,jdbcType=VARCHAR}
+                and customer=#{customer,jdbcType=VARCHAR}
             </if>
             <if test="phone!=null and phone!='' ">
-                AND phone=#{phone,jdbcType=VARCHAR}
+                and phone=#{phone,jdbcType=VARCHAR}
             </if>
             <if test="address!=null and address!='' ">
-                AND address=#{address,jdbcType=VARCHAR}
+                and address=#{address,jdbcType=VARCHAR}
             </if>
             <if test="providerId!=null ">
-                AND provider_id=#{providerId,jdbcType=NUMERIC}
+                and provider_id=#{providerId,jdbcType=NUMERIC}
             </if>
             <if test="storeId!=null ">
-                AND store_id=#{storeId,jdbcType=NUMERIC}
+                and store_id=#{storeId,jdbcType=NUMERIC}
             </if>
             <if test="salesId!=null ">
-                AND sales_id=#{salesId,jdbcType=NUMERIC}
+                and sales_id=#{salesId,jdbcType=NUMERIC}
             </if>
             <if test="orderStatus!=null ">
-                AND order_status=#{orderStatus, javaType=com.yc.trip.api.business.enums.order.OrderStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
+                and order_status=#{orderStatus, javaType=com.yc.trip.api.business.enums.order.OrderStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
             </if>
             <if test="contract!=null and contract!='' ">
-                AND contract=#{contract,jdbcType=VARCHAR}
+                and contract=#{contract,jdbcType=VARCHAR}
             </if>
             <if test="vertifyCode!=null and vertifyCode!='' ">
-                AND vertify_code=#{vertifyCode,jdbcType=VARCHAR}
+                and vertify_code=#{vertifyCode,jdbcType=VARCHAR}
             </if>
             <if test="notification!=null and notification!='' ">
-                AND notification=#{notification,jdbcType=VARCHAR}
+                and notification=#{notification,jdbcType=VARCHAR}
             </if>
             <if test="isDelete!=null ">
-                AND is_delete=#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
+                and is_delete=#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
             </if>
         </where>
         LIMIT 2	
 	</select>
 	
-    <!-- 订单信息列表查询 -->
-    <select id="queryList" parameterType="com.yc.trip.api.business.query.order.OrderInfoQuery" resultMap="OrderInfoMap">
+    <!-- 查询订单信息列表 -->
+    <select id="queryOrderInfoList" parameterType="com.yc.trip.api.business.bo.order.OrderInfoDomain" resultMap="OrderInfoMap">
             SELECT t.id,t.name,t.product_id,t.amout,
             t.customer,t.phone,t.address,t.provider_id,
             t.store_id,t.sales_id,t.order_status,t.contract,

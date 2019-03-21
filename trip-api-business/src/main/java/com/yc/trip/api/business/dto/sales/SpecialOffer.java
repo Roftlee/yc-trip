@@ -4,12 +4,9 @@ import java.util.Date;
 import java.util.List;
 
 import org.go.api.core.bean.ResBean;
-import org.go.api.core.dto.AbstractEntityDto;
-import org.go.api.core.annotation.InsertRequired;
+import org.go.api.core.dto.AbstractBasePageRequestDto;
 
 import com.yc.trip.api.core.constants.ResCode;
-
-import java.io.Serializable;
 
 import com.yc.trip.api.core.enums.YesNoStatus;
 
@@ -24,14 +21,14 @@ import lombok.NoArgsConstructor;
  * 优惠活动信息Dto类
  * 
  * @author My-Toolkits
- * @since 2019-01-08 23:30
+ * @since 2019-03-21 22:20
  */
 @Builder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper=false)
-public class SpecialOffer extends AbstractEntityDto implements Serializable {
+public class SpecialOffer extends AbstractBasePageRequestDto {
 
     private static final long serialVersionUID = -1;
 
@@ -44,13 +41,11 @@ public class SpecialOffer extends AbstractEntityDto implements Serializable {
 	/**
 	 * 标题
 	 */
-	@InsertRequired
 	private String title;
 
 	/**
 	 * 所属门店Id
 	 */
-	@InsertRequired
 	private Long storeId;
 
 	/**
@@ -61,13 +56,11 @@ public class SpecialOffer extends AbstractEntityDto implements Serializable {
 	/**
 	 * 开始时间
 	 */
-	@InsertRequired
 	private Date startTime;
 
 	/**
 	 * 结束时间
 	 */
-	@InsertRequired
 	private Date endTime;
 
 	/**
@@ -88,5 +81,33 @@ public class SpecialOffer extends AbstractEntityDto implements Serializable {
 	 */
 	private Date updatedTime;
 
+    
+    //-------------------- 扩展属性--------------------------
+     /**
+     * id列表
+     */
+    private List<Long> ids;
 
+    /**
+     * 关键字
+     */
+    private String keywords;
+    
+    @Override
+    public ResBean validateParam() {
+        return ResCode.success;
+    }
+    
+    /**
+     * 流式设置排序字段
+     * @param orderby
+     * @return 
+     */
+    public SpecialOffer orderBy(String orderby){
+        if(getPageNo() == null) setPageNo(1);
+        if(getPageSize() == null) setPageSize(1000);
+        setOrderby(orderby);
+        return this;
+    }
+        
 }

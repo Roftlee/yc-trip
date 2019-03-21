@@ -14,16 +14,16 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
 import com.yc.trip.api.core.constants.ResCode;
+import com.yc.trip.api.business.bo.order.OrderCustomerDomain;
 import com.yc.trip.api.business.dao.order.OrderCustomerDao;
 import com.yc.trip.api.business.dto.order.OrderCustomer;
-import com.yc.trip.api.business.query.order.OrderCustomerQuery;
 import com.yc.trip.api.business.facade.order.OrderCustomerFacade;
 
 /**
  * 订单人员信息相关接口实现
  * 
  * @author My-Toolkits
- * @since 2019-01-06 17:14
+ * @since 2019-03-21 21:47
  */
 @Service(version = "1.0.0")
 public class OrderCustomerFacadeImpl extends AbstractDubboNativeService implements OrderCustomerFacade {
@@ -37,14 +37,18 @@ public class OrderCustomerFacadeImpl extends AbstractDubboNativeService implemen
      * @throws PendingException
      */
     @Override
-    public OrderCustomer add(OrderCustomer orderCustomer) throws PendingException {
+    public OrderCustomer addOrderCustomer(OrderCustomer orderCustomer) throws PendingException {
         try {
+            // 转换成domain对象
+            OrderCustomerDomain cond = BeanMapping.map(orderCustomer, OrderCustomerDomain.class);
             // 新增时对各字段进行非空校验
-            orderCustomer.validateInsertFields();
+            if (!cond.validateInsertFields()) {
+                ResCode.orderCustomerDBParamInvalid.throwException("订单人员信息新增时参数未通过校验");
+            }
             // 调数据库接口进行新增操作
-            orderCustomerDao.add(orderCustomer);
+            orderCustomerDao.addOrderCustomer(cond);
             // 将新增后回返回（包含自增主键值）
-            return orderCustomer;
+            return BeanMapping.map(cond, OrderCustomer.class);
         } catch (Exception ex) {
             // 对异常进行处理
             throw transferException(ex, ResCode.orderCustomerDBError, "订单人员信息新增失败");
@@ -57,14 +61,17 @@ public class OrderCustomerFacadeImpl extends AbstractDubboNativeService implemen
      * @throws PendingException
      */
     @Override
-    public void update(OrderCustomer orderCustomer) throws PendingException {
+    public OrderCustomer updateOrderCustomer(OrderCustomer orderCustomer) throws PendingException {
         try {
+            // 转换成domain对象
+            OrderCustomerDomain cond = BeanMapping.map(orderCustomer, OrderCustomerDomain.class);
             // 更新或删除操作时，不能所有参数都为空
-            if (orderCustomer.isAllFiledsNull()) {
+            if (cond.isAllFiledsNull()) {
                 ResCode.orderCustomerDBParamInvalid.throwException("订单人员信息更新时参数未通过校验");
             }
             // 调数据库接口进行更新操作
-            orderCustomerDao.update(orderCustomer);
+            orderCustomerDao.updateOrderCustomer(cond);
+            return BeanMapping.map(cond, OrderCustomer.class);
         } catch (Exception ex) {
             // 对异常进行处理
             throw transferException(ex, ResCode.orderCustomerDBError, "订单人员信息更新失败");
@@ -77,10 +84,14 @@ public class OrderCustomerFacadeImpl extends AbstractDubboNativeService implemen
      * @throws PendingException
      */
     @Override
-    public OrderCustomer get(OrderCustomerQuery orderCustomerQuery) throws PendingException {
+    public OrderCustomer getOrderCustomer(OrderCustomer orderCustomer) throws PendingException {
         try {
+            // 转换成Domain对象
+            OrderCustomerDomain cond = BeanMapping.map(orderCustomer, OrderCustomerDomain.class);
             // 调数据库接口查询对象
-            return orderCustomerDao.get(orderCustomerQuery);
+            OrderCustomerDomain resultBean = orderCustomerDao.getOrderCustomer(cond);
+            // 转换返回结果
+            return BeanMapping.map(resultBean, OrderCustomer.class);
         } catch (Exception ex) {
             // 对异常进行处理
             throw transferException(ex, ResCode.orderCustomerDBError, "订单人员信息查询失败");
@@ -93,9 +104,9 @@ public class OrderCustomerFacadeImpl extends AbstractDubboNativeService implemen
      * @throws PendingException
      */
     @Override
-    public OrderCustomer mustGet(OrderCustomerQuery orderCustomerQuery) throws PendingException {
+    public OrderCustomer mustGet(OrderCustomer orderCustomer) throws PendingException {
         // 查询单位信息
-        OrderCustomer result = get(orderCustomerQuery);
+        OrderCustomer result = getOrderCustomer(orderCustomer);
         // 若不存在，则抛出异常
         if(result == null){
             ResCode.orderCustomerDBGetNull.throwException("未查询到订单人员信息");
@@ -109,14 +120,18 @@ public class OrderCustomerFacadeImpl extends AbstractDubboNativeService implemen
      * @throws PendingException
      */
     @Override
-    public List<OrderCustomer> queryList(OrderCustomerQuery orderCustomerQuery) throws PendingException {
+    public List<OrderCustomer> queryOrderCustomerList(OrderCustomer orderCustomer) throws PendingException {
         try {
+            // 转换成Domain对象
+            OrderCustomerDomain cond = BeanMapping.map(orderCustomer, OrderCustomerDomain.class);
             // 在上下文中设置排序信息
-            if (StringUtil.isNotBlank(orderCustomerQuery.getOrderby())) {
-                PageHelper.orderBy(orderCustomerQuery.getOrderby());
+            if (StringUtil.isNotBlank(orderCustomer.getOrderby())) {
+                PageHelper.orderBy(orderCustomer.getOrderby());
             }
             // 调数据库接口查询列表
-            return orderCustomerDao.queryList(orderCustomerQuery);
+            List<OrderCustomerDomain> resultList = orderCustomerDao.queryOrderCustomerList(cond);
+            // 转换返回结果
+            return BeanMapping.mapList(resultList, OrderCustomer.class);
         } catch (Exception ex) {
             // 对异常进行处理
             throw transferException(ex, ResCode.orderCustomerDBError, "订单人员信息列表查询失败");
@@ -129,22 +144,26 @@ public class OrderCustomerFacadeImpl extends AbstractDubboNativeService implemen
      * @throws PendingException
      */
     @Override
-    public PageInfo<OrderCustomer> queryPage(OrderCustomerQuery orderCustomerQuery) throws PendingException {
+    public PageInfo<OrderCustomer> queryOrderCustomerPage(OrderCustomer orderCustomer) throws PendingException {
         try {
             // 对请求参数进行校验
-            if (orderCustomerQuery.getPageNo() <= 0 || orderCustomerQuery.getPageSize() <= 0) {
+            if (orderCustomer.getPageNo() <= 0 || orderCustomer.getPageSize() <= 0) {
                 ResCode.orderCustomerDBParamInvalid.throwException("分页参数设置有误");
             }
             // 在上下文中设置分页信息
-            PageHelper.startPage(orderCustomerQuery.getPageNo(), orderCustomerQuery.getPageSize());
+            PageHelper.startPage(orderCustomer.getPageNo(), orderCustomer.getPageSize());
             // 在上下文中设置排序信息
-            if (StringUtil.isNotBlank(orderCustomerQuery.getOrderby())) {
-                PageHelper.orderBy(orderCustomerQuery.getOrderby());
+            if (StringUtil.isNotBlank(orderCustomer.getOrderby())) {
+                PageHelper.orderBy(orderCustomer.getOrderby());
             }
+            // 转换成Domain对象
+            OrderCustomerDomain cond = BeanMapping.map(orderCustomer, OrderCustomerDomain.class);
             // 调数据库接口查询列表
-            List<OrderCustomer> resultList = orderCustomerDao.queryList(orderCustomerQuery);
-            // 返回分页结果
-            return new PageInfo<>(resultList);
+            List<OrderCustomerDomain> resultList = orderCustomerDao.queryOrderCustomerList(cond);
+            // 生成分页对象
+            PageInfo<OrderCustomerDomain> pageInfo = new PageInfo<>(resultList);
+            // 对分页对象进行类型转换
+            return BeanMapping.mapPage(pageInfo, OrderCustomer.class);
         } catch (Exception ex) {
             // 对异常进行处理
             throw transferException(ex, ResCode.orderCustomerDBError, "订单人员信息分页查询失败");

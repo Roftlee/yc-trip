@@ -4,7 +4,7 @@
 <mapper namespace="com.yc.trip.api.business.dao.user.UserDao">
 
     <!-- 对象与字段映射 -->
-    <resultMap type="com.yc.trip.api.business.dto.user.User" id="UserMap">
+    <resultMap type="com.yc.trip.api.business.bo.user.UserDomain" id="UserMap">
         <!--  -->
         <result property="id" column="id" />
         <!-- 小程序openid -->
@@ -27,8 +27,8 @@
         <result property="updatedTime" column="updated_time" />
     </resultMap>
 
-    <!-- 用户信息新增 -->
-    <insert id="add" parameterType="com.yc.trip.api.business.dto.user.User" useGeneratedKeys="true" keyProperty="id">
+    <!-- 新增用户信息 -->
+    <insert id="addUser" parameterType="com.yc.trip.api.business.bo.user.UserDomain" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO `user`(
             open_id,
             name,
@@ -36,8 +36,7 @@
             phone,
             user_type,
             avatar,
-            <if test="isDelete!=null">is_delete</if>
-        )
+            is_delete)
         VALUES(
             #{openId,jdbcType=VARCHAR},
             #{name,jdbcType=VARCHAR},
@@ -45,12 +44,12 @@
             #{phone,jdbcType=VARCHAR},
             #{userType, javaType=com.yc.trip.api.business.enums.user.UserType, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC},
             #{avatar,jdbcType=VARCHAR},
-            <if test="isDelete!=null">#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}</if>
+            #{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
         )	
     </insert>
 	
-    <!-- 用户信息 修改-->
-	<update id="update" parameterType="com.yc.trip.api.business.dto.user.User">
+    <!-- 修改用户信息 -->
+	<update id="updateUser" parameterType="com.yc.trip.api.business.bo.user.UserDomain">
         UPDATE `user`
         <set>
             <if test="openId!=null and openId!='' ">
@@ -84,43 +83,43 @@
             WHERE id=#{id,jdbcType=NUMERIC}	
 	</update>
 	
-    <!-- 用户信息 查询-->
-	<select id="get" parameterType="com.yc.trip.api.business.query.user.UserQuery" resultMap="UserMap">
+    <!-- 查询用户信息 -->
+	<select id="getUser" parameterType="com.yc.trip.api.business.bo.user.UserDomain" resultMap="UserMap">
         SELECT id,open_id,name,sex,
            phone,user_type,avatar,is_delete,
            created_time,updated_time
         FROM `user`
         <where>
             <if test="id!=null ">
-                AND id=#{id,jdbcType=NUMERIC}
+                and id=#{id,jdbcType=NUMERIC}
             </if>
             <if test="openId!=null and openId!='' ">
-                AND open_id=#{openId,jdbcType=VARCHAR}
+                and open_id=#{openId,jdbcType=VARCHAR}
             </if>
             <if test="name!=null and name!='' ">
-                AND name=#{name,jdbcType=VARCHAR}
+                and name=#{name,jdbcType=VARCHAR}
             </if>
             <if test="sex!=null ">
-                AND sex=#{sex, javaType=com.yc.trip.api.core.enums.Sex, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
+                and sex=#{sex, javaType=com.yc.trip.api.core.enums.Sex, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
             </if>
             <if test="phone!=null and phone!='' ">
-                AND phone=#{phone,jdbcType=VARCHAR}
+                and phone=#{phone,jdbcType=VARCHAR}
             </if>
             <if test="userType!=null ">
-                AND user_type=#{userType, javaType=com.yc.trip.api.business.enums.user.UserType, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
+                and user_type=#{userType, javaType=com.yc.trip.api.business.enums.user.UserType, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
             </if>
             <if test="avatar!=null and avatar!='' ">
-                AND avatar=#{avatar,jdbcType=VARCHAR}
+                and avatar=#{avatar,jdbcType=VARCHAR}
             </if>
             <if test="isDelete!=null ">
-                AND is_delete=#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
+                and is_delete=#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
             </if>
         </where>
         LIMIT 2	
 	</select>
 	
-    <!-- 用户信息列表查询 -->
-    <select id="queryList" parameterType="com.yc.trip.api.business.query.user.UserQuery" resultMap="UserMap">
+    <!-- 查询用户信息列表 -->
+    <select id="queryUserList" parameterType="com.yc.trip.api.business.bo.user.UserDomain" resultMap="UserMap">
             SELECT t.id,t.open_id,t.name,t.sex,
             t.phone,t.user_type,t.avatar,t.is_delete,
             t.created_time,t.updated_time

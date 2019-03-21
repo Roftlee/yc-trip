@@ -2,36 +2,35 @@ package com.yc.trip.api.business.dao.user;
 
 import java.util.List;
 
-import com.yc.trip.api.business.dto.user.User;
-import com.yc.trip.api.business.query.user.UserQuery;
+import com.yc.trip.api.business.bo.user.UserDomain;
 
 /**
  * 用户信息Dao类
  * 
  * @author My-Toolkits
- * @since 2019-01-07 20:48
+ * @since 2019-03-21 22:31
  *
  */
 public interface UserDao {
 
     /**
-     * 用户信息新增
+     * 新增用户信息
      */
-    void add(User user);
+    void addUser(UserDomain userDomain);
 
     /**
-     * 用户信息修改
+     * 修改用户信息
      */
-    void update(User user);
+    void updateUser(UserDomain userDomain);
     
     /**
-     * 用户信息查询
+     * 查询用户信息
      */
-    User get(UserQuery userQuery);
+    UserDomain getUser(UserDomain userDomain);
 
     /**
-     * 用户信息列表查询
+     * 查询用户信息列表
      */
-    List<User> queryList(UserQuery userQuery);
+    List<UserDomain> queryUserList(UserDomain userDomain);
 
 }

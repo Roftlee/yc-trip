@@ -4,7 +4,7 @@
 <mapper namespace="com.yc.trip.api.business.dao.store.StoreSalesDao">
 
     <!-- 对象与字段映射 -->
-    <resultMap type="com.yc.trip.api.business.dto.store.StoreSales" id="StoreSalesMap">
+    <resultMap type="com.yc.trip.api.business.bo.store.StoreSalesDomain" id="StoreSalesMap">
         <!--  -->
         <result property="id" column="id" />
         <!-- 门店Id -->
@@ -25,28 +25,27 @@
         <result property="updatedTime" column="updated_time" />
     </resultMap>
 
-    <!-- 门店销售信息新增 -->
-    <insert id="add" parameterType="com.yc.trip.api.business.dto.store.StoreSales" useGeneratedKeys="true" keyProperty="id">
+    <!-- 新增门店销售信息 -->
+    <insert id="addStoreSales" parameterType="com.yc.trip.api.business.bo.store.StoreSalesDomain" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO `store_sales`(
             store_id,
             user_id,
             invite_user_id,
             sales_level,
             commission_rate,
-            <if test="isDelete!=null">is_delete</if>
-        )
+            is_delete)
         VALUES(
             #{storeId,jdbcType=NUMERIC},
             #{userId,jdbcType=NUMERIC},
             #{inviteUserId,jdbcType=NUMERIC},
             #{salesLevel, javaType=com.yc.trip.api.business.enums.store.SalesLevel, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC},
             #{commissionRate,jdbcType=NUMERIC},
-            <if test="isDelete!=null">#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}</if>
+            #{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
         )	
     </insert>
 	
-    <!-- 门店销售信息 修改-->
-	<update id="update" parameterType="com.yc.trip.api.business.dto.store.StoreSales">
+    <!-- 修改门店销售信息 -->
+	<update id="updateStoreSales" parameterType="com.yc.trip.api.business.bo.store.StoreSalesDomain">
         UPDATE `store_sales`
         <set>
             <if test="storeId!=null ">
@@ -77,40 +76,40 @@
             WHERE id=#{id,jdbcType=NUMERIC}	
 	</update>
 	
-    <!-- 门店销售信息 查询-->
-	<select id="get" parameterType="com.yc.trip.api.business.query.store.StoreSalesQuery" resultMap="StoreSalesMap">
+    <!-- 查询门店销售信息 -->
+	<select id="getStoreSales" parameterType="com.yc.trip.api.business.bo.store.StoreSalesDomain" resultMap="StoreSalesMap">
         SELECT id,store_id,user_id,invite_user_id,
            sales_level,commission_rate,is_delete,created_time,
            updated_time
         FROM `store_sales`
         <where>
             <if test="id!=null ">
-                AND id=#{id,jdbcType=NUMERIC}
+                and id=#{id,jdbcType=NUMERIC}
             </if>
             <if test="storeId!=null ">
-                AND store_id=#{storeId,jdbcType=NUMERIC}
+                and store_id=#{storeId,jdbcType=NUMERIC}
             </if>
             <if test="userId!=null ">
-                AND user_id=#{userId,jdbcType=NUMERIC}
+                and user_id=#{userId,jdbcType=NUMERIC}
             </if>
             <if test="inviteUserId!=null ">
-                AND invite_user_id=#{inviteUserId,jdbcType=NUMERIC}
+                and invite_user_id=#{inviteUserId,jdbcType=NUMERIC}
             </if>
             <if test="salesLevel!=null ">
-                AND sales_level=#{salesLevel, javaType=com.yc.trip.api.business.enums.store.SalesLevel, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
+                and sales_level=#{salesLevel, javaType=com.yc.trip.api.business.enums.store.SalesLevel, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
             </if>
             <if test="commissionRate!=null ">
-                AND commission_rate=#{commissionRate,jdbcType=NUMERIC}
+                and commission_rate=#{commissionRate,jdbcType=NUMERIC}
             </if>
             <if test="isDelete!=null ">
-                AND is_delete=#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
+                and is_delete=#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
             </if>
         </where>
         LIMIT 2	
 	</select>
 	
-    <!-- 门店销售信息列表查询 -->
-    <select id="queryList" parameterType="com.yc.trip.api.business.query.store.StoreSalesQuery" resultMap="StoreSalesMap">
+    <!-- 查询门店销售信息列表 -->
+    <select id="queryStoreSalesList" parameterType="com.yc.trip.api.business.bo.store.StoreSalesDomain" resultMap="StoreSalesMap">
             SELECT t.id,t.store_id,t.user_id,t.invite_user_id,
             t.sales_level,t.commission_rate,t.is_delete,t.created_time,
             t.updated_time

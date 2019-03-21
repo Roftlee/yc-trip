@@ -16,7 +16,7 @@ import com.google.common.collect.ImmutableMap;
  * MotorcadeType枚举类
  *
  * @author My-Toolkits
- * @since 2019-01-06 17:06
+ * @since 2019-03-21 21:39
  */
 public enum MotorcadeType implements BaseEnum<Enum<MotorcadeType>, Integer>{
     ALL(-1, "全部"),

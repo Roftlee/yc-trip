@@ -2,36 +2,35 @@ package com.yc.trip.api.business.dao.role;
 
 import java.util.List;
 
-import com.yc.trip.api.business.dto.role.Role;
-import com.yc.trip.api.business.query.role.RoleQuery;
+import com.yc.trip.api.business.bo.role.RoleDomain;
 
 /**
  * 角色信息Dao类
  * 
  * @author My-Toolkits
- * @since 2019-01-06 17:31
+ * @since 2019-03-21 22:15
  *
  */
 public interface RoleDao {
 
     /**
-     * 角色信息新增
+     * 新增角色信息
      */
-    void add(Role role);
+    void addRole(RoleDomain roleDomain);
 
     /**
-     * 角色信息修改
+     * 修改角色信息
      */
-    void update(Role role);
+    void updateRole(RoleDomain roleDomain);
     
     /**
-     * 角色信息查询
+     * 查询角色信息
      */
-    Role get(RoleQuery roleQuery);
+    RoleDomain getRole(RoleDomain roleDomain);
 
     /**
-     * 角色信息列表查询
+     * 查询角色信息列表
      */
-    List<Role> queryList(RoleQuery roleQuery);
+    List<RoleDomain> queryRoleList(RoleDomain roleDomain);
 
 }

@@ -2,36 +2,35 @@ package com.yc.trip.api.business.dao.sales;
 
 import java.util.List;
 
-import com.yc.trip.api.business.dto.sales.SpecialOffer;
-import com.yc.trip.api.business.query.sales.SpecialOfferQuery;
+import com.yc.trip.api.business.bo.sales.SpecialOfferDomain;
 
 /**
  * 优惠活动信息Dao类
  * 
  * @author My-Toolkits
- * @since 2019-01-08 23:30
+ * @since 2019-03-21 22:20
  *
  */
 public interface SpecialOfferDao {
 
     /**
-     * 优惠活动信息新增
+     * 新增优惠活动信息
      */
-    void add(SpecialOffer specialOffer);
+    void addSpecialOffer(SpecialOfferDomain specialOfferDomain);
 
     /**
-     * 优惠活动信息修改
+     * 修改优惠活动信息
      */
-    void update(SpecialOffer specialOffer);
+    void updateSpecialOffer(SpecialOfferDomain specialOfferDomain);
     
     /**
-     * 优惠活动信息查询
+     * 查询优惠活动信息
      */
-    SpecialOffer get(SpecialOfferQuery specialOfferQuery);
+    SpecialOfferDomain getSpecialOffer(SpecialOfferDomain specialOfferDomain);
 
     /**
-     * 优惠活动信息列表查询
+     * 查询优惠活动信息列表
      */
-    List<SpecialOffer> queryList(SpecialOfferQuery specialOfferQuery);
+    List<SpecialOfferDomain> querySpecialOfferList(SpecialOfferDomain specialOfferDomain);
 
 }

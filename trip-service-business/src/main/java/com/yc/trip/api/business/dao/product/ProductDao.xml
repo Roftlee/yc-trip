@@ -4,7 +4,7 @@
 <mapper namespace="com.yc.trip.api.business.dao.product.ProductDao">
 
     <!-- 对象与字段映射 -->
-    <resultMap type="com.yc.trip.api.business.dto.product.Product" id="ProductMap">
+    <resultMap type="com.yc.trip.api.business.bo.product.ProductDomain" id="ProductMap">
         <!--  -->
         <result property="id" column="id" />
         <!-- 产品名称 -->
@@ -49,8 +49,8 @@
         <result property="updatedTime" column="updated_time" />
     </resultMap>
 
-    <!-- 产品信息新增 -->
-    <insert id="add" parameterType="com.yc.trip.api.business.dto.product.Product" useGeneratedKeys="true" keyProperty="id">
+    <!-- 新增产品信息 -->
+    <insert id="addProduct" parameterType="com.yc.trip.api.business.bo.product.ProductDomain" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO `product`(
             name,
             brief_desc,
@@ -69,8 +69,7 @@
             route_feature,
             description,
             remark,
-            <if test="isDelete!=null">is_delete</if>
-        )
+            is_delete)
         VALUES(
             #{name,jdbcType=VARCHAR},
             #{briefDesc,jdbcType=VARCHAR},
@@ -89,12 +88,12 @@
             #{routeFeature,jdbcType=VARCHAR},
             #{description,jdbcType=VARCHAR},
             #{remark,jdbcType=VARCHAR},
-            <if test="isDelete!=null">#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}</if>
+            #{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
         )	
     </insert>
 	
-    <!-- 产品信息 修改-->
-	<update id="update" parameterType="com.yc.trip.api.business.dto.product.Product">
+    <!-- 修改产品信息 -->
+	<update id="updateProduct" parameterType="com.yc.trip.api.business.bo.product.ProductDomain">
         UPDATE `product`
         <set>
             <if test="name!=null and name!='' ">
@@ -161,8 +160,8 @@
             WHERE id=#{id,jdbcType=NUMERIC}	
 	</update>
 	
-    <!-- 产品信息 查询-->
-	<select id="get" parameterType="com.yc.trip.api.business.query.product.ProductQuery" resultMap="ProductMap">
+    <!-- 查询产品信息 -->
+	<select id="getProduct" parameterType="com.yc.trip.api.business.bo.product.ProductDomain" resultMap="ProductMap">
         SELECT id,name,brief_desc,sort_id,
            region_id,region_sort_id,provider_id,cost,
            strike_price,price,price_desc,commission_rate,
@@ -172,68 +171,68 @@
         FROM `product`
         <where>
             <if test="id!=null ">
-                AND id=#{id,jdbcType=NUMERIC}
+                and id=#{id,jdbcType=NUMERIC}
             </if>
             <if test="name!=null and name!='' ">
-                AND name=#{name,jdbcType=VARCHAR}
+                and name=#{name,jdbcType=VARCHAR}
             </if>
             <if test="briefDesc!=null and briefDesc!='' ">
-                AND brief_desc=#{briefDesc,jdbcType=VARCHAR}
+                and brief_desc=#{briefDesc,jdbcType=VARCHAR}
             </if>
             <if test="sortId!=null ">
-                AND sort_id=#{sortId,jdbcType=NUMERIC}
+                and sort_id=#{sortId,jdbcType=NUMERIC}
             </if>
             <if test="regionId!=null ">
-                AND region_id=#{regionId,jdbcType=NUMERIC}
+                and region_id=#{regionId,jdbcType=NUMERIC}
             </if>
             <if test="regionSortId!=null ">
-                AND region_sort_id=#{regionSortId,jdbcType=NUMERIC}
+                and region_sort_id=#{regionSortId,jdbcType=NUMERIC}
             </if>
             <if test="providerId!=null ">
-                AND provider_id=#{providerId,jdbcType=NUMERIC}
+                and provider_id=#{providerId,jdbcType=NUMERIC}
             </if>
             <if test="cost!=null ">
-                AND cost=#{cost,jdbcType=NUMERIC}
+                and cost=#{cost,jdbcType=NUMERIC}
             </if>
             <if test="strikePrice!=null ">
-                AND strike_price=#{strikePrice,jdbcType=NUMERIC}
+                and strike_price=#{strikePrice,jdbcType=NUMERIC}
             </if>
             <if test="price!=null ">
-                AND price=#{price,jdbcType=NUMERIC}
+                and price=#{price,jdbcType=NUMERIC}
             </if>
             <if test="priceDesc!=null and priceDesc!='' ">
-                AND price_desc=#{priceDesc,jdbcType=VARCHAR}
+                and price_desc=#{priceDesc,jdbcType=VARCHAR}
             </if>
             <if test="commissionRate!=null ">
-                AND commission_rate=#{commissionRate,jdbcType=NUMERIC}
+                and commission_rate=#{commissionRate,jdbcType=NUMERIC}
             </if>
             <if test="imageUrl!=null and imageUrl!='' ">
-                AND image_url=#{imageUrl,jdbcType=VARCHAR}
+                and image_url=#{imageUrl,jdbcType=VARCHAR}
             </if>
             <if test="videoUrl!=null and videoUrl!='' ">
-                AND video_url=#{videoUrl,jdbcType=VARCHAR}
+                and video_url=#{videoUrl,jdbcType=VARCHAR}
             </if>
             <if test="routeIntroduce!=null ">
-                AND route_introduce=#{routeIntroduce,jdbcType=VARCHAR}
+                and route_introduce=#{routeIntroduce,jdbcType=VARCHAR}
             </if>
             <if test="routeFeature!=null ">
-                AND route_feature=#{routeFeature,jdbcType=VARCHAR}
+                and route_feature=#{routeFeature,jdbcType=VARCHAR}
             </if>
             <if test="description!=null ">
-                AND description=#{description,jdbcType=VARCHAR}
+                and description=#{description,jdbcType=VARCHAR}
             </if>
             <if test="remark!=null and remark!='' ">
-                AND remark=#{remark,jdbcType=VARCHAR}
+                and remark=#{remark,jdbcType=VARCHAR}
             </if>
             <if test="isDelete!=null ">
-                AND is_delete=#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
+                and is_delete=#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
             </if>
         </where>
         LIMIT 2	
 	</select>
 	
-    <!-- 产品信息列表查询 -->
-    <select id="queryList" parameterType="com.yc.trip.api.business.query.product.ProductQuery" resultMap="ProductMap">
+    <!-- 查询产品信息列表 -->
+    <select id="queryProductList" parameterType="com.yc.trip.api.business.bo.product.ProductDomain" resultMap="ProductMap">
             SELECT t.id,t.name,t.brief_desc,t.sort_id,
             t.region_id,t.region_sort_id,t.provider_id,t.cost,
             t.strike_price,t.price,t.price_desc,t.commission_rate,

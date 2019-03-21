@@ -14,16 +14,16 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
 import com.yc.trip.api.core.constants.ResCode;
+import com.yc.trip.api.business.bo.purchase.PurchaseRecordDomain;
 import com.yc.trip.api.business.dao.purchase.PurchaseRecordDao;
 import com.yc.trip.api.business.dto.purchase.PurchaseRecord;
-import com.yc.trip.api.business.query.purchase.PurchaseRecordQuery;
 import com.yc.trip.api.business.facade.purchase.PurchaseRecordFacade;
 
 /**
  * 服务购买信息相关接口实现
  * 
  * @author My-Toolkits
- * @since 2019-01-06 17:27
+ * @since 2019-03-21 22:11
  */
 @Service(version = "1.0.0")
 public class PurchaseRecordFacadeImpl extends AbstractDubboNativeService implements PurchaseRecordFacade {
@@ -37,14 +37,18 @@ public class PurchaseRecordFacadeImpl extends AbstractDubboNativeService impleme
      * @throws PendingException
      */
     @Override
-    public PurchaseRecord add(PurchaseRecord purchaseRecord) throws PendingException {
+    public PurchaseRecord addPurchaseRecord(PurchaseRecord purchaseRecord) throws PendingException {
         try {
+            // 转换成domain对象
+            PurchaseRecordDomain cond = BeanMapping.map(purchaseRecord, PurchaseRecordDomain.class);
             // 新增时对各字段进行非空校验
-            purchaseRecord.validateInsertFields();
+            if (!cond.validateInsertFields()) {
+                ResCode.purchaseRecordDBParamInvalid.throwException("服务购买信息新增时参数未通过校验");
+            }
             // 调数据库接口进行新增操作
-            purchaseRecordDao.add(purchaseRecord);
+            purchaseRecordDao.addPurchaseRecord(cond);
             // 将新增后回返回（包含自增主键值）
-            return purchaseRecord;
+            return BeanMapping.map(cond, PurchaseRecord.class);
         } catch (Exception ex) {
             // 对异常进行处理
             throw transferException(ex, ResCode.purchaseRecordDBError, "服务购买信息新增失败");
@@ -57,14 +61,17 @@ public class PurchaseRecordFacadeImpl extends AbstractDubboNativeService impleme
      * @throws PendingException
      */
     @Override
-    public void update(PurchaseRecord purchaseRecord) throws PendingException {
+    public PurchaseRecord updatePurchaseRecord(PurchaseRecord purchaseRecord) throws PendingException {
         try {
+            // 转换成domain对象
+            PurchaseRecordDomain cond = BeanMapping.map(purchaseRecord, PurchaseRecordDomain.class);
             // 更新或删除操作时，不能所有参数都为空
-            if (purchaseRecord.isAllFiledsNull()) {
+            if (cond.isAllFiledsNull()) {
                 ResCode.purchaseRecordDBParamInvalid.throwException("服务购买信息更新时参数未通过校验");
             }
             // 调数据库接口进行更新操作
-            purchaseRecordDao.update(purchaseRecord);
+            purchaseRecordDao.updatePurchaseRecord(cond);
+            return BeanMapping.map(cond, PurchaseRecord.class);
         } catch (Exception ex) {
             // 对异常进行处理
             throw transferException(ex, ResCode.purchaseRecordDBError, "服务购买信息更新失败");
@@ -77,10 +84,14 @@ public class PurchaseRecordFacadeImpl extends AbstractDubboNativeService impleme
      * @throws PendingException
      */
     @Override
-    public PurchaseRecord get(PurchaseRecordQuery purchaseRecordQuery) throws PendingException {
+    public PurchaseRecord getPurchaseRecord(PurchaseRecord purchaseRecord) throws PendingException {
         try {
+            // 转换成Domain对象
+            PurchaseRecordDomain cond = BeanMapping.map(purchaseRecord, PurchaseRecordDomain.class);
             // 调数据库接口查询对象
-            return purchaseRecordDao.get(purchaseRecordQuery);
+            PurchaseRecordDomain resultBean = purchaseRecordDao.getPurchaseRecord(cond);
+            // 转换返回结果
+            return BeanMapping.map(resultBean, PurchaseRecord.class);
         } catch (Exception ex) {
             // 对异常进行处理
             throw transferException(ex, ResCode.purchaseRecordDBError, "服务购买信息查询失败");
@@ -93,9 +104,9 @@ public class PurchaseRecordFacadeImpl extends AbstractDubboNativeService impleme
      * @throws PendingException
      */
     @Override
-    public PurchaseRecord mustGet(PurchaseRecordQuery purchaseRecordQuery) throws PendingException {
+    public PurchaseRecord mustGet(PurchaseRecord purchaseRecord) throws PendingException {
         // 查询单位信息
-        PurchaseRecord result = get(purchaseRecordQuery);
+        PurchaseRecord result = getPurchaseRecord(purchaseRecord);
         // 若不存在，则抛出异常
         if(result == null){
             ResCode.purchaseRecordDBGetNull.throwException("未查询到服务购买信息");
@@ -109,14 +120,18 @@ public class PurchaseRecordFacadeImpl extends AbstractDubboNativeService impleme
      * @throws PendingException
      */
     @Override
-    public List<PurchaseRecord> queryList(PurchaseRecordQuery purchaseRecordQuery) throws PendingException {
+    public List<PurchaseRecord> queryPurchaseRecordList(PurchaseRecord purchaseRecord) throws PendingException {
         try {
+            // 转换成Domain对象
+            PurchaseRecordDomain cond = BeanMapping.map(purchaseRecord, PurchaseRecordDomain.class);
             // 在上下文中设置排序信息
-            if (StringUtil.isNotBlank(purchaseRecordQuery.getOrderby())) {
-                PageHelper.orderBy(purchaseRecordQuery.getOrderby());
+            if (StringUtil.isNotBlank(purchaseRecord.getOrderby())) {
+                PageHelper.orderBy(purchaseRecord.getOrderby());
             }
             // 调数据库接口查询列表
-            return purchaseRecordDao.queryList(purchaseRecordQuery);
+            List<PurchaseRecordDomain> resultList = purchaseRecordDao.queryPurchaseRecordList(cond);
+            // 转换返回结果
+            return BeanMapping.mapList(resultList, PurchaseRecord.class);
         } catch (Exception ex) {
             // 对异常进行处理
             throw transferException(ex, ResCode.purchaseRecordDBError, "服务购买信息列表查询失败");
@@ -129,22 +144,26 @@ public class PurchaseRecordFacadeImpl extends AbstractDubboNativeService impleme
      * @throws PendingException
      */
     @Override
-    public PageInfo<PurchaseRecord> queryPage(PurchaseRecordQuery purchaseRecordQuery) throws PendingException {
+    public PageInfo<PurchaseRecord> queryPurchaseRecordPage(PurchaseRecord purchaseRecord) throws PendingException {
         try {
             // 对请求参数进行校验
-            if (purchaseRecordQuery.getPageNo() <= 0 || purchaseRecordQuery.getPageSize() <= 0) {
+            if (purchaseRecord.getPageNo() <= 0 || purchaseRecord.getPageSize() <= 0) {
                 ResCode.purchaseRecordDBParamInvalid.throwException("分页参数设置有误");
             }
             // 在上下文中设置分页信息
-            PageHelper.startPage(purchaseRecordQuery.getPageNo(), purchaseRecordQuery.getPageSize());
+            PageHelper.startPage(purchaseRecord.getPageNo(), purchaseRecord.getPageSize());
             // 在上下文中设置排序信息
-            if (StringUtil.isNotBlank(purchaseRecordQuery.getOrderby())) {
-                PageHelper.orderBy(purchaseRecordQuery.getOrderby());
+            if (StringUtil.isNotBlank(purchaseRecord.getOrderby())) {
+                PageHelper.orderBy(purchaseRecord.getOrderby());
             }
+            // 转换成Domain对象
+            PurchaseRecordDomain cond = BeanMapping.map(purchaseRecord, PurchaseRecordDomain.class);
             // 调数据库接口查询列表
-            List<PurchaseRecord> resultList = purchaseRecordDao.queryList(purchaseRecordQuery);
-            // 返回分页结果
-            return new PageInfo<>(resultList);
+            List<PurchaseRecordDomain> resultList = purchaseRecordDao.queryPurchaseRecordList(cond);
+            // 生成分页对象
+            PageInfo<PurchaseRecordDomain> pageInfo = new PageInfo<>(resultList);
+            // 对分页对象进行类型转换
+            return BeanMapping.mapPage(pageInfo, PurchaseRecord.class);
         } catch (Exception ex) {
             // 对异常进行处理
             throw transferException(ex, ResCode.purchaseRecordDBError, "服务购买信息分页查询失败");

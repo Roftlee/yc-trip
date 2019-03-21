@@ -14,16 +14,16 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
 import com.yc.trip.api.core.constants.ResCode;
+import com.yc.trip.api.business.bo.user.UserDomain;
 import com.yc.trip.api.business.dao.user.UserDao;
 import com.yc.trip.api.business.dto.user.User;
-import com.yc.trip.api.business.query.user.UserQuery;
 import com.yc.trip.api.business.facade.user.UserFacade;
 
 /**
  * 用户信息相关接口实现
  * 
  * @author My-Toolkits
- * @since 2019-01-07 20:48
+ * @since 2019-03-21 22:31
  */
 @Service(version = "1.0.0")
 public class UserFacadeImpl extends AbstractDubboNativeService implements UserFacade {
@@ -37,14 +37,18 @@ public class UserFacadeImpl extends AbstractDubboNativeService implements UserFa
      * @throws PendingException
      */
     @Override
-    public User add(User user) throws PendingException {
+    public User addUser(User user) throws PendingException {
         try {
+            // 转换成domain对象
+            UserDomain cond = BeanMapping.map(user, UserDomain.class);
             // 新增时对各字段进行非空校验
-            user.validateInsertFields();
+            if (!cond.validateInsertFields()) {
+                ResCode.userDBParamInvalid.throwException("用户信息新增时参数未通过校验");
+            }
             // 调数据库接口进行新增操作
-            userDao.add(user);
+            userDao.addUser(cond);
             // 将新增后回返回（包含自增主键值）
-            return user;
+            return BeanMapping.map(cond, User.class);
         } catch (Exception ex) {
             // 对异常进行处理
             throw transferException(ex, ResCode.userDBError, "用户信息新增失败");
@@ -57,14 +61,17 @@ public class UserFacadeImpl extends AbstractDubboNativeService implements UserFa
      * @throws PendingException
      */
     @Override
-    public void update(User user) throws PendingException {
+    public User updateUser(User user) throws PendingException {
         try {
+            // 转换成domain对象
+            UserDomain cond = BeanMapping.map(user, UserDomain.class);
             // 更新或删除操作时，不能所有参数都为空
-            if (user.isAllFiledsNull()) {
+            if (cond.isAllFiledsNull()) {
                 ResCode.userDBParamInvalid.throwException("用户信息更新时参数未通过校验");
             }
             // 调数据库接口进行更新操作
-            userDao.update(user);
+            userDao.updateUser(cond);
+            return BeanMapping.map(cond, User.class);
         } catch (Exception ex) {
             // 对异常进行处理
             throw transferException(ex, ResCode.userDBError, "用户信息更新失败");
@@ -77,10 +84,14 @@ public class UserFacadeImpl extends AbstractDubboNativeService implements UserFa
      * @throws PendingException
      */
     @Override
-    public User get(UserQuery userQuery) throws PendingException {
+    public User getUser(User user) throws PendingException {
         try {
+            // 转换成Domain对象
+            UserDomain cond = BeanMapping.map(user, UserDomain.class);
             // 调数据库接口查询对象
-            return userDao.get(userQuery);
+            UserDomain resultBean = userDao.getUser(cond);
+            // 转换返回结果
+            return BeanMapping.map(resultBean, User.class);
         } catch (Exception ex) {
             // 对异常进行处理
             throw transferException(ex, ResCode.userDBError, "用户信息查询失败");
@@ -93,9 +104,9 @@ public class UserFacadeImpl extends AbstractDubboNativeService implements UserFa
      * @throws PendingException
      */
     @Override
-    public User mustGet(UserQuery userQuery) throws PendingException {
+    public User mustGet(User user) throws PendingException {
         // 查询单位信息
-        User result = get(userQuery);
+        User result = getUser(user);
         // 若不存在，则抛出异常
         if(result == null){
             ResCode.userDBGetNull.throwException("未查询到用户信息");
@@ -109,14 +120,18 @@ public class UserFacadeImpl extends AbstractDubboNativeService implements UserFa
      * @throws PendingException
      */
     @Override
-    public List<User> queryList(UserQuery userQuery) throws PendingException {
+    public List<User> queryUserList(User user) throws PendingException {
         try {
+            // 转换成Domain对象
+            UserDomain cond = BeanMapping.map(user, UserDomain.class);
             // 在上下文中设置排序信息
-            if (StringUtil.isNotBlank(userQuery.getOrderby())) {
-                PageHelper.orderBy(userQuery.getOrderby());
+            if (StringUtil.isNotBlank(user.getOrderby())) {
+                PageHelper.orderBy(user.getOrderby());
             }
             // 调数据库接口查询列表
-            return userDao.queryList(userQuery);
+            List<UserDomain> resultList = userDao.queryUserList(cond);
+            // 转换返回结果
+            return BeanMapping.mapList(resultList, User.class);
         } catch (Exception ex) {
             // 对异常进行处理
             throw transferException(ex, ResCode.userDBError, "用户信息列表查询失败");
@@ -129,22 +144,26 @@ public class UserFacadeImpl extends AbstractDubboNativeService implements UserFa
      * @throws PendingException
      */
     @Override
-    public PageInfo<User> queryPage(UserQuery userQuery) throws PendingException {
+    public PageInfo<User> queryUserPage(User user) throws PendingException {
         try {
             // 对请求参数进行校验
-            if (userQuery.getPageNo() <= 0 || userQuery.getPageSize() <= 0) {
+            if (user.getPageNo() <= 0 || user.getPageSize() <= 0) {
                 ResCode.userDBParamInvalid.throwException("分页参数设置有误");
             }
             // 在上下文中设置分页信息
-            PageHelper.startPage(userQuery.getPageNo(), userQuery.getPageSize());
+            PageHelper.startPage(user.getPageNo(), user.getPageSize());
             // 在上下文中设置排序信息
-            if (StringUtil.isNotBlank(userQuery.getOrderby())) {
-                PageHelper.orderBy(userQuery.getOrderby());
+            if (StringUtil.isNotBlank(user.getOrderby())) {
+                PageHelper.orderBy(user.getOrderby());
             }
+            // 转换成Domain对象
+            UserDomain cond = BeanMapping.map(user, UserDomain.class);
             // 调数据库接口查询列表
-            List<User> resultList = userDao.queryList(userQuery);
-            // 返回分页结果
-            return new PageInfo<>(resultList);
+            List<UserDomain> resultList = userDao.queryUserList(cond);
+            // 生成分页对象
+            PageInfo<UserDomain> pageInfo = new PageInfo<>(resultList);
+            // 对分页对象进行类型转换
+            return BeanMapping.mapPage(pageInfo, User.class);
         } catch (Exception ex) {
             // 对异常进行处理
             throw transferException(ex, ResCode.userDBError, "用户信息分页查询失败");

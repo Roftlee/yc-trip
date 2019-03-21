@@ -2,36 +2,35 @@ package com.yc.trip.api.business.dao.wx;
 
 import java.util.List;
 
-import com.yc.trip.api.business.dto.wx.WxApp;
-import com.yc.trip.api.business.query.wx.WxAppQuery;
+import com.yc.trip.api.business.bo.wx.WxAppDomain;
 
 /**
  * 微信小程序信息Dao类
  * 
  * @author My-Toolkits
- * @since 2019-01-06 19:05
+ * @since 2019-03-21 22:39
  *
  */
 public interface WxAppDao {
 
     /**
-     * 微信小程序信息新增
+     * 新增微信小程序信息
      */
-    void add(WxApp wxApp);
+    void addWxApp(WxAppDomain wxAppDomain);
 
     /**
-     * 微信小程序信息修改
+     * 修改微信小程序信息
      */
-    void update(WxApp wxApp);
+    void updateWxApp(WxAppDomain wxAppDomain);
     
     /**
-     * 微信小程序信息查询
+     * 查询微信小程序信息
      */
-    WxApp get(WxAppQuery wxAppQuery);
+    WxAppDomain getWxApp(WxAppDomain wxAppDomain);
 
     /**
-     * 微信小程序信息列表查询
+     * 查询微信小程序信息列表
      */
-    List<WxApp> queryList(WxAppQuery wxAppQuery);
+    List<WxAppDomain> queryWxAppList(WxAppDomain wxAppDomain);
 
 }

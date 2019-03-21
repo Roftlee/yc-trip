@@ -14,16 +14,16 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
 import com.yc.trip.api.core.constants.ResCode;
+import com.yc.trip.api.business.bo.visa.VisaAttachmentDomain;
 import com.yc.trip.api.business.dao.visa.VisaAttachmentDao;
 import com.yc.trip.api.business.dto.visa.VisaAttachment;
-import com.yc.trip.api.business.query.visa.VisaAttachmentQuery;
 import com.yc.trip.api.business.facade.visa.VisaAttachmentFacade;
 
 /**
  * 签证附件信息相关接口实现
  * 
  * @author My-Toolkits
- * @since 2019-01-06 18:04
+ * @since 2019-03-21 22:36
  */
 @Service(version = "1.0.0")
 public class VisaAttachmentFacadeImpl extends AbstractDubboNativeService implements VisaAttachmentFacade {
@@ -37,14 +37,18 @@ public class VisaAttachmentFacadeImpl extends AbstractDubboNativeService impleme
      * @throws PendingException
      */
     @Override
-    public VisaAttachment add(VisaAttachment visaAttachment) throws PendingException {
+    public VisaAttachment addVisaAttachment(VisaAttachment visaAttachment) throws PendingException {
         try {
+            // 转换成domain对象
+            VisaAttachmentDomain cond = BeanMapping.map(visaAttachment, VisaAttachmentDomain.class);
             // 新增时对各字段进行非空校验
-            visaAttachment.validateInsertFields();
+            if (!cond.validateInsertFields()) {
+                ResCode.visaAttachmentDBParamInvalid.throwException("签证附件信息新增时参数未通过校验");
+            }
             // 调数据库接口进行新增操作
-            visaAttachmentDao.add(visaAttachment);
+            visaAttachmentDao.addVisaAttachment(cond);
             // 将新增后回返回（包含自增主键值）
-            return visaAttachment;
+            return BeanMapping.map(cond, VisaAttachment.class);
         } catch (Exception ex) {
             // 对异常进行处理
             throw transferException(ex, ResCode.visaAttachmentDBError, "签证附件信息新增失败");
@@ -57,14 +61,17 @@ public class VisaAttachmentFacadeImpl extends AbstractDubboNativeService impleme
      * @throws PendingException
      */
     @Override
-    public void update(VisaAttachment visaAttachment) throws PendingException {
+    public VisaAttachment updateVisaAttachment(VisaAttachment visaAttachment) throws PendingException {
         try {
+            // 转换成domain对象
+            VisaAttachmentDomain cond = BeanMapping.map(visaAttachment, VisaAttachmentDomain.class);
             // 更新或删除操作时，不能所有参数都为空
-            if (visaAttachment.isAllFiledsNull()) {
+            if (cond.isAllFiledsNull()) {
                 ResCode.visaAttachmentDBParamInvalid.throwException("签证附件信息更新时参数未通过校验");
             }
             // 调数据库接口进行更新操作
-            visaAttachmentDao.update(visaAttachment);
+            visaAttachmentDao.updateVisaAttachment(cond);
+            return BeanMapping.map(cond, VisaAttachment.class);
         } catch (Exception ex) {
             // 对异常进行处理
             throw transferException(ex, ResCode.visaAttachmentDBError, "签证附件信息更新失败");
@@ -77,10 +84,14 @@ public class VisaAttachmentFacadeImpl extends AbstractDubboNativeService impleme
      * @throws PendingException
      */
     @Override
-    public VisaAttachment get(VisaAttachmentQuery visaAttachmentQuery) throws PendingException {
+    public VisaAttachment getVisaAttachment(VisaAttachment visaAttachment) throws PendingException {
         try {
+            // 转换成Domain对象
+            VisaAttachmentDomain cond = BeanMapping.map(visaAttachment, VisaAttachmentDomain.class);
             // 调数据库接口查询对象
-            return visaAttachmentDao.get(visaAttachmentQuery);
+            VisaAttachmentDomain resultBean = visaAttachmentDao.getVisaAttachment(cond);
+            // 转换返回结果
+            return BeanMapping.map(resultBean, VisaAttachment.class);
         } catch (Exception ex) {
             // 对异常进行处理
             throw transferException(ex, ResCode.visaAttachmentDBError, "签证附件信息查询失败");
@@ -93,9 +104,9 @@ public class VisaAttachmentFacadeImpl extends AbstractDubboNativeService impleme
      * @throws PendingException
      */
     @Override
-    public VisaAttachment mustGet(VisaAttachmentQuery visaAttachmentQuery) throws PendingException {
+    public VisaAttachment mustGet(VisaAttachment visaAttachment) throws PendingException {
         // 查询单位信息
-        VisaAttachment result = get(visaAttachmentQuery);
+        VisaAttachment result = getVisaAttachment(visaAttachment);
         // 若不存在，则抛出异常
         if(result == null){
             ResCode.visaAttachmentDBGetNull.throwException("未查询到签证附件信息");
@@ -109,14 +120,18 @@ public class VisaAttachmentFacadeImpl extends AbstractDubboNativeService impleme
      * @throws PendingException
      */
     @Override
-    public List<VisaAttachment> queryList(VisaAttachmentQuery visaAttachmentQuery) throws PendingException {
+    public List<VisaAttachment> queryVisaAttachmentList(VisaAttachment visaAttachment) throws PendingException {
         try {
+            // 转换成Domain对象
+            VisaAttachmentDomain cond = BeanMapping.map(visaAttachment, VisaAttachmentDomain.class);
             // 在上下文中设置排序信息
-            if (StringUtil.isNotBlank(visaAttachmentQuery.getOrderby())) {
-                PageHelper.orderBy(visaAttachmentQuery.getOrderby());
+            if (StringUtil.isNotBlank(visaAttachment.getOrderby())) {
+                PageHelper.orderBy(visaAttachment.getOrderby());
             }
             // 调数据库接口查询列表
-            return visaAttachmentDao.queryList(visaAttachmentQuery);
+            List<VisaAttachmentDomain> resultList = visaAttachmentDao.queryVisaAttachmentList(cond);
+            // 转换返回结果
+            return BeanMapping.mapList(resultList, VisaAttachment.class);
         } catch (Exception ex) {
             // 对异常进行处理
             throw transferException(ex, ResCode.visaAttachmentDBError, "签证附件信息列表查询失败");
@@ -129,22 +144,26 @@ public class VisaAttachmentFacadeImpl extends AbstractDubboNativeService impleme
      * @throws PendingException
      */
     @Override
-    public PageInfo<VisaAttachment> queryPage(VisaAttachmentQuery visaAttachmentQuery) throws PendingException {
+    public PageInfo<VisaAttachment> queryVisaAttachmentPage(VisaAttachment visaAttachment) throws PendingException {
         try {
             // 对请求参数进行校验
-            if (visaAttachmentQuery.getPageNo() <= 0 || visaAttachmentQuery.getPageSize() <= 0) {
+            if (visaAttachment.getPageNo() <= 0 || visaAttachment.getPageSize() <= 0) {
                 ResCode.visaAttachmentDBParamInvalid.throwException("分页参数设置有误");
             }
             // 在上下文中设置分页信息
-            PageHelper.startPage(visaAttachmentQuery.getPageNo(), visaAttachmentQuery.getPageSize());
+            PageHelper.startPage(visaAttachment.getPageNo(), visaAttachment.getPageSize());
             // 在上下文中设置排序信息
-            if (StringUtil.isNotBlank(visaAttachmentQuery.getOrderby())) {
-                PageHelper.orderBy(visaAttachmentQuery.getOrderby());
+            if (StringUtil.isNotBlank(visaAttachment.getOrderby())) {
+                PageHelper.orderBy(visaAttachment.getOrderby());
             }
+            // 转换成Domain对象
+            VisaAttachmentDomain cond = BeanMapping.map(visaAttachment, VisaAttachmentDomain.class);
             // 调数据库接口查询列表
-            List<VisaAttachment> resultList = visaAttachmentDao.queryList(visaAttachmentQuery);
-            // 返回分页结果
-            return new PageInfo<>(resultList);
+            List<VisaAttachmentDomain> resultList = visaAttachmentDao.queryVisaAttachmentList(cond);
+            // 生成分页对象
+            PageInfo<VisaAttachmentDomain> pageInfo = new PageInfo<>(resultList);
+            // 对分页对象进行类型转换
+            return BeanMapping.mapPage(pageInfo, VisaAttachment.class);
         } catch (Exception ex) {
             // 对异常进行处理
             throw transferException(ex, ResCode.visaAttachmentDBError, "签证附件信息分页查询失败");

@@ -4,7 +4,7 @@
 <mapper namespace="com.yc.trip.api.business.dao.role.RoleDao">
 
     <!-- 对象与字段映射 -->
-    <resultMap type="com.yc.trip.api.business.dto.role.Role" id="RoleMap">
+    <resultMap type="com.yc.trip.api.business.bo.role.RoleDomain" id="RoleMap">
         <!--  -->
         <result property="id" column="id" />
         <!-- 角色名称 -->
@@ -19,22 +19,21 @@
         <result property="updatedTime" column="updated_time" />
     </resultMap>
 
-    <!-- 角色信息新增 -->
-    <insert id="add" parameterType="com.yc.trip.api.business.dto.role.Role" useGeneratedKeys="true" keyProperty="id">
+    <!-- 新增角色信息 -->
+    <insert id="addRole" parameterType="com.yc.trip.api.business.bo.role.RoleDomain" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO `role`(
             role_name,
             created_by,
-            <if test="isDelete!=null">is_delete</if>
-        )
+            is_delete)
         VALUES(
             #{roleName,jdbcType=VARCHAR},
             #{createdBy,jdbcType=NUMERIC},
-            <if test="isDelete!=null">#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}</if>
+            #{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
         )	
     </insert>
 	
-    <!-- 角色信息 修改-->
-	<update id="update" parameterType="com.yc.trip.api.business.dto.role.Role">
+    <!-- 修改角色信息 -->
+	<update id="updateRole" parameterType="com.yc.trip.api.business.bo.role.RoleDomain">
         UPDATE `role`
         <set>
             <if test="roleName!=null and roleName!='' ">
@@ -56,30 +55,30 @@
             WHERE id=#{id,jdbcType=NUMERIC}	
 	</update>
 	
-    <!-- 角色信息 查询-->
-	<select id="get" parameterType="com.yc.trip.api.business.query.role.RoleQuery" resultMap="RoleMap">
+    <!-- 查询角色信息 -->
+	<select id="getRole" parameterType="com.yc.trip.api.business.bo.role.RoleDomain" resultMap="RoleMap">
         SELECT id,role_name,created_by,is_delete,
            created_time,updated_time
         FROM `role`
         <where>
             <if test="id!=null ">
-                AND id=#{id,jdbcType=NUMERIC}
+                and id=#{id,jdbcType=NUMERIC}
             </if>
             <if test="roleName!=null and roleName!='' ">
-                AND role_name=#{roleName,jdbcType=VARCHAR}
+                and role_name=#{roleName,jdbcType=VARCHAR}
             </if>
             <if test="createdBy!=null ">
-                AND created_by=#{createdBy,jdbcType=NUMERIC}
+                and created_by=#{createdBy,jdbcType=NUMERIC}
             </if>
             <if test="isDelete!=null ">
-                AND is_delete=#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
+                and is_delete=#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
             </if>
         </where>
         LIMIT 2	
 	</select>
 	
-    <!-- 角色信息列表查询 -->
-    <select id="queryList" parameterType="com.yc.trip.api.business.query.role.RoleQuery" resultMap="RoleMap">
+    <!-- 查询角色信息列表 -->
+    <select id="queryRoleList" parameterType="com.yc.trip.api.business.bo.role.RoleDomain" resultMap="RoleMap">
             SELECT t.id,t.role_name,t.created_by,t.is_delete,
             t.created_time,t.updated_time
             FROM `role` t 

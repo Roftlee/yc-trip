@@ -4,7 +4,7 @@
 <mapper namespace="com.yc.trip.api.business.dao.purchase.PurchaseRecordDao">
 
     <!-- 对象与字段映射 -->
-    <resultMap type="com.yc.trip.api.business.dto.purchase.PurchaseRecord" id="PurchaseRecordMap">
+    <resultMap type="com.yc.trip.api.business.bo.purchase.PurchaseRecordDomain" id="PurchaseRecordMap">
         <!--  -->
         <result property="id" column="id" />
         <!-- 角色Id -->
@@ -19,22 +19,21 @@
         <result property="updatedTime" column="updated_time" />
     </resultMap>
 
-    <!-- 服务购买信息新增 -->
-    <insert id="add" parameterType="com.yc.trip.api.business.dto.purchase.PurchaseRecord" useGeneratedKeys="true" keyProperty="id">
+    <!-- 新增服务购买信息 -->
+    <insert id="addPurchaseRecord" parameterType="com.yc.trip.api.business.bo.purchase.PurchaseRecordDomain" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO `purchase_record`(
             role_id,
             business_id,
-            total_days,
-        )
+            total_days)
         VALUES(
             #{roleId,jdbcType=NUMERIC},
             #{businessId,jdbcType=NUMERIC},
-            #{totalDays,jdbcType=NUMERIC},
+            #{totalDays,jdbcType=NUMERIC}
         )	
     </insert>
 	
-    <!-- 服务购买信息 修改-->
-	<update id="update" parameterType="com.yc.trip.api.business.dto.purchase.PurchaseRecord">
+    <!-- 修改服务购买信息 -->
+	<update id="updatePurchaseRecord" parameterType="com.yc.trip.api.business.bo.purchase.PurchaseRecordDomain">
         UPDATE `purchase_record`
         <set>
             <if test="roleId!=null ">
@@ -56,30 +55,30 @@
             WHERE id=#{id,jdbcType=NUMERIC}	
 	</update>
 	
-    <!-- 服务购买信息 查询-->
-	<select id="get" parameterType="com.yc.trip.api.business.query.purchase.PurchaseRecordQuery" resultMap="PurchaseRecordMap">
+    <!-- 查询服务购买信息 -->
+	<select id="getPurchaseRecord" parameterType="com.yc.trip.api.business.bo.purchase.PurchaseRecordDomain" resultMap="PurchaseRecordMap">
         SELECT id,role_id,business_id,total_days,
            created_time,updated_time
         FROM `purchase_record`
         <where>
             <if test="id!=null ">
-                AND id=#{id,jdbcType=NUMERIC}
+                and id=#{id,jdbcType=NUMERIC}
             </if>
             <if test="roleId!=null ">
-                AND role_id=#{roleId,jdbcType=NUMERIC}
+                and role_id=#{roleId,jdbcType=NUMERIC}
             </if>
             <if test="businessId!=null ">
-                AND business_id=#{businessId,jdbcType=NUMERIC}
+                and business_id=#{businessId,jdbcType=NUMERIC}
             </if>
             <if test="totalDays!=null ">
-                AND total_days=#{totalDays,jdbcType=NUMERIC}
+                and total_days=#{totalDays,jdbcType=NUMERIC}
             </if>
         </where>
         LIMIT 2	
 	</select>
 	
-    <!-- 服务购买信息列表查询 -->
-    <select id="queryList" parameterType="com.yc.trip.api.business.query.purchase.PurchaseRecordQuery" resultMap="PurchaseRecordMap">
+    <!-- 查询服务购买信息列表 -->
+    <select id="queryPurchaseRecordList" parameterType="com.yc.trip.api.business.bo.purchase.PurchaseRecordDomain" resultMap="PurchaseRecordMap">
             SELECT t.id,t.role_id,t.business_id,t.total_days,
             t.created_time,t.updated_time
             FROM `purchase_record` t 

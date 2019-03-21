@@ -4,12 +4,9 @@ import java.util.Date;
 import java.util.List;
 
 import org.go.api.core.bean.ResBean;
-import org.go.api.core.dto.AbstractEntityDto;
-import org.go.api.core.annotation.InsertRequired;
+import org.go.api.core.dto.AbstractBasePageRequestDto;
 
 import com.yc.trip.api.core.constants.ResCode;
-
-import java.io.Serializable;
 
 
 
@@ -23,14 +20,14 @@ import lombok.NoArgsConstructor;
  * 产品评论图片信息Dto类
  * 
  * @author My-Toolkits
- * @since 2019-01-06 17:20
+ * @since 2019-03-21 22:06
  */
 @Builder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper=false)
-public class ProductCommentImage extends AbstractEntityDto implements Serializable {
+public class ProductCommentImage extends AbstractBasePageRequestDto {
 
     private static final long serialVersionUID = -1;
 
@@ -43,13 +40,11 @@ public class ProductCommentImage extends AbstractEntityDto implements Serializab
 	/**
 	 * 点评记录Id
 	 */
-	@InsertRequired
 	private Long commentId;
 
 	/**
 	 * 图片链接
 	 */
-	@InsertRequired
 	private String imageUrl;
 
 	/**
@@ -64,5 +59,33 @@ public class ProductCommentImage extends AbstractEntityDto implements Serializab
 	 */
 	private Date updatedTime;
 
+    
+    //-------------------- 扩展属性--------------------------
+     /**
+     * id列表
+     */
+    private List<Long> ids;
 
+    /**
+     * 关键字
+     */
+    private String keywords;
+    
+    @Override
+    public ResBean validateParam() {
+        return ResCode.success;
+    }
+    
+    /**
+     * 流式设置排序字段
+     * @param orderby
+     * @return 
+     */
+    public ProductCommentImage orderBy(String orderby){
+        if(getPageNo() == null) setPageNo(1);
+        if(getPageSize() == null) setPageSize(1000);
+        setOrderby(orderby);
+        return this;
+    }
+        
 }

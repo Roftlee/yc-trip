@@ -14,16 +14,16 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
 import com.yc.trip.api.core.constants.ResCode;
+import com.yc.trip.api.business.bo.order.OrderCreditDomain;
 import com.yc.trip.api.business.dao.order.OrderCreditDao;
 import com.yc.trip.api.business.dto.order.OrderCredit;
-import com.yc.trip.api.business.query.order.OrderCreditQuery;
 import com.yc.trip.api.business.facade.order.OrderCreditFacade;
 
 /**
  * 订单积分信息相关接口实现
  * 
  * @author My-Toolkits
- * @since 2019-01-06 17:12
+ * @since 2019-03-21 21:45
  */
 @Service(version = "1.0.0")
 public class OrderCreditFacadeImpl extends AbstractDubboNativeService implements OrderCreditFacade {
@@ -37,14 +37,18 @@ public class OrderCreditFacadeImpl extends AbstractDubboNativeService implements
      * @throws PendingException
      */
     @Override
-    public OrderCredit add(OrderCredit orderCredit) throws PendingException {
+    public OrderCredit addOrderCredit(OrderCredit orderCredit) throws PendingException {
         try {
+            // 转换成domain对象
+            OrderCreditDomain cond = BeanMapping.map(orderCredit, OrderCreditDomain.class);
             // 新增时对各字段进行非空校验
-            orderCredit.validateInsertFields();
+            if (!cond.validateInsertFields()) {
+                ResCode.orderCreditDBParamInvalid.throwException("订单积分信息新增时参数未通过校验");
+            }
             // 调数据库接口进行新增操作
-            orderCreditDao.add(orderCredit);
+            orderCreditDao.addOrderCredit(cond);
             // 将新增后回返回（包含自增主键值）
-            return orderCredit;
+            return BeanMapping.map(cond, OrderCredit.class);
         } catch (Exception ex) {
             // 对异常进行处理
             throw transferException(ex, ResCode.orderCreditDBError, "订单积分信息新增失败");
@@ -57,14 +61,17 @@ public class OrderCreditFacadeImpl extends AbstractDubboNativeService implements
      * @throws PendingException
      */
     @Override
-    public void update(OrderCredit orderCredit) throws PendingException {
+    public OrderCredit updateOrderCredit(OrderCredit orderCredit) throws PendingException {
         try {
+            // 转换成domain对象
+            OrderCreditDomain cond = BeanMapping.map(orderCredit, OrderCreditDomain.class);
             // 更新或删除操作时，不能所有参数都为空
-            if (orderCredit.isAllFiledsNull()) {
+            if (cond.isAllFiledsNull()) {
                 ResCode.orderCreditDBParamInvalid.throwException("订单积分信息更新时参数未通过校验");
             }
             // 调数据库接口进行更新操作
-            orderCreditDao.update(orderCredit);
+            orderCreditDao.updateOrderCredit(cond);
+            return BeanMapping.map(cond, OrderCredit.class);
         } catch (Exception ex) {
             // 对异常进行处理
             throw transferException(ex, ResCode.orderCreditDBError, "订单积分信息更新失败");
@@ -77,10 +84,14 @@ public class OrderCreditFacadeImpl extends AbstractDubboNativeService implements
      * @throws PendingException
      */
     @Override
-    public OrderCredit get(OrderCreditQuery orderCreditQuery) throws PendingException {
+    public OrderCredit getOrderCredit(OrderCredit orderCredit) throws PendingException {
         try {
+            // 转换成Domain对象
+            OrderCreditDomain cond = BeanMapping.map(orderCredit, OrderCreditDomain.class);
             // 调数据库接口查询对象
-            return orderCreditDao.get(orderCreditQuery);
+            OrderCreditDomain resultBean = orderCreditDao.getOrderCredit(cond);
+            // 转换返回结果
+            return BeanMapping.map(resultBean, OrderCredit.class);
         } catch (Exception ex) {
             // 对异常进行处理
             throw transferException(ex, ResCode.orderCreditDBError, "订单积分信息查询失败");
@@ -93,9 +104,9 @@ public class OrderCreditFacadeImpl extends AbstractDubboNativeService implements
      * @throws PendingException
      */
     @Override
-    public OrderCredit mustGet(OrderCreditQuery orderCreditQuery) throws PendingException {
+    public OrderCredit mustGet(OrderCredit orderCredit) throws PendingException {
         // 查询单位信息
-        OrderCredit result = get(orderCreditQuery);
+        OrderCredit result = getOrderCredit(orderCredit);
         // 若不存在，则抛出异常
         if(result == null){
             ResCode.orderCreditDBGetNull.throwException("未查询到订单积分信息");
@@ -109,14 +120,18 @@ public class OrderCreditFacadeImpl extends AbstractDubboNativeService implements
      * @throws PendingException
      */
     @Override
-    public List<OrderCredit> queryList(OrderCreditQuery orderCreditQuery) throws PendingException {
+    public List<OrderCredit> queryOrderCreditList(OrderCredit orderCredit) throws PendingException {
         try {
+            // 转换成Domain对象
+            OrderCreditDomain cond = BeanMapping.map(orderCredit, OrderCreditDomain.class);
             // 在上下文中设置排序信息
-            if (StringUtil.isNotBlank(orderCreditQuery.getOrderby())) {
-                PageHelper.orderBy(orderCreditQuery.getOrderby());
+            if (StringUtil.isNotBlank(orderCredit.getOrderby())) {
+                PageHelper.orderBy(orderCredit.getOrderby());
             }
             // 调数据库接口查询列表
-            return orderCreditDao.queryList(orderCreditQuery);
+            List<OrderCreditDomain> resultList = orderCreditDao.queryOrderCreditList(cond);
+            // 转换返回结果
+            return BeanMapping.mapList(resultList, OrderCredit.class);
         } catch (Exception ex) {
             // 对异常进行处理
             throw transferException(ex, ResCode.orderCreditDBError, "订单积分信息列表查询失败");
@@ -129,22 +144,26 @@ public class OrderCreditFacadeImpl extends AbstractDubboNativeService implements
      * @throws PendingException
      */
     @Override
-    public PageInfo<OrderCredit> queryPage(OrderCreditQuery orderCreditQuery) throws PendingException {
+    public PageInfo<OrderCredit> queryOrderCreditPage(OrderCredit orderCredit) throws PendingException {
         try {
             // 对请求参数进行校验
-            if (orderCreditQuery.getPageNo() <= 0 || orderCreditQuery.getPageSize() <= 0) {
+            if (orderCredit.getPageNo() <= 0 || orderCredit.getPageSize() <= 0) {
                 ResCode.orderCreditDBParamInvalid.throwException("分页参数设置有误");
             }
             // 在上下文中设置分页信息
-            PageHelper.startPage(orderCreditQuery.getPageNo(), orderCreditQuery.getPageSize());
+            PageHelper.startPage(orderCredit.getPageNo(), orderCredit.getPageSize());
             // 在上下文中设置排序信息
-            if (StringUtil.isNotBlank(orderCreditQuery.getOrderby())) {
-                PageHelper.orderBy(orderCreditQuery.getOrderby());
+            if (StringUtil.isNotBlank(orderCredit.getOrderby())) {
+                PageHelper.orderBy(orderCredit.getOrderby());
             }
+            // 转换成Domain对象
+            OrderCreditDomain cond = BeanMapping.map(orderCredit, OrderCreditDomain.class);
             // 调数据库接口查询列表
-            List<OrderCredit> resultList = orderCreditDao.queryList(orderCreditQuery);
-            // 返回分页结果
-            return new PageInfo<>(resultList);
+            List<OrderCreditDomain> resultList = orderCreditDao.queryOrderCreditList(cond);
+            // 生成分页对象
+            PageInfo<OrderCreditDomain> pageInfo = new PageInfo<>(resultList);
+            // 对分页对象进行类型转换
+            return BeanMapping.mapPage(pageInfo, OrderCredit.class);
         } catch (Exception ex) {
             // 对异常进行处理
             throw transferException(ex, ResCode.orderCreditDBError, "订单积分信息分页查询失败");

@@ -4,7 +4,7 @@
 <mapper namespace="com.yc.trip.api.business.dao.guide.TripGuideDao">
 
     <!-- 对象与字段映射 -->
-    <resultMap type="com.yc.trip.api.business.dto.guide.TripGuide" id="TripGuideMap">
+    <resultMap type="com.yc.trip.api.business.bo.guide.TripGuideDomain" id="TripGuideMap">
         <!--  -->
         <result property="id" column="id" />
         <!-- 发布人用户Id -->
@@ -21,24 +21,23 @@
         <result property="updatedTime" column="updated_time" />
     </resultMap>
 
-    <!-- 旅游攻略信息新增 -->
-    <insert id="add" parameterType="com.yc.trip.api.business.dto.guide.TripGuide" useGeneratedKeys="true" keyProperty="id">
+    <!-- 新增旅游攻略信息 -->
+    <insert id="addTripGuide" parameterType="com.yc.trip.api.business.bo.guide.TripGuideDomain" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO `trip_guide`(
             user_id,
             title,
             content,
-            is_delete,
-        )
+            is_delete)
         VALUES(
             #{userId,jdbcType=NUMERIC},
             #{title,jdbcType=VARCHAR},
             #{content,jdbcType=VARCHAR},
-            #{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC},
+            #{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
         )	
     </insert>
 	
-    <!-- 旅游攻略信息 修改-->
-	<update id="update" parameterType="com.yc.trip.api.business.dto.guide.TripGuide">
+    <!-- 修改旅游攻略信息 -->
+	<update id="updateTripGuide" parameterType="com.yc.trip.api.business.bo.guide.TripGuideDomain">
         UPDATE `trip_guide`
         <set>
             <if test="userId!=null ">
@@ -63,33 +62,33 @@
             WHERE id=#{id,jdbcType=NUMERIC}	
 	</update>
 	
-    <!-- 旅游攻略信息 查询-->
-	<select id="get" parameterType="com.yc.trip.api.business.query.guide.TripGuideQuery" resultMap="TripGuideMap">
+    <!-- 查询旅游攻略信息 -->
+	<select id="getTripGuide" parameterType="com.yc.trip.api.business.bo.guide.TripGuideDomain" resultMap="TripGuideMap">
         SELECT id,user_id,title,content,
            is_delete,created_time,updated_time
         FROM `trip_guide`
         <where>
             <if test="id!=null ">
-                AND id=#{id,jdbcType=NUMERIC}
+                and id=#{id,jdbcType=NUMERIC}
             </if>
             <if test="userId!=null ">
-                AND user_id=#{userId,jdbcType=NUMERIC}
+                and user_id=#{userId,jdbcType=NUMERIC}
             </if>
             <if test="title!=null and title!='' ">
-                AND title=#{title,jdbcType=VARCHAR}
+                and title=#{title,jdbcType=VARCHAR}
             </if>
             <if test="content!=null ">
-                AND content=#{content,jdbcType=VARCHAR}
+                and content=#{content,jdbcType=VARCHAR}
             </if>
             <if test="isDelete!=null ">
-                AND is_delete=#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
+                and is_delete=#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
             </if>
         </where>
         LIMIT 2	
 	</select>
 	
-    <!-- 旅游攻略信息列表查询 -->
-    <select id="queryList" parameterType="com.yc.trip.api.business.query.guide.TripGuideQuery" resultMap="TripGuideMap">
+    <!-- 查询旅游攻略信息列表 -->
+    <select id="queryTripGuideList" parameterType="com.yc.trip.api.business.bo.guide.TripGuideDomain" resultMap="TripGuideMap">
             SELECT t.id,t.user_id,t.title,t.content,
             t.is_delete,t.created_time,t.updated_time
             FROM `trip_guide` t 

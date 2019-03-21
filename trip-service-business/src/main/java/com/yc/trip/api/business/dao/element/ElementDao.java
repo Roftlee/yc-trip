@@ -2,36 +2,35 @@ package com.yc.trip.api.business.dao.element;
 
 import java.util.List;
 
-import com.yc.trip.api.business.dto.element.Element;
-import com.yc.trip.api.business.query.element.ElementQuery;
+import com.yc.trip.api.business.bo.element.ElementDomain;
 
 /**
  * 权限信息Dao类
  * 
  * @author My-Toolkits
- * @since 2019-01-06 18:27
+ * @since 2019-03-21 21:36
  *
  */
 public interface ElementDao {
 
     /**
-     * 权限信息新增
+     * 新增权限信息
      */
-    void add(Element element);
+    void addElement(ElementDomain elementDomain);
 
     /**
-     * 权限信息修改
+     * 修改权限信息
      */
-    void update(Element element);
+    void updateElement(ElementDomain elementDomain);
     
     /**
-     * 权限信息查询
+     * 查询权限信息
      */
-    Element get(ElementQuery elementQuery);
+    ElementDomain getElement(ElementDomain elementDomain);
 
     /**
-     * 权限信息列表查询
+     * 查询权限信息列表
      */
-    List<Element> queryList(ElementQuery elementQuery);
+    List<ElementDomain> queryElementList(ElementDomain elementDomain);
 
 }

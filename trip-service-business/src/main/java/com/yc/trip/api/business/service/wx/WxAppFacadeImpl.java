@@ -14,16 +14,16 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
 import com.yc.trip.api.core.constants.ResCode;
+import com.yc.trip.api.business.bo.wx.WxAppDomain;
 import com.yc.trip.api.business.dao.wx.WxAppDao;
 import com.yc.trip.api.business.dto.wx.WxApp;
-import com.yc.trip.api.business.query.wx.WxAppQuery;
 import com.yc.trip.api.business.facade.wx.WxAppFacade;
 
 /**
  * 微信小程序信息相关接口实现
  * 
  * @author My-Toolkits
- * @since 2019-01-06 19:05
+ * @since 2019-03-21 22:39
  */
 @Service(version = "1.0.0")
 public class WxAppFacadeImpl extends AbstractDubboNativeService implements WxAppFacade {
@@ -37,14 +37,18 @@ public class WxAppFacadeImpl extends AbstractDubboNativeService implements WxApp
      * @throws PendingException
      */
     @Override
-    public WxApp add(WxApp wxApp) throws PendingException {
+    public WxApp addWxApp(WxApp wxApp) throws PendingException {
         try {
+            // 转换成domain对象
+            WxAppDomain cond = BeanMapping.map(wxApp, WxAppDomain.class);
             // 新增时对各字段进行非空校验
-            wxApp.validateInsertFields();
+            if (!cond.validateInsertFields()) {
+                ResCode.wxAppDBParamInvalid.throwException("微信小程序信息新增时参数未通过校验");
+            }
             // 调数据库接口进行新增操作
-            wxAppDao.add(wxApp);
+            wxAppDao.addWxApp(cond);
             // 将新增后回返回（包含自增主键值）
-            return wxApp;
+            return BeanMapping.map(cond, WxApp.class);
         } catch (Exception ex) {
             // 对异常进行处理
             throw transferException(ex, ResCode.wxAppDBError, "微信小程序信息新增失败");
@@ -57,14 +61,17 @@ public class WxAppFacadeImpl extends AbstractDubboNativeService implements WxApp
      * @throws PendingException
      */
     @Override
-    public void update(WxApp wxApp) throws PendingException {
+    public WxApp updateWxApp(WxApp wxApp) throws PendingException {
         try {
+            // 转换成domain对象
+            WxAppDomain cond = BeanMapping.map(wxApp, WxAppDomain.class);
             // 更新或删除操作时，不能所有参数都为空
-            if (wxApp.isAllFiledsNull()) {
+            if (cond.isAllFiledsNull()) {
                 ResCode.wxAppDBParamInvalid.throwException("微信小程序信息更新时参数未通过校验");
             }
             // 调数据库接口进行更新操作
-            wxAppDao.update(wxApp);
+            wxAppDao.updateWxApp(cond);
+            return BeanMapping.map(cond, WxApp.class);
         } catch (Exception ex) {
             // 对异常进行处理
             throw transferException(ex, ResCode.wxAppDBError, "微信小程序信息更新失败");
@@ -77,10 +84,14 @@ public class WxAppFacadeImpl extends AbstractDubboNativeService implements WxApp
      * @throws PendingException
      */
     @Override
-    public WxApp get(WxAppQuery wxAppQuery) throws PendingException {
+    public WxApp getWxApp(WxApp wxApp) throws PendingException {
         try {
+            // 转换成Domain对象
+            WxAppDomain cond = BeanMapping.map(wxApp, WxAppDomain.class);
             // 调数据库接口查询对象
-            return wxAppDao.get(wxAppQuery);
+            WxAppDomain resultBean = wxAppDao.getWxApp(cond);
+            // 转换返回结果
+            return BeanMapping.map(resultBean, WxApp.class);
         } catch (Exception ex) {
             // 对异常进行处理
             throw transferException(ex, ResCode.wxAppDBError, "微信小程序信息查询失败");
@@ -93,9 +104,9 @@ public class WxAppFacadeImpl extends AbstractDubboNativeService implements WxApp
      * @throws PendingException
      */
     @Override
-    public WxApp mustGet(WxAppQuery wxAppQuery) throws PendingException {
+    public WxApp mustGet(WxApp wxApp) throws PendingException {
         // 查询单位信息
-        WxApp result = get(wxAppQuery);
+        WxApp result = getWxApp(wxApp);
         // 若不存在，则抛出异常
         if(result == null){
             ResCode.wxAppDBGetNull.throwException("未查询到微信小程序信息");
@@ -109,14 +120,18 @@ public class WxAppFacadeImpl extends AbstractDubboNativeService implements WxApp
      * @throws PendingException
      */
     @Override
-    public List<WxApp> queryList(WxAppQuery wxAppQuery) throws PendingException {
+    public List<WxApp> queryWxAppList(WxApp wxApp) throws PendingException {
         try {
+            // 转换成Domain对象
+            WxAppDomain cond = BeanMapping.map(wxApp, WxAppDomain.class);
             // 在上下文中设置排序信息
-            if (StringUtil.isNotBlank(wxAppQuery.getOrderby())) {
-                PageHelper.orderBy(wxAppQuery.getOrderby());
+            if (StringUtil.isNotBlank(wxApp.getOrderby())) {
+                PageHelper.orderBy(wxApp.getOrderby());
             }
             // 调数据库接口查询列表
-            return wxAppDao.queryList(wxAppQuery);
+            List<WxAppDomain> resultList = wxAppDao.queryWxAppList(cond);
+            // 转换返回结果
+            return BeanMapping.mapList(resultList, WxApp.class);
         } catch (Exception ex) {
             // 对异常进行处理
             throw transferException(ex, ResCode.wxAppDBError, "微信小程序信息列表查询失败");
@@ -129,22 +144,26 @@ public class WxAppFacadeImpl extends AbstractDubboNativeService implements WxApp
      * @throws PendingException
      */
     @Override
-    public PageInfo<WxApp> queryPage(WxAppQuery wxAppQuery) throws PendingException {
+    public PageInfo<WxApp> queryWxAppPage(WxApp wxApp) throws PendingException {
         try {
             // 对请求参数进行校验
-            if (wxAppQuery.getPageNo() <= 0 || wxAppQuery.getPageSize() <= 0) {
+            if (wxApp.getPageNo() <= 0 || wxApp.getPageSize() <= 0) {
                 ResCode.wxAppDBParamInvalid.throwException("分页参数设置有误");
             }
             // 在上下文中设置分页信息
-            PageHelper.startPage(wxAppQuery.getPageNo(), wxAppQuery.getPageSize());
+            PageHelper.startPage(wxApp.getPageNo(), wxApp.getPageSize());
             // 在上下文中设置排序信息
-            if (StringUtil.isNotBlank(wxAppQuery.getOrderby())) {
-                PageHelper.orderBy(wxAppQuery.getOrderby());
+            if (StringUtil.isNotBlank(wxApp.getOrderby())) {
+                PageHelper.orderBy(wxApp.getOrderby());
             }
+            // 转换成Domain对象
+            WxAppDomain cond = BeanMapping.map(wxApp, WxAppDomain.class);
             // 调数据库接口查询列表
-            List<WxApp> resultList = wxAppDao.queryList(wxAppQuery);
-            // 返回分页结果
-            return new PageInfo<>(resultList);
+            List<WxAppDomain> resultList = wxAppDao.queryWxAppList(cond);
+            // 生成分页对象
+            PageInfo<WxAppDomain> pageInfo = new PageInfo<>(resultList);
+            // 对分页对象进行类型转换
+            return BeanMapping.mapPage(pageInfo, WxApp.class);
         } catch (Exception ex) {
             // 对异常进行处理
             throw transferException(ex, ResCode.wxAppDBError, "微信小程序信息分页查询失败");

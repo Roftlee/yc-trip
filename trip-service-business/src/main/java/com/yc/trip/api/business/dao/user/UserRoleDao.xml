@@ -4,7 +4,7 @@
 <mapper namespace="com.yc.trip.api.business.dao.user.UserRoleDao">
 
     <!-- 对象与字段映射 -->
-    <resultMap type="com.yc.trip.api.business.dto.user.UserRole" id="UserRoleMap">
+    <resultMap type="com.yc.trip.api.business.bo.user.UserRoleDomain" id="UserRoleMap">
         <!--  -->
         <result property="id" column="id" />
         <!-- 用户Id -->
@@ -17,20 +17,19 @@
         <result property="updatedTime" column="updated_time" />
     </resultMap>
 
-    <!-- 用户角色信息新增 -->
-    <insert id="add" parameterType="com.yc.trip.api.business.dto.user.UserRole" useGeneratedKeys="true" keyProperty="id">
+    <!-- 新增用户角色信息 -->
+    <insert id="addUserRole" parameterType="com.yc.trip.api.business.bo.user.UserRoleDomain" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO `user_role`(
             user_id,
-            role_id,
-        )
+            role_id)
         VALUES(
             #{userId,jdbcType=NUMERIC},
-            #{roleId,jdbcType=NUMERIC},
+            #{roleId,jdbcType=NUMERIC}
         )	
     </insert>
 	
-    <!-- 用户角色信息 修改-->
-	<update id="update" parameterType="com.yc.trip.api.business.dto.user.UserRole">
+    <!-- 修改用户角色信息 -->
+	<update id="updateUserRole" parameterType="com.yc.trip.api.business.bo.user.UserRoleDomain">
         UPDATE `user_role`
         <set>
             <if test="userId!=null ">
@@ -49,27 +48,27 @@
             WHERE id=#{id,jdbcType=NUMERIC}	
 	</update>
 	
-    <!-- 用户角色信息 查询-->
-	<select id="get" parameterType="com.yc.trip.api.business.query.user.UserRoleQuery" resultMap="UserRoleMap">
+    <!-- 查询用户角色信息 -->
+	<select id="getUserRole" parameterType="com.yc.trip.api.business.bo.user.UserRoleDomain" resultMap="UserRoleMap">
         SELECT id,user_id,role_id,created_time,
            updated_time
         FROM `user_role`
         <where>
             <if test="id!=null ">
-                AND id=#{id,jdbcType=NUMERIC}
+                and id=#{id,jdbcType=NUMERIC}
             </if>
             <if test="userId!=null ">
-                AND user_id=#{userId,jdbcType=NUMERIC}
+                and user_id=#{userId,jdbcType=NUMERIC}
             </if>
             <if test="roleId!=null ">
-                AND role_id=#{roleId,jdbcType=NUMERIC}
+                and role_id=#{roleId,jdbcType=NUMERIC}
             </if>
         </where>
         LIMIT 2	
 	</select>
 	
-    <!-- 用户角色信息列表查询 -->
-    <select id="queryList" parameterType="com.yc.trip.api.business.query.user.UserRoleQuery" resultMap="UserRoleMap">
+    <!-- 查询用户角色信息列表 -->
+    <select id="queryUserRoleList" parameterType="com.yc.trip.api.business.bo.user.UserRoleDomain" resultMap="UserRoleMap">
             SELECT t.id,t.user_id,t.role_id,t.created_time,
             t.updated_time
             FROM `user_role` t 

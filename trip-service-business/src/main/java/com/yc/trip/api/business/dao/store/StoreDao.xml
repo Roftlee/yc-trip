@@ -4,7 +4,7 @@
 <mapper namespace="com.yc.trip.api.business.dao.store.StoreDao">
 
     <!-- 对象与字段映射 -->
-    <resultMap type="com.yc.trip.api.business.dto.store.Store" id="StoreMap">
+    <resultMap type="com.yc.trip.api.business.bo.store.StoreDomain" id="StoreMap">
         <!--  -->
         <result property="id" column="id" />
         <!-- 门店名称 -->
@@ -25,28 +25,27 @@
         <result property="updatedTime" column="updated_time" />
     </resultMap>
 
-    <!-- 门店信息新增 -->
-    <insert id="add" parameterType="com.yc.trip.api.business.dto.store.Store" useGeneratedKeys="true" keyProperty="id">
+    <!-- 新增门店信息 -->
+    <insert id="addStore" parameterType="com.yc.trip.api.business.bo.store.StoreDomain" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO `store`(
             store_name,
             link_man,
             link_num,
             address,
             total_days,
-            end_time,
-        )
+            end_time)
         VALUES(
             #{storeName,jdbcType=VARCHAR},
             #{linkMan,jdbcType=VARCHAR},
             #{linkNum,jdbcType=VARCHAR},
             #{address,jdbcType=VARCHAR},
             #{totalDays,jdbcType=NUMERIC},
-            #{endTime,jdbcType=TIMESTAMP},
+            #{endTime,jdbcType=TIMESTAMP}
         )	
     </insert>
 	
-    <!-- 门店信息 修改-->
-	<update id="update" parameterType="com.yc.trip.api.business.dto.store.Store">
+    <!-- 修改门店信息 -->
+	<update id="updateStore" parameterType="com.yc.trip.api.business.bo.store.StoreDomain">
         UPDATE `store`
         <set>
             <if test="storeName!=null and storeName!='' ">
@@ -77,37 +76,37 @@
             WHERE id=#{id,jdbcType=NUMERIC}	
 	</update>
 	
-    <!-- 门店信息 查询-->
-	<select id="get" parameterType="com.yc.trip.api.business.query.store.StoreQuery" resultMap="StoreMap">
+    <!-- 查询门店信息 -->
+	<select id="getStore" parameterType="com.yc.trip.api.business.bo.store.StoreDomain" resultMap="StoreMap">
         SELECT id,store_name,link_man,link_num,
            address,total_days,end_time,created_time,
            updated_time
         FROM `store`
         <where>
             <if test="id!=null ">
-                AND id=#{id,jdbcType=NUMERIC}
+                and id=#{id,jdbcType=NUMERIC}
             </if>
             <if test="storeName!=null and storeName!='' ">
-                AND store_name=#{storeName,jdbcType=VARCHAR}
+                and store_name=#{storeName,jdbcType=VARCHAR}
             </if>
             <if test="linkMan!=null and linkMan!='' ">
-                AND link_man=#{linkMan,jdbcType=VARCHAR}
+                and link_man=#{linkMan,jdbcType=VARCHAR}
             </if>
             <if test="linkNum!=null and linkNum!='' ">
-                AND link_num=#{linkNum,jdbcType=VARCHAR}
+                and link_num=#{linkNum,jdbcType=VARCHAR}
             </if>
             <if test="address!=null and address!='' ">
-                AND address=#{address,jdbcType=VARCHAR}
+                and address=#{address,jdbcType=VARCHAR}
             </if>
             <if test="totalDays!=null ">
-                AND total_days=#{totalDays,jdbcType=NUMERIC}
+                and total_days=#{totalDays,jdbcType=NUMERIC}
             </if>
         </where>
         LIMIT 2	
 	</select>
 	
-    <!-- 门店信息列表查询 -->
-    <select id="queryList" parameterType="com.yc.trip.api.business.query.store.StoreQuery" resultMap="StoreMap">
+    <!-- 查询门店信息列表 -->
+    <select id="queryStoreList" parameterType="com.yc.trip.api.business.bo.store.StoreDomain" resultMap="StoreMap">
             SELECT t.id,t.store_name,t.link_man,t.link_num,
             t.address,t.total_days,t.end_time,t.created_time,
             t.updated_time

@@ -16,7 +16,7 @@ import com.google.common.collect.ImmutableMap;
  * ElementType枚举类
  *
  * @author My-Toolkits
- * @since 2019-01-06 18:27
+ * @since 2019-03-21 21:36
  */
 public enum ElementType implements BaseEnum<Enum<ElementType>, Integer>{
     ALL(-1, "全部"),

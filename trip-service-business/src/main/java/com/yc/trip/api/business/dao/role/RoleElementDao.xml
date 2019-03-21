@@ -4,7 +4,7 @@
 <mapper namespace="com.yc.trip.api.business.dao.role.RoleElementDao">
 
     <!-- 对象与字段映射 -->
-    <resultMap type="com.yc.trip.api.business.dto.role.RoleElement" id="RoleElementMap">
+    <resultMap type="com.yc.trip.api.business.bo.role.RoleElementDomain" id="RoleElementMap">
         <!--  -->
         <result property="id" column="id" />
         <!-- 角色Id -->
@@ -17,20 +17,19 @@
         <result property="updatedTime" column="updated_time" />
     </resultMap>
 
-    <!-- 角色权限信息新增 -->
-    <insert id="add" parameterType="com.yc.trip.api.business.dto.role.RoleElement" useGeneratedKeys="true" keyProperty="id">
+    <!-- 新增角色权限信息 -->
+    <insert id="addRoleElement" parameterType="com.yc.trip.api.business.bo.role.RoleElementDomain" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO `role_element`(
             role_id,
-            element_id,
-        )
+            element_id)
         VALUES(
             #{roleId,jdbcType=NUMERIC},
-            #{elementId,jdbcType=NUMERIC},
+            #{elementId,jdbcType=NUMERIC}
         )	
     </insert>
 	
-    <!-- 角色权限信息 修改-->
-	<update id="update" parameterType="com.yc.trip.api.business.dto.role.RoleElement">
+    <!-- 修改角色权限信息 -->
+	<update id="updateRoleElement" parameterType="com.yc.trip.api.business.bo.role.RoleElementDomain">
         UPDATE `role_element`
         <set>
             <if test="roleId!=null ">
@@ -49,27 +48,27 @@
             WHERE id=#{id,jdbcType=NUMERIC}	
 	</update>
 	
-    <!-- 角色权限信息 查询-->
-	<select id="get" parameterType="com.yc.trip.api.business.query.role.RoleElementQuery" resultMap="RoleElementMap">
+    <!-- 查询角色权限信息 -->
+	<select id="getRoleElement" parameterType="com.yc.trip.api.business.bo.role.RoleElementDomain" resultMap="RoleElementMap">
         SELECT id,role_id,element_id,created_time,
            updated_time
         FROM `role_element`
         <where>
             <if test="id!=null ">
-                AND id=#{id,jdbcType=NUMERIC}
+                and id=#{id,jdbcType=NUMERIC}
             </if>
             <if test="roleId!=null ">
-                AND role_id=#{roleId,jdbcType=NUMERIC}
+                and role_id=#{roleId,jdbcType=NUMERIC}
             </if>
             <if test="elementId!=null ">
-                AND element_id=#{elementId,jdbcType=NUMERIC}
+                and element_id=#{elementId,jdbcType=NUMERIC}
             </if>
         </where>
         LIMIT 2	
 	</select>
 	
-    <!-- 角色权限信息列表查询 -->
-    <select id="queryList" parameterType="com.yc.trip.api.business.query.role.RoleElementQuery" resultMap="RoleElementMap">
+    <!-- 查询角色权限信息列表 -->
+    <select id="queryRoleElementList" parameterType="com.yc.trip.api.business.bo.role.RoleElementDomain" resultMap="RoleElementMap">
             SELECT t.id,t.role_id,t.element_id,t.created_time,
             t.updated_time
             FROM `role_element` t 

@@ -4,7 +4,7 @@
 <mapper namespace="com.yc.trip.api.business.dao.shop.ShoppingCarDao">
 
     <!-- 对象与字段映射 -->
-    <resultMap type="com.yc.trip.api.business.dto.shop.ShoppingCar" id="ShoppingCarMap">
+    <resultMap type="com.yc.trip.api.business.bo.shop.ShoppingCarDomain" id="ShoppingCarMap">
         <!--  -->
         <result property="id" column="id" />
         <!-- 用户Id -->
@@ -17,20 +17,19 @@
         <result property="updatedTime" column="updated_time" />
     </resultMap>
 
-    <!-- 购物车信息新增 -->
-    <insert id="add" parameterType="com.yc.trip.api.business.dto.shop.ShoppingCar" useGeneratedKeys="true" keyProperty="id">
+    <!-- 新增购物车信息 -->
+    <insert id="addShoppingCar" parameterType="com.yc.trip.api.business.bo.shop.ShoppingCarDomain" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO `shopping_car`(
             user_id,
-            product_id,
-        )
+            product_id)
         VALUES(
             #{userId,jdbcType=NUMERIC},
-            #{productId,jdbcType=NUMERIC},
+            #{productId,jdbcType=NUMERIC}
         )	
     </insert>
 	
-    <!-- 购物车信息 修改-->
-	<update id="update" parameterType="com.yc.trip.api.business.dto.shop.ShoppingCar">
+    <!-- 修改购物车信息 -->
+	<update id="updateShoppingCar" parameterType="com.yc.trip.api.business.bo.shop.ShoppingCarDomain">
         UPDATE `shopping_car`
         <set>
             <if test="userId!=null ">
@@ -49,27 +48,27 @@
             WHERE id=#{id,jdbcType=NUMERIC}	
 	</update>
 	
-    <!-- 购物车信息 查询-->
-	<select id="get" parameterType="com.yc.trip.api.business.query.shop.ShoppingCarQuery" resultMap="ShoppingCarMap">
+    <!-- 查询购物车信息 -->
+	<select id="getShoppingCar" parameterType="com.yc.trip.api.business.bo.shop.ShoppingCarDomain" resultMap="ShoppingCarMap">
         SELECT id,user_id,product_id,created_time,
            updated_time
         FROM `shopping_car`
         <where>
             <if test="id!=null ">
-                AND id=#{id,jdbcType=NUMERIC}
+                and id=#{id,jdbcType=NUMERIC}
             </if>
             <if test="userId!=null ">
-                AND user_id=#{userId,jdbcType=NUMERIC}
+                and user_id=#{userId,jdbcType=NUMERIC}
             </if>
             <if test="productId!=null ">
-                AND product_id=#{productId,jdbcType=NUMERIC}
+                and product_id=#{productId,jdbcType=NUMERIC}
             </if>
         </where>
         LIMIT 2	
 	</select>
 	
-    <!-- 购物车信息列表查询 -->
-    <select id="queryList" parameterType="com.yc.trip.api.business.query.shop.ShoppingCarQuery" resultMap="ShoppingCarMap">
+    <!-- 查询购物车信息列表 -->
+    <select id="queryShoppingCarList" parameterType="com.yc.trip.api.business.bo.shop.ShoppingCarDomain" resultMap="ShoppingCarMap">
             SELECT t.id,t.user_id,t.product_id,t.created_time,
             t.updated_time
             FROM `shopping_car` t 

@@ -2,36 +2,35 @@ package com.yc.trip.api.business.dao.user;
 
 import java.util.List;
 
-import com.yc.trip.api.business.dto.user.UserRole;
-import com.yc.trip.api.business.query.user.UserRoleQuery;
+import com.yc.trip.api.business.bo.user.UserRoleDomain;
 
 /**
  * 用户角色信息Dao类
  * 
  * @author My-Toolkits
- * @since 2019-01-06 18:01
+ * @since 2019-03-21 22:34
  *
  */
 public interface UserRoleDao {
 
     /**
-     * 用户角色信息新增
+     * 新增用户角色信息
      */
-    void add(UserRole userRole);
+    void addUserRole(UserRoleDomain userRoleDomain);
 
     /**
-     * 用户角色信息修改
+     * 修改用户角色信息
      */
-    void update(UserRole userRole);
+    void updateUserRole(UserRoleDomain userRoleDomain);
     
     /**
-     * 用户角色信息查询
+     * 查询用户角色信息
      */
-    UserRole get(UserRoleQuery userRoleQuery);
+    UserRoleDomain getUserRole(UserRoleDomain userRoleDomain);
 
     /**
-     * 用户角色信息列表查询
+     * 查询用户角色信息列表
      */
-    List<UserRole> queryList(UserRoleQuery userRoleQuery);
+    List<UserRoleDomain> queryUserRoleList(UserRoleDomain userRoleDomain);
 
 }

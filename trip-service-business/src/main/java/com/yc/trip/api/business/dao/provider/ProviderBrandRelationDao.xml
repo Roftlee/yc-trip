@@ -4,7 +4,7 @@
 <mapper namespace="com.yc.trip.api.business.dao.provider.ProviderBrandRelationDao">
 
     <!-- 对象与字段映射 -->
-    <resultMap type="com.yc.trip.api.business.dto.provider.ProviderBrandRelation" id="ProviderBrandRelationMap">
+    <resultMap type="com.yc.trip.api.business.bo.provider.ProviderBrandRelationDomain" id="ProviderBrandRelationMap">
         <!--  -->
         <result property="id" column="id" />
         <!-- 供应商Id -->
@@ -17,20 +17,19 @@
         <result property="updatedTime" column="updated_time" />
     </resultMap>
 
-    <!-- 供应商品牌关联信息新增 -->
-    <insert id="add" parameterType="com.yc.trip.api.business.dto.provider.ProviderBrandRelation" useGeneratedKeys="true" keyProperty="id">
+    <!-- 新增供应商品牌关联信息 -->
+    <insert id="addProviderBrandRelation" parameterType="com.yc.trip.api.business.bo.provider.ProviderBrandRelationDomain" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO `provider_brand_relation`(
             provider_id,
-            brand_id,
-        )
+            brand_id)
         VALUES(
             #{providerId,jdbcType=NUMERIC},
-            #{brandId,jdbcType=NUMERIC},
+            #{brandId,jdbcType=NUMERIC}
         )	
     </insert>
 	
-    <!-- 供应商品牌关联信息 修改-->
-	<update id="update" parameterType="com.yc.trip.api.business.dto.provider.ProviderBrandRelation">
+    <!-- 修改供应商品牌关联信息 -->
+	<update id="updateProviderBrandRelation" parameterType="com.yc.trip.api.business.bo.provider.ProviderBrandRelationDomain">
         UPDATE `provider_brand_relation`
         <set>
             <if test="providerId!=null ">
@@ -49,27 +48,27 @@
             WHERE id=#{id,jdbcType=NUMERIC}	
 	</update>
 	
-    <!-- 供应商品牌关联信息 查询-->
-	<select id="get" parameterType="com.yc.trip.api.business.query.provider.ProviderBrandRelationQuery" resultMap="ProviderBrandRelationMap">
+    <!-- 查询供应商品牌关联信息 -->
+	<select id="getProviderBrandRelation" parameterType="com.yc.trip.api.business.bo.provider.ProviderBrandRelationDomain" resultMap="ProviderBrandRelationMap">
         SELECT id,provider_id,brand_id,created_time,
            updated_time
         FROM `provider_brand_relation`
         <where>
             <if test="id!=null ">
-                AND id=#{id,jdbcType=NUMERIC}
+                and id=#{id,jdbcType=NUMERIC}
             </if>
             <if test="providerId!=null ">
-                AND provider_id=#{providerId,jdbcType=NUMERIC}
+                and provider_id=#{providerId,jdbcType=NUMERIC}
             </if>
             <if test="brandId!=null ">
-                AND brand_id=#{brandId,jdbcType=NUMERIC}
+                and brand_id=#{brandId,jdbcType=NUMERIC}
             </if>
         </where>
         LIMIT 2	
 	</select>
 	
-    <!-- 供应商品牌关联信息列表查询 -->
-    <select id="queryList" parameterType="com.yc.trip.api.business.query.provider.ProviderBrandRelationQuery" resultMap="ProviderBrandRelationMap">
+    <!-- 查询供应商品牌关联信息列表 -->
+    <select id="queryProviderBrandRelationList" parameterType="com.yc.trip.api.business.bo.provider.ProviderBrandRelationDomain" resultMap="ProviderBrandRelationMap">
             SELECT t.id,t.provider_id,t.brand_id,t.created_time,
             t.updated_time
             FROM `provider_brand_relation` t 

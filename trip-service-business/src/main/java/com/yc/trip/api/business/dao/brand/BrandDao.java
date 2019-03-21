@@ -2,36 +2,35 @@ package com.yc.trip.api.business.dao.brand;
 
 import java.util.List;
 
-import com.yc.trip.api.business.dto.brand.Brand;
-import com.yc.trip.api.business.query.brand.BrandQuery;
+import com.yc.trip.api.business.bo.brand.BrandDomain;
 
 /**
  * 品牌Dao类
  * 
  * @author My-Toolkits
- * @since 2019-01-06 17:03
+ * @since 2019-03-21 21:31
  *
  */
 public interface BrandDao {
 
     /**
-     * 品牌新增
+     * 新增品牌
      */
-    void add(Brand brand);
+    void addBrand(BrandDomain brandDomain);
 
     /**
-     * 品牌修改
+     * 修改品牌
      */
-    void update(Brand brand);
+    void updateBrand(BrandDomain brandDomain);
     
     /**
-     * 品牌查询
+     * 查询品牌
      */
-    Brand get(BrandQuery brandQuery);
+    BrandDomain getBrand(BrandDomain brandDomain);
 
     /**
-     * 品牌列表查询
+     * 查询品牌列表
      */
-    List<Brand> queryList(BrandQuery brandQuery);
+    List<BrandDomain> queryBrandList(BrandDomain brandDomain);
 
 }

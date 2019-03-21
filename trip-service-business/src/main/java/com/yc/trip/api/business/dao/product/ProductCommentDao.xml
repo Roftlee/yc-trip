@@ -4,7 +4,7 @@
 <mapper namespace="com.yc.trip.api.business.dao.product.ProductCommentDao">
 
     <!-- 对象与字段映射 -->
-    <resultMap type="com.yc.trip.api.business.dto.product.ProductComment" id="ProductCommentMap">
+    <resultMap type="com.yc.trip.api.business.bo.product.ProductCommentDomain" id="ProductCommentMap">
         <!--  -->
         <result property="id" column="id" />
         <!-- 订单Id -->
@@ -25,28 +25,27 @@
         <result property="updatedTime" column="updated_time" />
     </resultMap>
 
-    <!-- 产品评论信息新增 -->
-    <insert id="add" parameterType="com.yc.trip.api.business.dto.product.ProductComment" useGeneratedKeys="true" keyProperty="id">
+    <!-- 新增产品评论信息 -->
+    <insert id="addProductComment" parameterType="com.yc.trip.api.business.bo.product.ProductCommentDomain" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO `product_comment`(
             order_id,
             product_id,
             user_id,
             credit,
             comment,
-            <if test="isDelete!=null">is_delete</if>
-        )
+            is_delete)
         VALUES(
             #{orderId,jdbcType=NUMERIC},
             #{productId,jdbcType=NUMERIC},
             #{userId,jdbcType=NUMERIC},
             #{credit,jdbcType=NUMERIC},
             #{comment,jdbcType=VARCHAR},
-            <if test="isDelete!=null">#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}</if>
+            #{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
         )	
     </insert>
 	
-    <!-- 产品评论信息 修改-->
-	<update id="update" parameterType="com.yc.trip.api.business.dto.product.ProductComment">
+    <!-- 修改产品评论信息 -->
+	<update id="updateProductComment" parameterType="com.yc.trip.api.business.bo.product.ProductCommentDomain">
         UPDATE `product_comment`
         <set>
             <if test="orderId!=null ">
@@ -77,40 +76,40 @@
             WHERE id=#{id,jdbcType=NUMERIC}	
 	</update>
 	
-    <!-- 产品评论信息 查询-->
-	<select id="get" parameterType="com.yc.trip.api.business.query.product.ProductCommentQuery" resultMap="ProductCommentMap">
+    <!-- 查询产品评论信息 -->
+	<select id="getProductComment" parameterType="com.yc.trip.api.business.bo.product.ProductCommentDomain" resultMap="ProductCommentMap">
         SELECT id,order_id,product_id,user_id,
            credit,comment,is_delete,created_time,
            updated_time
         FROM `product_comment`
         <where>
             <if test="id!=null ">
-                AND id=#{id,jdbcType=NUMERIC}
+                and id=#{id,jdbcType=NUMERIC}
             </if>
             <if test="orderId!=null ">
-                AND order_id=#{orderId,jdbcType=NUMERIC}
+                and order_id=#{orderId,jdbcType=NUMERIC}
             </if>
             <if test="productId!=null ">
-                AND product_id=#{productId,jdbcType=NUMERIC}
+                and product_id=#{productId,jdbcType=NUMERIC}
             </if>
             <if test="userId!=null ">
-                AND user_id=#{userId,jdbcType=NUMERIC}
+                and user_id=#{userId,jdbcType=NUMERIC}
             </if>
             <if test="credit!=null ">
-                AND credit=#{credit,jdbcType=NUMERIC}
+                and credit=#{credit,jdbcType=NUMERIC}
             </if>
             <if test="comment!=null and comment!='' ">
-                AND comment=#{comment,jdbcType=VARCHAR}
+                and comment=#{comment,jdbcType=VARCHAR}
             </if>
             <if test="isDelete!=null ">
-                AND is_delete=#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
+                and is_delete=#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
             </if>
         </where>
         LIMIT 2	
 	</select>
 	
-    <!-- 产品评论信息列表查询 -->
-    <select id="queryList" parameterType="com.yc.trip.api.business.query.product.ProductCommentQuery" resultMap="ProductCommentMap">
+    <!-- 查询产品评论信息列表 -->
+    <select id="queryProductCommentList" parameterType="com.yc.trip.api.business.bo.product.ProductCommentDomain" resultMap="ProductCommentMap">
             SELECT t.id,t.order_id,t.product_id,t.user_id,
             t.credit,t.comment,t.is_delete,t.created_time,
             t.updated_time

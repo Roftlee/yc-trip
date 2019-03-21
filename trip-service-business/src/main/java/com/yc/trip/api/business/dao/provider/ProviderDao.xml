@@ -4,7 +4,7 @@
 <mapper namespace="com.yc.trip.api.business.dao.provider.ProviderDao">
 
     <!-- 对象与字段映射 -->
-    <resultMap type="com.yc.trip.api.business.dto.provider.Provider" id="ProviderMap">
+    <resultMap type="com.yc.trip.api.business.bo.provider.ProviderDomain" id="ProviderMap">
         <!--  -->
         <result property="id" column="id" />
         <!-- 供应商名称 -->
@@ -29,8 +29,8 @@
         <result property="updatedTime" column="updated_time" />
     </resultMap>
 
-    <!-- 供应商信息新增 -->
-    <insert id="add" parameterType="com.yc.trip.api.business.dto.provider.Provider" useGeneratedKeys="true" keyProperty="id">
+    <!-- 新增供应商信息 -->
+    <insert id="addProvider" parameterType="com.yc.trip.api.business.bo.provider.ProviderDomain" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO `provider`(
             provider_name,
             link_man,
@@ -39,8 +39,7 @@
             total_days,
             end_time,
             sub_count,
-            <if test="isDelete!=null">is_delete</if>
-        )
+            is_delete)
         VALUES(
             #{providerName,jdbcType=VARCHAR},
             #{linkMan,jdbcType=VARCHAR},
@@ -49,12 +48,12 @@
             #{totalDays,jdbcType=NUMERIC},
             #{endTime,jdbcType=TIMESTAMP},
             #{subCount,jdbcType=NUMERIC},
-            <if test="isDelete!=null">#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}</if>
+            #{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
         )	
     </insert>
 	
-    <!-- 供应商信息 修改-->
-	<update id="update" parameterType="com.yc.trip.api.business.dto.provider.Provider">
+    <!-- 修改供应商信息 -->
+	<update id="updateProvider" parameterType="com.yc.trip.api.business.bo.provider.ProviderDomain">
         UPDATE `provider`
         <set>
             <if test="providerName!=null and providerName!='' ">
@@ -91,43 +90,43 @@
             WHERE id=#{id,jdbcType=NUMERIC}	
 	</update>
 	
-    <!-- 供应商信息 查询-->
-	<select id="get" parameterType="com.yc.trip.api.business.query.provider.ProviderQuery" resultMap="ProviderMap">
+    <!-- 查询供应商信息 -->
+	<select id="getProvider" parameterType="com.yc.trip.api.business.bo.provider.ProviderDomain" resultMap="ProviderMap">
         SELECT id,provider_name,link_man,link_num,
            address,total_days,end_time,sub_count,
            is_delete,created_time,updated_time
         FROM `provider`
         <where>
             <if test="id!=null ">
-                AND id=#{id,jdbcType=NUMERIC}
+                and id=#{id,jdbcType=NUMERIC}
             </if>
             <if test="providerName!=null and providerName!='' ">
-                AND provider_name=#{providerName,jdbcType=VARCHAR}
+                and provider_name=#{providerName,jdbcType=VARCHAR}
             </if>
             <if test="linkMan!=null and linkMan!='' ">
-                AND link_man=#{linkMan,jdbcType=VARCHAR}
+                and link_man=#{linkMan,jdbcType=VARCHAR}
             </if>
             <if test="linkNum!=null and linkNum!='' ">
-                AND link_num=#{linkNum,jdbcType=VARCHAR}
+                and link_num=#{linkNum,jdbcType=VARCHAR}
             </if>
             <if test="address!=null and address!='' ">
-                AND address=#{address,jdbcType=VARCHAR}
+                and address=#{address,jdbcType=VARCHAR}
             </if>
             <if test="totalDays!=null ">
-                AND total_days=#{totalDays,jdbcType=NUMERIC}
+                and total_days=#{totalDays,jdbcType=NUMERIC}
             </if>
             <if test="subCount!=null ">
-                AND sub_count=#{subCount,jdbcType=NUMERIC}
+                and sub_count=#{subCount,jdbcType=NUMERIC}
             </if>
             <if test="isDelete!=null ">
-                AND is_delete=#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
+                and is_delete=#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
             </if>
         </where>
         LIMIT 2	
 	</select>
 	
-    <!-- 供应商信息列表查询 -->
-    <select id="queryList" parameterType="com.yc.trip.api.business.query.provider.ProviderQuery" resultMap="ProviderMap">
+    <!-- 查询供应商信息列表 -->
+    <select id="queryProviderList" parameterType="com.yc.trip.api.business.bo.provider.ProviderDomain" resultMap="ProviderMap">
             SELECT t.id,t.provider_name,t.link_man,t.link_num,
             t.address,t.total_days,t.end_time,t.sub_count,
             t.is_delete,t.created_time,t.updated_time

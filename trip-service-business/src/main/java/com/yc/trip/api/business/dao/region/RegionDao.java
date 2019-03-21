@@ -2,36 +2,35 @@ package com.yc.trip.api.business.dao.region;
 
 import java.util.List;
 
-import com.yc.trip.api.business.dto.region.Region;
-import com.yc.trip.api.business.query.region.RegionQuery;
+import com.yc.trip.api.business.bo.region.RegionDomain;
 
 /**
  * 地区信息Dao类
  * 
  * @author My-Toolkits
- * @since 2019-01-06 17:29
+ * @since 2019-03-21 22:13
  *
  */
 public interface RegionDao {
 
     /**
-     * 地区信息新增
+     * 新增地区信息
      */
-    void add(Region region);
+    void addRegion(RegionDomain regionDomain);
 
     /**
-     * 地区信息修改
+     * 修改地区信息
      */
-    void update(Region region);
+    void updateRegion(RegionDomain regionDomain);
     
     /**
-     * 地区信息查询
+     * 查询地区信息
      */
-    Region get(RegionQuery regionQuery);
+    RegionDomain getRegion(RegionDomain regionDomain);
 
     /**
-     * 地区信息列表查询
+     * 查询地区信息列表
      */
-    List<Region> queryList(RegionQuery regionQuery);
+    List<RegionDomain> queryRegionList(RegionDomain regionDomain);
 
 }

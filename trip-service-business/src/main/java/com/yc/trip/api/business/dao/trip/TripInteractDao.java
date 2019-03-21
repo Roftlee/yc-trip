@@ -2,36 +2,35 @@ package com.yc.trip.api.business.dao.trip;
 
 import java.util.List;
 
-import com.yc.trip.api.business.dto.trip.TripInteract;
-import com.yc.trip.api.business.query.trip.TripInteractQuery;
+import com.yc.trip.api.business.bo.trip.TripInteractDomain;
 
 /**
  * 旅游互动信息Dao类
  * 
  * @author My-Toolkits
- * @since 2019-01-06 17:58
+ * @since 2019-03-21 22:29
  *
  */
 public interface TripInteractDao {
 
     /**
-     * 旅游互动信息新增
+     * 新增旅游互动信息
      */
-    void add(TripInteract tripInteract);
+    void addTripInteract(TripInteractDomain tripInteractDomain);
 
     /**
-     * 旅游互动信息修改
+     * 修改旅游互动信息
      */
-    void update(TripInteract tripInteract);
+    void updateTripInteract(TripInteractDomain tripInteractDomain);
     
     /**
-     * 旅游互动信息查询
+     * 查询旅游互动信息
      */
-    TripInteract get(TripInteractQuery tripInteractQuery);
+    TripInteractDomain getTripInteract(TripInteractDomain tripInteractDomain);
 
     /**
-     * 旅游互动信息列表查询
+     * 查询旅游互动信息列表
      */
-    List<TripInteract> queryList(TripInteractQuery tripInteractQuery);
+    List<TripInteractDomain> queryTripInteractList(TripInteractDomain tripInteractDomain);
 
 }

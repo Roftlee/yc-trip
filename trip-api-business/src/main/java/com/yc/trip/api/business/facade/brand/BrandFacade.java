@@ -6,12 +6,11 @@ import org.go.framework.core.exception.PendingException;
 
 import com.github.pagehelper.PageInfo;
 import com.yc.trip.api.business.dto.brand.Brand;
-import com.yc.trip.api.business.query.brand.BrandQuery;
 
 /**
  * 品牌相关接口
  * @author My-Toolkits
- * @since 2019-01-06 17:03
+ * @since 2019-03-21 21:31
  */
 public interface BrandFacade {
 
@@ -19,37 +18,37 @@ public interface BrandFacade {
      * 新增品牌
      * @throws PendingException 
      */
-    Brand add(Brand brand) throws PendingException;
+    Brand addBrand(Brand brand) throws PendingException;
 
     /**
      * 修改品牌
      * @throws PendingException 
      */
-    void update(Brand brand) throws PendingException;
+    Brand updateBrand(Brand brand) throws PendingException;
     
     /**
      * 查询品牌
      * @throws PendingException 
      */
-    Brand get(BrandQuery brandQuery) throws PendingException;
+    Brand getBrand(Brand brand) throws PendingException;
     
     /**
      * 查询品牌（若不存在，则抛出异常）
      * 
      * @throws PendingException
      */
-    Brand mustGet(BrandQuery brandQuery) throws PendingException;
+    Brand mustGet(Brand brand) throws PendingException;
 
     /**
      * 查询品牌列表
      * @throws PendingException 
      */
-    List<Brand> queryList(BrandQuery brandQuery) throws PendingException;
+    List<Brand> queryBrandList(Brand brand) throws PendingException;
 
     /**
      * 查询品牌列表 ,分页查询
      * @throws PendingException 
      */
-    PageInfo<Brand> queryPage(BrandQuery brandQuery) throws PendingException;
+    PageInfo<Brand> queryBrandPage(Brand brand) throws PendingException;
 
 }

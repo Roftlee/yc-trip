@@ -2,36 +2,35 @@ package com.yc.trip.api.business.dao.purchase;
 
 import java.util.List;
 
-import com.yc.trip.api.business.dto.purchase.PurchaseRecord;
-import com.yc.trip.api.business.query.purchase.PurchaseRecordQuery;
+import com.yc.trip.api.business.bo.purchase.PurchaseRecordDomain;
 
 /**
  * 服务购买信息Dao类
  * 
  * @author My-Toolkits
- * @since 2019-01-06 17:27
+ * @since 2019-03-21 22:11
  *
  */
 public interface PurchaseRecordDao {
 
     /**
-     * 服务购买信息新增
+     * 新增服务购买信息
      */
-    void add(PurchaseRecord purchaseRecord);
+    void addPurchaseRecord(PurchaseRecordDomain purchaseRecordDomain);
 
     /**
-     * 服务购买信息修改
+     * 修改服务购买信息
      */
-    void update(PurchaseRecord purchaseRecord);
+    void updatePurchaseRecord(PurchaseRecordDomain purchaseRecordDomain);
     
     /**
-     * 服务购买信息查询
+     * 查询服务购买信息
      */
-    PurchaseRecord get(PurchaseRecordQuery purchaseRecordQuery);
+    PurchaseRecordDomain getPurchaseRecord(PurchaseRecordDomain purchaseRecordDomain);
 
     /**
-     * 服务购买信息列表查询
+     * 查询服务购买信息列表
      */
-    List<PurchaseRecord> queryList(PurchaseRecordQuery purchaseRecordQuery);
+    List<PurchaseRecordDomain> queryPurchaseRecordList(PurchaseRecordDomain purchaseRecordDomain);
 
 }

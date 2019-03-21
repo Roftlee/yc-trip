@@ -4,12 +4,9 @@ import java.util.Date;
 import java.util.List;
 
 import org.go.api.core.bean.ResBean;
-import org.go.api.core.dto.AbstractEntityDto;
-import org.go.api.core.annotation.InsertRequired;
+import org.go.api.core.dto.AbstractBasePageRequestDto;
 
 import com.yc.trip.api.core.constants.ResCode;
-
-import java.io.Serializable;
 
 import com.yc.trip.api.business.enums.store.SalesLevel;
 import com.yc.trip.api.core.enums.YesNoStatus;
@@ -25,14 +22,14 @@ import lombok.NoArgsConstructor;
  * 门店销售信息Dto类
  * 
  * @author My-Toolkits
- * @since 2019-01-06 17:54
+ * @since 2019-03-21 22:24
  */
 @Builder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper=false)
-public class StoreSales extends AbstractEntityDto implements Serializable {
+public class StoreSales extends AbstractBasePageRequestDto {
 
     private static final long serialVersionUID = -1;
 
@@ -45,31 +42,26 @@ public class StoreSales extends AbstractEntityDto implements Serializable {
 	/**
 	 * 门店Id
 	 */
-	@InsertRequired
 	private Long storeId;
 
 	/**
 	 * 用户Id
 	 */
-	@InsertRequired
 	private Long userId;
 
 	/**
 	 * 邀请人Id
 	 */
-	@InsertRequired
 	private Long inviteUserId;
 
 	/**
 	 * 销售等级1一级销售2二级销售3VIP销售(枚举:SalesLevel)
 	 */
-	@InsertRequired
 	private SalesLevel salesLevel;
 
 	/**
 	 * 利润分成(百分比)
 	 */
-	@InsertRequired
 	private Integer commissionRate;
 
 	/**
@@ -90,5 +82,33 @@ public class StoreSales extends AbstractEntityDto implements Serializable {
 	 */
 	private Date updatedTime;
 
+    
+    //-------------------- 扩展属性--------------------------
+     /**
+     * id列表
+     */
+    private List<Long> ids;
 
+    /**
+     * 关键字
+     */
+    private String keywords;
+    
+    @Override
+    public ResBean validateParam() {
+        return ResCode.success;
+    }
+    
+    /**
+     * 流式设置排序字段
+     * @param orderby
+     * @return 
+     */
+    public StoreSales orderBy(String orderby){
+        if(getPageNo() == null) setPageNo(1);
+        if(getPageSize() == null) setPageSize(1000);
+        setOrderby(orderby);
+        return this;
+    }
+        
 }

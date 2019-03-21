@@ -2,36 +2,35 @@ package com.yc.trip.api.business.dao.order;
 
 import java.util.List;
 
-import com.yc.trip.api.business.dto.order.OrderCredit;
-import com.yc.trip.api.business.query.order.OrderCreditQuery;
+import com.yc.trip.api.business.bo.order.OrderCreditDomain;
 
 /**
  * 订单积分信息Dao类
  * 
  * @author My-Toolkits
- * @since 2019-01-06 17:12
+ * @since 2019-03-21 21:45
  *
  */
 public interface OrderCreditDao {
 
     /**
-     * 订单积分信息新增
+     * 新增订单积分信息
      */
-    void add(OrderCredit orderCredit);
+    void addOrderCredit(OrderCreditDomain orderCreditDomain);
 
     /**
-     * 订单积分信息修改
+     * 修改订单积分信息
      */
-    void update(OrderCredit orderCredit);
+    void updateOrderCredit(OrderCreditDomain orderCreditDomain);
     
     /**
-     * 订单积分信息查询
+     * 查询订单积分信息
      */
-    OrderCredit get(OrderCreditQuery orderCreditQuery);
+    OrderCreditDomain getOrderCredit(OrderCreditDomain orderCreditDomain);
 
     /**
-     * 订单积分信息列表查询
+     * 查询订单积分信息列表
      */
-    List<OrderCredit> queryList(OrderCreditQuery orderCreditQuery);
+    List<OrderCreditDomain> queryOrderCreditList(OrderCreditDomain orderCreditDomain);
 
 }

@@ -2,36 +2,35 @@ package com.yc.trip.api.business.dao.role;
 
 import java.util.List;
 
-import com.yc.trip.api.business.dto.role.RoleElement;
-import com.yc.trip.api.business.query.role.RoleElementQuery;
+import com.yc.trip.api.business.bo.role.RoleElementDomain;
 
 /**
  * 角色权限信息Dao类
  * 
  * @author My-Toolkits
- * @since 2019-01-06 17:41
+ * @since 2019-03-21 22:16
  *
  */
 public interface RoleElementDao {
 
     /**
-     * 角色权限信息新增
+     * 新增角色权限信息
      */
-    void add(RoleElement roleElement);
+    void addRoleElement(RoleElementDomain roleElementDomain);
 
     /**
-     * 角色权限信息修改
+     * 修改角色权限信息
      */
-    void update(RoleElement roleElement);
+    void updateRoleElement(RoleElementDomain roleElementDomain);
     
     /**
-     * 角色权限信息查询
+     * 查询角色权限信息
      */
-    RoleElement get(RoleElementQuery roleElementQuery);
+    RoleElementDomain getRoleElement(RoleElementDomain roleElementDomain);
 
     /**
-     * 角色权限信息列表查询
+     * 查询角色权限信息列表
      */
-    List<RoleElement> queryList(RoleElementQuery roleElementQuery);
+    List<RoleElementDomain> queryRoleElementList(RoleElementDomain roleElementDomain);
 
 }

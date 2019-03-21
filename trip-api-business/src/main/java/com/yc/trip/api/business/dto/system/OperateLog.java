@@ -4,12 +4,9 @@ import java.util.Date;
 import java.util.List;
 
 import org.go.api.core.bean.ResBean;
-import org.go.api.core.dto.AbstractEntityDto;
-import org.go.api.core.annotation.InsertRequired;
+import org.go.api.core.dto.AbstractBasePageRequestDto;
 
 import com.yc.trip.api.core.constants.ResCode;
-
-import java.io.Serializable;
 
 import com.yc.trip.api.business.enums.system.PlatformType;
 import com.yc.trip.api.core.enums.OperTargetType;
@@ -26,14 +23,14 @@ import lombok.NoArgsConstructor;
  * 操作日志Dto类
  * 
  * @author My-Toolkits
- * @since 2019-01-06 17:11
+ * @since 2019-03-21 21:44
  */
 @Builder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper=false)
-public class OperateLog extends AbstractEntityDto implements Serializable {
+public class OperateLog extends AbstractBasePageRequestDto {
 
     private static final long serialVersionUID = -1;
 
@@ -46,13 +43,11 @@ public class OperateLog extends AbstractEntityDto implements Serializable {
 	/**
 	 * 用户Id
 	 */
-	@InsertRequired
 	private Long userId;
 
 	/**
 	 * 用户名
 	 */
-	@InsertRequired
 	private String userName;
 
 	/**
@@ -63,13 +58,11 @@ public class OperateLog extends AbstractEntityDto implements Serializable {
 	/**
 	 * 功能模块(枚举:OperTargetType[core])
 	 */
-	@InsertRequired
 	private OperTargetType operTargetType;
 
 	/**
 	 * 操作类型(枚举:OperType[core])
 	 */
-	@InsertRequired
 	private OperType operType;
 
 	/**
@@ -104,5 +97,33 @@ public class OperateLog extends AbstractEntityDto implements Serializable {
 	 */
 	private Date updatedTime;
 
+    
+    //-------------------- 扩展属性--------------------------
+     /**
+     * id列表
+     */
+    private List<Long> ids;
 
+    /**
+     * 关键字
+     */
+    private String keywords;
+    
+    @Override
+    public ResBean validateParam() {
+        return ResCode.success;
+    }
+    
+    /**
+     * 流式设置排序字段
+     * @param orderby
+     * @return 
+     */
+    public OperateLog orderBy(String orderby){
+        if(getPageNo() == null) setPageNo(1);
+        if(getPageSize() == null) setPageSize(1000);
+        setOrderby(orderby);
+        return this;
+    }
+        
 }

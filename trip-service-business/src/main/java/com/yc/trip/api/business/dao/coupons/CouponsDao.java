@@ -2,36 +2,35 @@ package com.yc.trip.api.business.dao.coupons;
 
 import java.util.List;
 
-import com.yc.trip.api.business.dto.coupons.Coupons;
-import com.yc.trip.api.business.query.coupons.CouponsQuery;
+import com.yc.trip.api.business.bo.coupons.CouponsDomain;
 
 /**
  * 优惠券Dao类
  * 
  * @author My-Toolkits
- * @since 2019-01-08 23:25
+ * @since 2019-03-21 21:34
  *
  */
 public interface CouponsDao {
 
     /**
-     * 优惠券新增
+     * 新增优惠券
      */
-    void add(Coupons coupons);
+    void addCoupons(CouponsDomain couponsDomain);
 
     /**
-     * 优惠券修改
+     * 修改优惠券
      */
-    void update(Coupons coupons);
+    void updateCoupons(CouponsDomain couponsDomain);
     
     /**
-     * 优惠券查询
+     * 查询优惠券
      */
-    Coupons get(CouponsQuery couponsQuery);
+    CouponsDomain getCoupons(CouponsDomain couponsDomain);
 
     /**
-     * 优惠券列表查询
+     * 查询优惠券列表
      */
-    List<Coupons> queryList(CouponsQuery couponsQuery);
+    List<CouponsDomain> queryCouponsList(CouponsDomain couponsDomain);
 
 }

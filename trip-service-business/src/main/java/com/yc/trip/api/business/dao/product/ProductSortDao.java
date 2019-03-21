@@ -2,36 +2,35 @@ package com.yc.trip.api.business.dao.product;
 
 import java.util.List;
 
-import com.yc.trip.api.business.dto.product.ProductSort;
-import com.yc.trip.api.business.query.product.ProductSortQuery;
+import com.yc.trip.api.business.bo.product.ProductSortDomain;
 
 /**
  * 产品分类信息Dao类
  * 
  * @author My-Toolkits
- * @since 2019-01-09 19:52
+ * @since 2019-03-21 22:07
  *
  */
 public interface ProductSortDao {
 
     /**
-     * 产品分类信息新增
+     * 新增产品分类信息
      */
-    void add(ProductSort productSort);
+    void addProductSort(ProductSortDomain productSortDomain);
 
     /**
-     * 产品分类信息修改
+     * 修改产品分类信息
      */
-    void update(ProductSort productSort);
+    void updateProductSort(ProductSortDomain productSortDomain);
     
     /**
-     * 产品分类信息查询
+     * 查询产品分类信息
      */
-    ProductSort get(ProductSortQuery productSortQuery);
+    ProductSortDomain getProductSort(ProductSortDomain productSortDomain);
 
     /**
-     * 产品分类信息列表查询
+     * 查询产品分类信息列表
      */
-    List<ProductSort> queryList(ProductSortQuery productSortQuery);
+    List<ProductSortDomain> queryProductSortList(ProductSortDomain productSortDomain);
 
 }

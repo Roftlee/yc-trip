@@ -4,7 +4,7 @@
 <mapper namespace="com.yc.trip.api.business.dao.order.OrderCustomerDao">
 
     <!-- 对象与字段映射 -->
-    <resultMap type="com.yc.trip.api.business.dto.order.OrderCustomer" id="OrderCustomerMap">
+    <resultMap type="com.yc.trip.api.business.bo.order.OrderCustomerDomain" id="OrderCustomerMap">
         <!--  -->
         <result property="id" column="id" />
         <!-- 订单号 -->
@@ -21,24 +21,23 @@
         <result property="updatedTime" column="updated_time" />
     </resultMap>
 
-    <!-- 订单人员信息新增 -->
-    <insert id="add" parameterType="com.yc.trip.api.business.dto.order.OrderCustomer" useGeneratedKeys="true" keyProperty="id">
+    <!-- 新增订单人员信息 -->
+    <insert id="addOrderCustomer" parameterType="com.yc.trip.api.business.bo.order.OrderCustomerDomain" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO `order_customer`(
             order_id,
             name,
             phone,
-            id_card,
-        )
+            id_card)
         VALUES(
             #{orderId,jdbcType=NUMERIC},
             #{name,jdbcType=VARCHAR},
             #{phone,jdbcType=VARCHAR},
-            #{idCard,jdbcType=VARCHAR},
+            #{idCard,jdbcType=VARCHAR}
         )	
     </insert>
 	
-    <!-- 订单人员信息 修改-->
-	<update id="update" parameterType="com.yc.trip.api.business.dto.order.OrderCustomer">
+    <!-- 修改订单人员信息 -->
+	<update id="updateOrderCustomer" parameterType="com.yc.trip.api.business.bo.order.OrderCustomerDomain">
         UPDATE `order_customer`
         <set>
             <if test="orderId!=null ">
@@ -63,33 +62,33 @@
             WHERE id=#{id,jdbcType=NUMERIC}	
 	</update>
 	
-    <!-- 订单人员信息 查询-->
-	<select id="get" parameterType="com.yc.trip.api.business.query.order.OrderCustomerQuery" resultMap="OrderCustomerMap">
+    <!-- 查询订单人员信息 -->
+	<select id="getOrderCustomer" parameterType="com.yc.trip.api.business.bo.order.OrderCustomerDomain" resultMap="OrderCustomerMap">
         SELECT id,order_id,name,phone,
            id_card,created_time,updated_time
         FROM `order_customer`
         <where>
             <if test="id!=null ">
-                AND id=#{id,jdbcType=NUMERIC}
+                and id=#{id,jdbcType=NUMERIC}
             </if>
             <if test="orderId!=null ">
-                AND order_id=#{orderId,jdbcType=NUMERIC}
+                and order_id=#{orderId,jdbcType=NUMERIC}
             </if>
             <if test="name!=null and name!='' ">
-                AND name=#{name,jdbcType=VARCHAR}
+                and name=#{name,jdbcType=VARCHAR}
             </if>
             <if test="phone!=null and phone!='' ">
-                AND phone=#{phone,jdbcType=VARCHAR}
+                and phone=#{phone,jdbcType=VARCHAR}
             </if>
             <if test="idCard!=null and idCard!='' ">
-                AND id_card=#{idCard,jdbcType=VARCHAR}
+                and id_card=#{idCard,jdbcType=VARCHAR}
             </if>
         </where>
         LIMIT 2	
 	</select>
 	
-    <!-- 订单人员信息列表查询 -->
-    <select id="queryList" parameterType="com.yc.trip.api.business.query.order.OrderCustomerQuery" resultMap="OrderCustomerMap">
+    <!-- 查询订单人员信息列表 -->
+    <select id="queryOrderCustomerList" parameterType="com.yc.trip.api.business.bo.order.OrderCustomerDomain" resultMap="OrderCustomerMap">
             SELECT t.id,t.order_id,t.name,t.phone,
             t.id_card,t.created_time,t.updated_time
             FROM `order_customer` t 

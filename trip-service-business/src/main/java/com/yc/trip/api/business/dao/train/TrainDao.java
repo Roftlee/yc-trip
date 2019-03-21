@@ -2,36 +2,35 @@ package com.yc.trip.api.business.dao.train;
 
 import java.util.List;
 
-import com.yc.trip.api.business.dto.train.Train;
-import com.yc.trip.api.business.query.train.TrainQuery;
+import com.yc.trip.api.business.bo.train.TrainDomain;
 
 /**
  * 培训信息Dao类
  * 
  * @author My-Toolkits
- * @since 2019-01-06 17:55
+ * @since 2019-03-21 22:26
  *
  */
 public interface TrainDao {
 
     /**
-     * 培训信息新增
+     * 新增培训信息
      */
-    void add(Train train);
+    void addTrain(TrainDomain trainDomain);
 
     /**
-     * 培训信息修改
+     * 修改培训信息
      */
-    void update(Train train);
+    void updateTrain(TrainDomain trainDomain);
     
     /**
-     * 培训信息查询
+     * 查询培训信息
      */
-    Train get(TrainQuery trainQuery);
+    TrainDomain getTrain(TrainDomain trainDomain);
 
     /**
-     * 培训信息列表查询
+     * 查询培训信息列表
      */
-    List<Train> queryList(TrainQuery trainQuery);
+    List<TrainDomain> queryTrainList(TrainDomain trainDomain);
 
 }

@@ -4,7 +4,7 @@
 <mapper namespace="com.yc.trip.api.business.dao.coupons.CouponsDao">
 
     <!-- 对象与字段映射 -->
-    <resultMap type="com.yc.trip.api.business.dto.coupons.Coupons" id="CouponsMap">
+    <resultMap type="com.yc.trip.api.business.bo.coupons.CouponsDomain" id="CouponsMap">
         <!-- id -->
         <result property="id" column="id" />
         <!-- 优惠券名称 -->
@@ -23,28 +23,27 @@
         <result property="updatedTime" column="updated_time" />
     </resultMap>
 
-    <!-- 优惠券新增 -->
-    <insert id="add" parameterType="com.yc.trip.api.business.dto.coupons.Coupons">
+    <!-- 新增优惠券 -->
+    <insert id="addCoupons" parameterType="com.yc.trip.api.business.bo.coupons.CouponsDomain">
         INSERT INTO `coupons`(
             id,
             name,
             description,
             limit_cost,
             amount,
-            <if test="isDelete!=null">is_delete</if>
-        )
+            is_delete)
         VALUES(
             #{id,jdbcType=NUMERIC},
             #{name,jdbcType=VARCHAR},
             #{description,jdbcType=VARCHAR},
             #{limitCost,jdbcType=NUMERIC},
             #{amount,jdbcType=NUMERIC},
-            <if test="isDelete!=null">#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}</if>
+            #{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
         )	
     </insert>
 	
-    <!-- 优惠券 修改-->
-	<update id="update" parameterType="com.yc.trip.api.business.dto.coupons.Coupons">
+    <!-- 修改优惠券 -->
+	<update id="updateCoupons" parameterType="com.yc.trip.api.business.bo.coupons.CouponsDomain">
         UPDATE `coupons`
         <set>
             <if test="name!=null and name!='' ">
@@ -72,36 +71,36 @@
             WHERE id=#{id,jdbcType=NUMERIC}	
 	</update>
 	
-    <!-- 优惠券 查询-->
-	<select id="get" parameterType="com.yc.trip.api.business.query.coupons.CouponsQuery" resultMap="CouponsMap">
+    <!-- 查询优惠券 -->
+	<select id="getCoupons" parameterType="com.yc.trip.api.business.bo.coupons.CouponsDomain" resultMap="CouponsMap">
         SELECT id,name,description,limit_cost,
            amount,is_delete,created_time,updated_time
         FROM `coupons`
         <where>
             <if test="id!=null ">
-                AND id=#{id,jdbcType=NUMERIC}
+                and id=#{id,jdbcType=NUMERIC}
             </if>
             <if test="name!=null and name!='' ">
-                AND name=#{name,jdbcType=VARCHAR}
+                and name=#{name,jdbcType=VARCHAR}
             </if>
             <if test="description!=null ">
-                AND description=#{description,jdbcType=VARCHAR}
+                and description=#{description,jdbcType=VARCHAR}
             </if>
             <if test="limitCost!=null ">
-                AND limit_cost=#{limitCost,jdbcType=NUMERIC}
+                and limit_cost=#{limitCost,jdbcType=NUMERIC}
             </if>
             <if test="amount!=null ">
-                AND amount=#{amount,jdbcType=NUMERIC}
+                and amount=#{amount,jdbcType=NUMERIC}
             </if>
             <if test="isDelete!=null ">
-                AND is_delete=#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
+                and is_delete=#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
             </if>
         </where>
         LIMIT 2	
 	</select>
 	
-    <!-- 优惠券列表查询 -->
-    <select id="queryList" parameterType="com.yc.trip.api.business.query.coupons.CouponsQuery" resultMap="CouponsMap">
+    <!-- 查询优惠券列表 -->
+    <select id="queryCouponsList" parameterType="com.yc.trip.api.business.bo.coupons.CouponsDomain" resultMap="CouponsMap">
             SELECT t.id,t.name,t.description,t.limit_cost,
             t.amount,t.is_delete,t.created_time,t.updated_time
             FROM `coupons` t 

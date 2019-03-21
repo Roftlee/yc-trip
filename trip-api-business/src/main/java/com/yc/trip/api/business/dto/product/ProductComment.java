@@ -4,12 +4,9 @@ import java.util.Date;
 import java.util.List;
 
 import org.go.api.core.bean.ResBean;
-import org.go.api.core.dto.AbstractEntityDto;
-import org.go.api.core.annotation.InsertRequired;
+import org.go.api.core.dto.AbstractBasePageRequestDto;
 
 import com.yc.trip.api.core.constants.ResCode;
-
-import java.io.Serializable;
 
 import com.yc.trip.api.core.enums.YesNoStatus;
 
@@ -24,14 +21,14 @@ import lombok.NoArgsConstructor;
  * 产品评论信息Dto类
  * 
  * @author My-Toolkits
- * @since 2019-01-06 17:17
+ * @since 2019-03-21 22:00
  */
 @Builder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper=false)
-public class ProductComment extends AbstractEntityDto implements Serializable {
+public class ProductComment extends AbstractBasePageRequestDto {
 
     private static final long serialVersionUID = -1;
 
@@ -44,31 +41,26 @@ public class ProductComment extends AbstractEntityDto implements Serializable {
 	/**
 	 * 订单Id
 	 */
-	@InsertRequired
 	private Long orderId;
 
 	/**
 	 * 产品Id
 	 */
-	@InsertRequired
 	private Long productId;
 
 	/**
 	 * 用户Id
 	 */
-	@InsertRequired
 	private Long userId;
 
 	/**
 	 * 评分
 	 */
-	@InsertRequired
 	private Double credit;
 
 	/**
 	 * 评价内容
 	 */
-	@InsertRequired
 	private String comment;
 
 	/**
@@ -89,5 +81,33 @@ public class ProductComment extends AbstractEntityDto implements Serializable {
 	 */
 	private Date updatedTime;
 
+    
+    //-------------------- 扩展属性--------------------------
+     /**
+     * id列表
+     */
+    private List<Long> ids;
 
+    /**
+     * 关键字
+     */
+    private String keywords;
+    
+    @Override
+    public ResBean validateParam() {
+        return ResCode.success;
+    }
+    
+    /**
+     * 流式设置排序字段
+     * @param orderby
+     * @return 
+     */
+    public ProductComment orderBy(String orderby){
+        if(getPageNo() == null) setPageNo(1);
+        if(getPageSize() == null) setPageSize(1000);
+        setOrderby(orderby);
+        return this;
+    }
+        
 }

@@ -6,12 +6,11 @@ import org.go.framework.core.exception.PendingException;
 
 import com.github.pagehelper.PageInfo;
 import com.yc.trip.api.business.dto.role.RoleElement;
-import com.yc.trip.api.business.query.role.RoleElementQuery;
 
 /**
  * 角色权限信息相关接口
  * @author My-Toolkits
- * @since 2019-01-06 17:41
+ * @since 2019-03-21 22:16
  */
 public interface RoleElementFacade {
 
@@ -19,37 +18,37 @@ public interface RoleElementFacade {
      * 新增角色权限信息
      * @throws PendingException 
      */
-    RoleElement add(RoleElement roleElement) throws PendingException;
+    RoleElement addRoleElement(RoleElement roleElement) throws PendingException;
 
     /**
      * 修改角色权限信息
      * @throws PendingException 
      */
-    void update(RoleElement roleElement) throws PendingException;
+    RoleElement updateRoleElement(RoleElement roleElement) throws PendingException;
     
     /**
      * 查询角色权限信息
      * @throws PendingException 
      */
-    RoleElement get(RoleElementQuery roleElementQuery) throws PendingException;
+    RoleElement getRoleElement(RoleElement roleElement) throws PendingException;
     
     /**
      * 查询角色权限信息（若不存在，则抛出异常）
      * 
      * @throws PendingException
      */
-    RoleElement mustGet(RoleElementQuery roleElementQuery) throws PendingException;
+    RoleElement mustGet(RoleElement roleElement) throws PendingException;
 
     /**
      * 查询角色权限信息列表
      * @throws PendingException 
      */
-    List<RoleElement> queryList(RoleElementQuery roleElementQuery) throws PendingException;
+    List<RoleElement> queryRoleElementList(RoleElement roleElement) throws PendingException;
 
     /**
      * 查询角色权限信息列表 ,分页查询
      * @throws PendingException 
      */
-    PageInfo<RoleElement> queryPage(RoleElementQuery roleElementQuery) throws PendingException;
+    PageInfo<RoleElement> queryRoleElementPage(RoleElement roleElement) throws PendingException;
 
 }

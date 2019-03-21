@@ -4,7 +4,7 @@
 <mapper namespace="com.yc.trip.api.business.dao.sales.SpecialOfferProductDao">
 
     <!-- 对象与字段映射 -->
-    <resultMap type="com.yc.trip.api.business.dto.sales.SpecialOfferProduct" id="SpecialOfferProductMap">
+    <resultMap type="com.yc.trip.api.business.bo.sales.SpecialOfferProductDomain" id="SpecialOfferProductMap">
         <!-- id -->
         <result property="id" column="id" />
         <!-- 优惠活动Id -->
@@ -17,22 +17,21 @@
         <result property="updatedTime" column="updated_time" />
     </resultMap>
 
-    <!-- 优惠活动产品信息新增 -->
-    <insert id="add" parameterType="com.yc.trip.api.business.dto.sales.SpecialOfferProduct">
+    <!-- 新增优惠活动产品信息 -->
+    <insert id="addSpecialOfferProduct" parameterType="com.yc.trip.api.business.bo.sales.SpecialOfferProductDomain">
         INSERT INTO `special_offer_product`(
             id,
             special_offer_id,
-            product_id,
-        )
+            product_id)
         VALUES(
             #{id,jdbcType=NUMERIC},
             #{specialOfferId,jdbcType=NUMERIC},
-            #{productId,jdbcType=NUMERIC},
+            #{productId,jdbcType=NUMERIC}
         )	
     </insert>
 	
-    <!-- 优惠活动产品信息 修改-->
-	<update id="update" parameterType="com.yc.trip.api.business.dto.sales.SpecialOfferProduct">
+    <!-- 修改优惠活动产品信息 -->
+	<update id="updateSpecialOfferProduct" parameterType="com.yc.trip.api.business.bo.sales.SpecialOfferProductDomain">
         UPDATE `special_offer_product`
         <set>
             <if test="specialOfferId!=null ">
@@ -51,27 +50,27 @@
             WHERE id=#{id,jdbcType=NUMERIC}	
 	</update>
 	
-    <!-- 优惠活动产品信息 查询-->
-	<select id="get" parameterType="com.yc.trip.api.business.query.sales.SpecialOfferProductQuery" resultMap="SpecialOfferProductMap">
+    <!-- 查询优惠活动产品信息 -->
+	<select id="getSpecialOfferProduct" parameterType="com.yc.trip.api.business.bo.sales.SpecialOfferProductDomain" resultMap="SpecialOfferProductMap">
         SELECT id,special_offer_id,product_id,created_time,
            updated_time
         FROM `special_offer_product`
         <where>
             <if test="id!=null ">
-                AND id=#{id,jdbcType=NUMERIC}
+                and id=#{id,jdbcType=NUMERIC}
             </if>
             <if test="specialOfferId!=null ">
-                AND special_offer_id=#{specialOfferId,jdbcType=NUMERIC}
+                and special_offer_id=#{specialOfferId,jdbcType=NUMERIC}
             </if>
             <if test="productId!=null ">
-                AND product_id=#{productId,jdbcType=NUMERIC}
+                and product_id=#{productId,jdbcType=NUMERIC}
             </if>
         </where>
         LIMIT 2	
 	</select>
 	
-    <!-- 优惠活动产品信息列表查询 -->
-    <select id="queryList" parameterType="com.yc.trip.api.business.query.sales.SpecialOfferProductQuery" resultMap="SpecialOfferProductMap">
+    <!-- 查询优惠活动产品信息列表 -->
+    <select id="querySpecialOfferProductList" parameterType="com.yc.trip.api.business.bo.sales.SpecialOfferProductDomain" resultMap="SpecialOfferProductMap">
             SELECT t.id,t.special_offer_id,t.product_id,t.created_time,
             t.updated_time
             FROM `special_offer_product` t 

@@ -2,36 +2,35 @@ package com.yc.trip.api.business.dao.product;
 
 import java.util.List;
 
-import com.yc.trip.api.business.dto.product.ProductComment;
-import com.yc.trip.api.business.query.product.ProductCommentQuery;
+import com.yc.trip.api.business.bo.product.ProductCommentDomain;
 
 /**
  * 产品评论信息Dao类
  * 
  * @author My-Toolkits
- * @since 2019-01-06 17:17
+ * @since 2019-03-21 22:00
  *
  */
 public interface ProductCommentDao {
 
     /**
-     * 产品评论信息新增
+     * 新增产品评论信息
      */
-    void add(ProductComment productComment);
+    void addProductComment(ProductCommentDomain productCommentDomain);
 
     /**
-     * 产品评论信息修改
+     * 修改产品评论信息
      */
-    void update(ProductComment productComment);
+    void updateProductComment(ProductCommentDomain productCommentDomain);
     
     /**
-     * 产品评论信息查询
+     * 查询产品评论信息
      */
-    ProductComment get(ProductCommentQuery productCommentQuery);
+    ProductCommentDomain getProductComment(ProductCommentDomain productCommentDomain);
 
     /**
-     * 产品评论信息列表查询
+     * 查询产品评论信息列表
      */
-    List<ProductComment> queryList(ProductCommentQuery productCommentQuery);
+    List<ProductCommentDomain> queryProductCommentList(ProductCommentDomain productCommentDomain);
 
 }

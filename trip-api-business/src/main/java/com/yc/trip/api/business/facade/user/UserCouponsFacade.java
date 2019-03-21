@@ -6,12 +6,11 @@ import org.go.framework.core.exception.PendingException;
 
 import com.github.pagehelper.PageInfo;
 import com.yc.trip.api.business.dto.user.UserCoupons;
-import com.yc.trip.api.business.query.user.UserCouponsQuery;
 
 /**
  * 用户优惠券相关接口
  * @author My-Toolkits
- * @since 2019-01-08 23:28
+ * @since 2019-03-21 22:32
  */
 public interface UserCouponsFacade {
 
@@ -19,37 +18,37 @@ public interface UserCouponsFacade {
      * 新增用户优惠券
      * @throws PendingException 
      */
-    UserCoupons add(UserCoupons userCoupons) throws PendingException;
+    UserCoupons addUserCoupons(UserCoupons userCoupons) throws PendingException;
 
     /**
      * 修改用户优惠券
      * @throws PendingException 
      */
-    void update(UserCoupons userCoupons) throws PendingException;
+    UserCoupons updateUserCoupons(UserCoupons userCoupons) throws PendingException;
     
     /**
      * 查询用户优惠券
      * @throws PendingException 
      */
-    UserCoupons get(UserCouponsQuery userCouponsQuery) throws PendingException;
+    UserCoupons getUserCoupons(UserCoupons userCoupons) throws PendingException;
     
     /**
      * 查询用户优惠券（若不存在，则抛出异常）
      * 
      * @throws PendingException
      */
-    UserCoupons mustGet(UserCouponsQuery userCouponsQuery) throws PendingException;
+    UserCoupons mustGet(UserCoupons userCoupons) throws PendingException;
 
     /**
      * 查询用户优惠券列表
      * @throws PendingException 
      */
-    List<UserCoupons> queryList(UserCouponsQuery userCouponsQuery) throws PendingException;
+    List<UserCoupons> queryUserCouponsList(UserCoupons userCoupons) throws PendingException;
 
     /**
      * 查询用户优惠券列表 ,分页查询
      * @throws PendingException 
      */
-    PageInfo<UserCoupons> queryPage(UserCouponsQuery userCouponsQuery) throws PendingException;
+    PageInfo<UserCoupons> queryUserCouponsPage(UserCoupons userCoupons) throws PendingException;
 
 }

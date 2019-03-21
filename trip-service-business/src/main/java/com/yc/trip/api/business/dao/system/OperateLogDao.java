@@ -2,36 +2,35 @@ package com.yc.trip.api.business.dao.system;
 
 import java.util.List;
 
-import com.yc.trip.api.business.dto.system.OperateLog;
-import com.yc.trip.api.business.query.system.OperateLogQuery;
+import com.yc.trip.api.business.bo.system.OperateLogDomain;
 
 /**
  * 操作日志Dao类
  * 
  * @author My-Toolkits
- * @since 2019-01-06 17:11
+ * @since 2019-03-21 21:44
  *
  */
 public interface OperateLogDao {
 
     /**
-     * 操作日志新增
+     * 新增操作日志
      */
-    void add(OperateLog operateLog);
+    void addOperateLog(OperateLogDomain operateLogDomain);
 
     /**
-     * 操作日志修改
+     * 修改操作日志
      */
-    void update(OperateLog operateLog);
+    void updateOperateLog(OperateLogDomain operateLogDomain);
     
     /**
-     * 操作日志查询
+     * 查询操作日志
      */
-    OperateLog get(OperateLogQuery operateLogQuery);
+    OperateLogDomain getOperateLog(OperateLogDomain operateLogDomain);
 
     /**
-     * 操作日志列表查询
+     * 查询操作日志列表
      */
-    List<OperateLog> queryList(OperateLogQuery operateLogQuery);
+    List<OperateLogDomain> queryOperateLogList(OperateLogDomain operateLogDomain);
 
 }

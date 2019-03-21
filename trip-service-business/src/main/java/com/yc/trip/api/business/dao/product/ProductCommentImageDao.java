@@ -2,36 +2,35 @@ package com.yc.trip.api.business.dao.product;
 
 import java.util.List;
 
-import com.yc.trip.api.business.dto.product.ProductCommentImage;
-import com.yc.trip.api.business.query.product.ProductCommentImageQuery;
+import com.yc.trip.api.business.bo.product.ProductCommentImageDomain;
 
 /**
  * 产品评论图片信息Dao类
  * 
  * @author My-Toolkits
- * @since 2019-01-06 17:20
+ * @since 2019-03-21 22:06
  *
  */
 public interface ProductCommentImageDao {
 
     /**
-     * 产品评论图片信息新增
+     * 新增产品评论图片信息
      */
-    void add(ProductCommentImage productCommentImage);
+    void addProductCommentImage(ProductCommentImageDomain productCommentImageDomain);
 
     /**
-     * 产品评论图片信息修改
+     * 修改产品评论图片信息
      */
-    void update(ProductCommentImage productCommentImage);
+    void updateProductCommentImage(ProductCommentImageDomain productCommentImageDomain);
     
     /**
-     * 产品评论图片信息查询
+     * 查询产品评论图片信息
      */
-    ProductCommentImage get(ProductCommentImageQuery productCommentImageQuery);
+    ProductCommentImageDomain getProductCommentImage(ProductCommentImageDomain productCommentImageDomain);
 
     /**
-     * 产品评论图片信息列表查询
+     * 查询产品评论图片信息列表
      */
-    List<ProductCommentImage> queryList(ProductCommentImageQuery productCommentImageQuery);
+    List<ProductCommentImageDomain> queryProductCommentImageList(ProductCommentImageDomain productCommentImageDomain);
 
 }

@@ -14,16 +14,16 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
 import com.yc.trip.api.core.constants.ResCode;
+import com.yc.trip.api.business.bo.provider.ProviderBrandRelationDomain;
 import com.yc.trip.api.business.dao.provider.ProviderBrandRelationDao;
 import com.yc.trip.api.business.dto.provider.ProviderBrandRelation;
-import com.yc.trip.api.business.query.provider.ProviderBrandRelationQuery;
 import com.yc.trip.api.business.facade.provider.ProviderBrandRelationFacade;
 
 /**
  * 供应商品牌关联信息相关接口实现
  * 
  * @author My-Toolkits
- * @since 2019-01-06 17:25
+ * @since 2019-03-21 22:10
  */
 @Service(version = "1.0.0")
 public class ProviderBrandRelationFacadeImpl extends AbstractDubboNativeService implements ProviderBrandRelationFacade {
@@ -37,14 +37,18 @@ public class ProviderBrandRelationFacadeImpl extends AbstractDubboNativeService 
      * @throws PendingException
      */
     @Override
-    public ProviderBrandRelation add(ProviderBrandRelation providerBrandRelation) throws PendingException {
+    public ProviderBrandRelation addProviderBrandRelation(ProviderBrandRelation providerBrandRelation) throws PendingException {
         try {
+            // 转换成domain对象
+            ProviderBrandRelationDomain cond = BeanMapping.map(providerBrandRelation, ProviderBrandRelationDomain.class);
             // 新增时对各字段进行非空校验
-            providerBrandRelation.validateInsertFields();
+            if (!cond.validateInsertFields()) {
+                ResCode.providerBrandRelationDBParamInvalid.throwException("供应商品牌关联信息新增时参数未通过校验");
+            }
             // 调数据库接口进行新增操作
-            providerBrandRelationDao.add(providerBrandRelation);
+            providerBrandRelationDao.addProviderBrandRelation(cond);
             // 将新增后回返回（包含自增主键值）
-            return providerBrandRelation;
+            return BeanMapping.map(cond, ProviderBrandRelation.class);
         } catch (Exception ex) {
             // 对异常进行处理
             throw transferException(ex, ResCode.providerBrandRelationDBError, "供应商品牌关联信息新增失败");
@@ -57,14 +61,17 @@ public class ProviderBrandRelationFacadeImpl extends AbstractDubboNativeService 
      * @throws PendingException
      */
     @Override
-    public void update(ProviderBrandRelation providerBrandRelation) throws PendingException {
+    public ProviderBrandRelation updateProviderBrandRelation(ProviderBrandRelation providerBrandRelation) throws PendingException {
         try {
+            // 转换成domain对象
+            ProviderBrandRelationDomain cond = BeanMapping.map(providerBrandRelation, ProviderBrandRelationDomain.class);
             // 更新或删除操作时，不能所有参数都为空
-            if (providerBrandRelation.isAllFiledsNull()) {
+            if (cond.isAllFiledsNull()) {
                 ResCode.providerBrandRelationDBParamInvalid.throwException("供应商品牌关联信息更新时参数未通过校验");
             }
             // 调数据库接口进行更新操作
-            providerBrandRelationDao.update(providerBrandRelation);
+            providerBrandRelationDao.updateProviderBrandRelation(cond);
+            return BeanMapping.map(cond, ProviderBrandRelation.class);
         } catch (Exception ex) {
             // 对异常进行处理
             throw transferException(ex, ResCode.providerBrandRelationDBError, "供应商品牌关联信息更新失败");
@@ -77,10 +84,14 @@ public class ProviderBrandRelationFacadeImpl extends AbstractDubboNativeService 
      * @throws PendingException
      */
     @Override
-    public ProviderBrandRelation get(ProviderBrandRelationQuery providerBrandRelationQuery) throws PendingException {
+    public ProviderBrandRelation getProviderBrandRelation(ProviderBrandRelation providerBrandRelation) throws PendingException {
         try {
+            // 转换成Domain对象
+            ProviderBrandRelationDomain cond = BeanMapping.map(providerBrandRelation, ProviderBrandRelationDomain.class);
             // 调数据库接口查询对象
-            return providerBrandRelationDao.get(providerBrandRelationQuery);
+            ProviderBrandRelationDomain resultBean = providerBrandRelationDao.getProviderBrandRelation(cond);
+            // 转换返回结果
+            return BeanMapping.map(resultBean, ProviderBrandRelation.class);
         } catch (Exception ex) {
             // 对异常进行处理
             throw transferException(ex, ResCode.providerBrandRelationDBError, "供应商品牌关联信息查询失败");
@@ -93,9 +104,9 @@ public class ProviderBrandRelationFacadeImpl extends AbstractDubboNativeService 
      * @throws PendingException
      */
     @Override
-    public ProviderBrandRelation mustGet(ProviderBrandRelationQuery providerBrandRelationQuery) throws PendingException {
+    public ProviderBrandRelation mustGet(ProviderBrandRelation providerBrandRelation) throws PendingException {
         // 查询单位信息
-        ProviderBrandRelation result = get(providerBrandRelationQuery);
+        ProviderBrandRelation result = getProviderBrandRelation(providerBrandRelation);
         // 若不存在，则抛出异常
         if(result == null){
             ResCode.providerBrandRelationDBGetNull.throwException("未查询到供应商品牌关联信息");
@@ -109,14 +120,18 @@ public class ProviderBrandRelationFacadeImpl extends AbstractDubboNativeService 
      * @throws PendingException
      */
     @Override
-    public List<ProviderBrandRelation> queryList(ProviderBrandRelationQuery providerBrandRelationQuery) throws PendingException {
+    public List<ProviderBrandRelation> queryProviderBrandRelationList(ProviderBrandRelation providerBrandRelation) throws PendingException {
         try {
+            // 转换成Domain对象
+            ProviderBrandRelationDomain cond = BeanMapping.map(providerBrandRelation, ProviderBrandRelationDomain.class);
             // 在上下文中设置排序信息
-            if (StringUtil.isNotBlank(providerBrandRelationQuery.getOrderby())) {
-                PageHelper.orderBy(providerBrandRelationQuery.getOrderby());
+            if (StringUtil.isNotBlank(providerBrandRelation.getOrderby())) {
+                PageHelper.orderBy(providerBrandRelation.getOrderby());
             }
             // 调数据库接口查询列表
-            return providerBrandRelationDao.queryList(providerBrandRelationQuery);
+            List<ProviderBrandRelationDomain> resultList = providerBrandRelationDao.queryProviderBrandRelationList(cond);
+            // 转换返回结果
+            return BeanMapping.mapList(resultList, ProviderBrandRelation.class);
         } catch (Exception ex) {
             // 对异常进行处理
             throw transferException(ex, ResCode.providerBrandRelationDBError, "供应商品牌关联信息列表查询失败");
@@ -129,22 +144,26 @@ public class ProviderBrandRelationFacadeImpl extends AbstractDubboNativeService 
      * @throws PendingException
      */
     @Override
-    public PageInfo<ProviderBrandRelation> queryPage(ProviderBrandRelationQuery providerBrandRelationQuery) throws PendingException {
+    public PageInfo<ProviderBrandRelation> queryProviderBrandRelationPage(ProviderBrandRelation providerBrandRelation) throws PendingException {
         try {
             // 对请求参数进行校验
-            if (providerBrandRelationQuery.getPageNo() <= 0 || providerBrandRelationQuery.getPageSize() <= 0) {
+            if (providerBrandRelation.getPageNo() <= 0 || providerBrandRelation.getPageSize() <= 0) {
                 ResCode.providerBrandRelationDBParamInvalid.throwException("分页参数设置有误");
             }
             // 在上下文中设置分页信息
-            PageHelper.startPage(providerBrandRelationQuery.getPageNo(), providerBrandRelationQuery.getPageSize());
+            PageHelper.startPage(providerBrandRelation.getPageNo(), providerBrandRelation.getPageSize());
             // 在上下文中设置排序信息
-            if (StringUtil.isNotBlank(providerBrandRelationQuery.getOrderby())) {
-                PageHelper.orderBy(providerBrandRelationQuery.getOrderby());
+            if (StringUtil.isNotBlank(providerBrandRelation.getOrderby())) {
+                PageHelper.orderBy(providerBrandRelation.getOrderby());
             }
+            // 转换成Domain对象
+            ProviderBrandRelationDomain cond = BeanMapping.map(providerBrandRelation, ProviderBrandRelationDomain.class);
             // 调数据库接口查询列表
-            List<ProviderBrandRelation> resultList = providerBrandRelationDao.queryList(providerBrandRelationQuery);
-            // 返回分页结果
-            return new PageInfo<>(resultList);
+            List<ProviderBrandRelationDomain> resultList = providerBrandRelationDao.queryProviderBrandRelationList(cond);
+            // 生成分页对象
+            PageInfo<ProviderBrandRelationDomain> pageInfo = new PageInfo<>(resultList);
+            // 对分页对象进行类型转换
+            return BeanMapping.mapPage(pageInfo, ProviderBrandRelation.class);
         } catch (Exception ex) {
             // 对异常进行处理
             throw transferException(ex, ResCode.providerBrandRelationDBError, "供应商品牌关联信息分页查询失败");

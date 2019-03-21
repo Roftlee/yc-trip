@@ -2,36 +2,35 @@ package com.yc.trip.api.business.dao.notice;
 
 import java.util.List;
 
-import com.yc.trip.api.business.dto.notice.NoticeInfo;
-import com.yc.trip.api.business.query.notice.NoticeInfoQuery;
+import com.yc.trip.api.business.bo.notice.NoticeInfoDomain;
 
 /**
  * 资讯Dao类
  * 
  * @author My-Toolkits
- * @since 2019-01-06 17:08
+ * @since 2019-03-21 21:41
  *
  */
 public interface NoticeInfoDao {
 
     /**
-     * 资讯新增
+     * 新增资讯
      */
-    void add(NoticeInfo noticeInfo);
+    void addNoticeInfo(NoticeInfoDomain noticeInfoDomain);
 
     /**
-     * 资讯修改
+     * 修改资讯
      */
-    void update(NoticeInfo noticeInfo);
+    void updateNoticeInfo(NoticeInfoDomain noticeInfoDomain);
     
     /**
-     * 资讯查询
+     * 查询资讯
      */
-    NoticeInfo get(NoticeInfoQuery noticeInfoQuery);
+    NoticeInfoDomain getNoticeInfo(NoticeInfoDomain noticeInfoDomain);
 
     /**
-     * 资讯列表查询
+     * 查询资讯列表
      */
-    List<NoticeInfo> queryList(NoticeInfoQuery noticeInfoQuery);
+    List<NoticeInfoDomain> queryNoticeInfoList(NoticeInfoDomain noticeInfoDomain);
 
 }

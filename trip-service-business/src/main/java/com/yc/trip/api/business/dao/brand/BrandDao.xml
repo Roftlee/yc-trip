@@ -4,7 +4,7 @@
 <mapper namespace="com.yc.trip.api.business.dao.brand.BrandDao">
 
     <!-- 对象与字段映射 -->
-    <resultMap type="com.yc.trip.api.business.dto.brand.Brand" id="BrandMap">
+    <resultMap type="com.yc.trip.api.business.bo.brand.BrandDomain" id="BrandMap">
         <!--  -->
         <result property="id" column="id" />
         <!-- 品牌名 -->
@@ -21,24 +21,23 @@
         <result property="updatedTime" column="updated_time" />
     </resultMap>
 
-    <!-- 品牌新增 -->
-    <insert id="add" parameterType="com.yc.trip.api.business.dto.brand.Brand" useGeneratedKeys="true" keyProperty="id">
+    <!-- 新增品牌 -->
+    <insert id="addBrand" parameterType="com.yc.trip.api.business.bo.brand.BrandDomain" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO `brand`(
             name,
             logo,
-            <if test="isDelete!=null">is_delete,</if>
-            created_by,
-        )
+            is_delete,
+            created_by)
         VALUES(
             #{name,jdbcType=VARCHAR},
             #{logo,jdbcType=VARCHAR},
-            <if test="isDelete!=null">#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC},</if>
-            #{createdBy,jdbcType=NUMERIC},
+            #{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC},
+            #{createdBy,jdbcType=NUMERIC}
         )	
     </insert>
 	
-    <!-- 品牌 修改-->
-	<update id="update" parameterType="com.yc.trip.api.business.dto.brand.Brand">
+    <!-- 修改品牌 -->
+	<update id="updateBrand" parameterType="com.yc.trip.api.business.bo.brand.BrandDomain">
         UPDATE `brand`
         <set>
             <if test="name!=null and name!='' ">
@@ -63,33 +62,33 @@
             WHERE id=#{id,jdbcType=NUMERIC}	
 	</update>
 	
-    <!-- 品牌 查询-->
-	<select id="get" parameterType="com.yc.trip.api.business.query.brand.BrandQuery" resultMap="BrandMap">
+    <!-- 查询品牌 -->
+	<select id="getBrand" parameterType="com.yc.trip.api.business.bo.brand.BrandDomain" resultMap="BrandMap">
         SELECT id,name,logo,is_delete,
            created_by,created_time,updated_time
         FROM `brand`
         <where>
             <if test="id!=null ">
-                AND id=#{id,jdbcType=NUMERIC}
+                and id=#{id,jdbcType=NUMERIC}
             </if>
             <if test="name!=null and name!='' ">
-                AND name=#{name,jdbcType=VARCHAR}
+                and name=#{name,jdbcType=VARCHAR}
             </if>
             <if test="logo!=null and logo!='' ">
-                AND logo=#{logo,jdbcType=VARCHAR}
+                and logo=#{logo,jdbcType=VARCHAR}
             </if>
             <if test="isDelete!=null ">
-                AND is_delete=#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
+                and is_delete=#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
             </if>
             <if test="createdBy!=null ">
-                AND created_by=#{createdBy,jdbcType=NUMERIC}
+                and created_by=#{createdBy,jdbcType=NUMERIC}
             </if>
         </where>
         LIMIT 2	
 	</select>
 	
-    <!-- 品牌列表查询 -->
-    <select id="queryList" parameterType="com.yc.trip.api.business.query.brand.BrandQuery" resultMap="BrandMap">
+    <!-- 查询品牌列表 -->
+    <select id="queryBrandList" parameterType="com.yc.trip.api.business.bo.brand.BrandDomain" resultMap="BrandMap">
             SELECT t.id,t.name,t.logo,t.is_delete,
             t.created_by,t.created_time,t.updated_time
             FROM `brand` t 

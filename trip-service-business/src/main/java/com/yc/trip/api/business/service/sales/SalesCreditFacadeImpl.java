@@ -14,16 +14,16 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
 import com.yc.trip.api.core.constants.ResCode;
+import com.yc.trip.api.business.bo.sales.SalesCreditDomain;
 import com.yc.trip.api.business.dao.sales.SalesCreditDao;
 import com.yc.trip.api.business.dto.sales.SalesCredit;
-import com.yc.trip.api.business.query.sales.SalesCreditQuery;
 import com.yc.trip.api.business.facade.sales.SalesCreditFacade;
 
 /**
  * 销售人员积分信息相关接口实现
  * 
  * @author My-Toolkits
- * @since 2019-01-06 17:43
+ * @since 2019-03-21 22:18
  */
 @Service(version = "1.0.0")
 public class SalesCreditFacadeImpl extends AbstractDubboNativeService implements SalesCreditFacade {
@@ -37,14 +37,18 @@ public class SalesCreditFacadeImpl extends AbstractDubboNativeService implements
      * @throws PendingException
      */
     @Override
-    public SalesCredit add(SalesCredit salesCredit) throws PendingException {
+    public SalesCredit addSalesCredit(SalesCredit salesCredit) throws PendingException {
         try {
+            // 转换成domain对象
+            SalesCreditDomain cond = BeanMapping.map(salesCredit, SalesCreditDomain.class);
             // 新增时对各字段进行非空校验
-            salesCredit.validateInsertFields();
+            if (!cond.validateInsertFields()) {
+                ResCode.salesCreditDBParamInvalid.throwException("销售人员积分信息新增时参数未通过校验");
+            }
             // 调数据库接口进行新增操作
-            salesCreditDao.add(salesCredit);
+            salesCreditDao.addSalesCredit(cond);
             // 将新增后回返回（包含自增主键值）
-            return salesCredit;
+            return BeanMapping.map(cond, SalesCredit.class);
         } catch (Exception ex) {
             // 对异常进行处理
             throw transferException(ex, ResCode.salesCreditDBError, "销售人员积分信息新增失败");
@@ -57,14 +61,17 @@ public class SalesCreditFacadeImpl extends AbstractDubboNativeService implements
      * @throws PendingException
      */
     @Override
-    public void update(SalesCredit salesCredit) throws PendingException {
+    public SalesCredit updateSalesCredit(SalesCredit salesCredit) throws PendingException {
         try {
+            // 转换成domain对象
+            SalesCreditDomain cond = BeanMapping.map(salesCredit, SalesCreditDomain.class);
             // 更新或删除操作时，不能所有参数都为空
-            if (salesCredit.isAllFiledsNull()) {
+            if (cond.isAllFiledsNull()) {
                 ResCode.salesCreditDBParamInvalid.throwException("销售人员积分信息更新时参数未通过校验");
             }
             // 调数据库接口进行更新操作
-            salesCreditDao.update(salesCredit);
+            salesCreditDao.updateSalesCredit(cond);
+            return BeanMapping.map(cond, SalesCredit.class);
         } catch (Exception ex) {
             // 对异常进行处理
             throw transferException(ex, ResCode.salesCreditDBError, "销售人员积分信息更新失败");
@@ -77,10 +84,14 @@ public class SalesCreditFacadeImpl extends AbstractDubboNativeService implements
      * @throws PendingException
      */
     @Override
-    public SalesCredit get(SalesCreditQuery salesCreditQuery) throws PendingException {
+    public SalesCredit getSalesCredit(SalesCredit salesCredit) throws PendingException {
         try {
+            // 转换成Domain对象
+            SalesCreditDomain cond = BeanMapping.map(salesCredit, SalesCreditDomain.class);
             // 调数据库接口查询对象
-            return salesCreditDao.get(salesCreditQuery);
+            SalesCreditDomain resultBean = salesCreditDao.getSalesCredit(cond);
+            // 转换返回结果
+            return BeanMapping.map(resultBean, SalesCredit.class);
         } catch (Exception ex) {
             // 对异常进行处理
             throw transferException(ex, ResCode.salesCreditDBError, "销售人员积分信息查询失败");
@@ -93,9 +104,9 @@ public class SalesCreditFacadeImpl extends AbstractDubboNativeService implements
      * @throws PendingException
      */
     @Override
-    public SalesCredit mustGet(SalesCreditQuery salesCreditQuery) throws PendingException {
+    public SalesCredit mustGet(SalesCredit salesCredit) throws PendingException {
         // 查询单位信息
-        SalesCredit result = get(salesCreditQuery);
+        SalesCredit result = getSalesCredit(salesCredit);
         // 若不存在，则抛出异常
         if(result == null){
             ResCode.salesCreditDBGetNull.throwException("未查询到销售人员积分信息");
@@ -109,14 +120,18 @@ public class SalesCreditFacadeImpl extends AbstractDubboNativeService implements
      * @throws PendingException
      */
     @Override
-    public List<SalesCredit> queryList(SalesCreditQuery salesCreditQuery) throws PendingException {
+    public List<SalesCredit> querySalesCreditList(SalesCredit salesCredit) throws PendingException {
         try {
+            // 转换成Domain对象
+            SalesCreditDomain cond = BeanMapping.map(salesCredit, SalesCreditDomain.class);
             // 在上下文中设置排序信息
-            if (StringUtil.isNotBlank(salesCreditQuery.getOrderby())) {
-                PageHelper.orderBy(salesCreditQuery.getOrderby());
+            if (StringUtil.isNotBlank(salesCredit.getOrderby())) {
+                PageHelper.orderBy(salesCredit.getOrderby());
             }
             // 调数据库接口查询列表
-            return salesCreditDao.queryList(salesCreditQuery);
+            List<SalesCreditDomain> resultList = salesCreditDao.querySalesCreditList(cond);
+            // 转换返回结果
+            return BeanMapping.mapList(resultList, SalesCredit.class);
         } catch (Exception ex) {
             // 对异常进行处理
             throw transferException(ex, ResCode.salesCreditDBError, "销售人员积分信息列表查询失败");
@@ -129,22 +144,26 @@ public class SalesCreditFacadeImpl extends AbstractDubboNativeService implements
      * @throws PendingException
      */
     @Override
-    public PageInfo<SalesCredit> queryPage(SalesCreditQuery salesCreditQuery) throws PendingException {
+    public PageInfo<SalesCredit> querySalesCreditPage(SalesCredit salesCredit) throws PendingException {
         try {
             // 对请求参数进行校验
-            if (salesCreditQuery.getPageNo() <= 0 || salesCreditQuery.getPageSize() <= 0) {
+            if (salesCredit.getPageNo() <= 0 || salesCredit.getPageSize() <= 0) {
                 ResCode.salesCreditDBParamInvalid.throwException("分页参数设置有误");
             }
             // 在上下文中设置分页信息
-            PageHelper.startPage(salesCreditQuery.getPageNo(), salesCreditQuery.getPageSize());
+            PageHelper.startPage(salesCredit.getPageNo(), salesCredit.getPageSize());
             // 在上下文中设置排序信息
-            if (StringUtil.isNotBlank(salesCreditQuery.getOrderby())) {
-                PageHelper.orderBy(salesCreditQuery.getOrderby());
+            if (StringUtil.isNotBlank(salesCredit.getOrderby())) {
+                PageHelper.orderBy(salesCredit.getOrderby());
             }
+            // 转换成Domain对象
+            SalesCreditDomain cond = BeanMapping.map(salesCredit, SalesCreditDomain.class);
             // 调数据库接口查询列表
-            List<SalesCredit> resultList = salesCreditDao.queryList(salesCreditQuery);
-            // 返回分页结果
-            return new PageInfo<>(resultList);
+            List<SalesCreditDomain> resultList = salesCreditDao.querySalesCreditList(cond);
+            // 生成分页对象
+            PageInfo<SalesCreditDomain> pageInfo = new PageInfo<>(resultList);
+            // 对分页对象进行类型转换
+            return BeanMapping.mapPage(pageInfo, SalesCredit.class);
         } catch (Exception ex) {
             // 对异常进行处理
             throw transferException(ex, ResCode.salesCreditDBError, "销售人员积分信息分页查询失败");

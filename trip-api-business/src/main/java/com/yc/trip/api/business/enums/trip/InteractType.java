@@ -16,7 +16,7 @@ import com.google.common.collect.ImmutableMap;
  * InteractType枚举类
  *
  * @author My-Toolkits
- * @since 2019-01-06 17:58
+ * @since 2019-03-21 22:29
  */
 public enum InteractType implements BaseEnum<Enum<InteractType>, Integer>{
     ALL(-1, "全部"),

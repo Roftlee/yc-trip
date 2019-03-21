@@ -2,36 +2,35 @@ package com.yc.trip.api.business.dao.motorcade;
 
 import java.util.List;
 
-import com.yc.trip.api.business.dto.motorcade.Motorcade;
-import com.yc.trip.api.business.query.motorcade.MotorcadeQuery;
+import com.yc.trip.api.business.bo.motorcade.MotorcadeDomain;
 
 /**
  * 车队Dao类
  * 
  * @author My-Toolkits
- * @since 2019-01-06 17:06
+ * @since 2019-03-21 21:39
  *
  */
 public interface MotorcadeDao {
 
     /**
-     * 车队新增
+     * 新增车队
      */
-    void add(Motorcade motorcade);
+    void addMotorcade(MotorcadeDomain motorcadeDomain);
 
     /**
-     * 车队修改
+     * 修改车队
      */
-    void update(Motorcade motorcade);
+    void updateMotorcade(MotorcadeDomain motorcadeDomain);
     
     /**
-     * 车队查询
+     * 查询车队
      */
-    Motorcade get(MotorcadeQuery motorcadeQuery);
+    MotorcadeDomain getMotorcade(MotorcadeDomain motorcadeDomain);
 
     /**
-     * 车队列表查询
+     * 查询车队列表
      */
-    List<Motorcade> queryList(MotorcadeQuery motorcadeQuery);
+    List<MotorcadeDomain> queryMotorcadeList(MotorcadeDomain motorcadeDomain);
 
 }

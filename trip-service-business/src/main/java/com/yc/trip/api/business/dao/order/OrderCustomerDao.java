@@ -2,36 +2,35 @@ package com.yc.trip.api.business.dao.order;
 
 import java.util.List;
 
-import com.yc.trip.api.business.dto.order.OrderCustomer;
-import com.yc.trip.api.business.query.order.OrderCustomerQuery;
+import com.yc.trip.api.business.bo.order.OrderCustomerDomain;
 
 /**
  * 订单人员信息Dao类
  * 
  * @author My-Toolkits
- * @since 2019-01-06 17:14
+ * @since 2019-03-21 21:47
  *
  */
 public interface OrderCustomerDao {
 
     /**
-     * 订单人员信息新增
+     * 新增订单人员信息
      */
-    void add(OrderCustomer orderCustomer);
+    void addOrderCustomer(OrderCustomerDomain orderCustomerDomain);
 
     /**
-     * 订单人员信息修改
+     * 修改订单人员信息
      */
-    void update(OrderCustomer orderCustomer);
+    void updateOrderCustomer(OrderCustomerDomain orderCustomerDomain);
     
     /**
-     * 订单人员信息查询
+     * 查询订单人员信息
      */
-    OrderCustomer get(OrderCustomerQuery orderCustomerQuery);
+    OrderCustomerDomain getOrderCustomer(OrderCustomerDomain orderCustomerDomain);
 
     /**
-     * 订单人员信息列表查询
+     * 查询订单人员信息列表
      */
-    List<OrderCustomer> queryList(OrderCustomerQuery orderCustomerQuery);
+    List<OrderCustomerDomain> queryOrderCustomerList(OrderCustomerDomain orderCustomerDomain);
 
 }

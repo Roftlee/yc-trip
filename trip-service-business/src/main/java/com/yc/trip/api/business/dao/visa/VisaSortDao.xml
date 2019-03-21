@@ -4,7 +4,7 @@
 <mapper namespace="com.yc.trip.api.business.dao.visa.VisaSortDao">
 
     <!-- 对象与字段映射 -->
-    <resultMap type="com.yc.trip.api.business.dto.visa.VisaSort" id="VisaSortMap">
+    <resultMap type="com.yc.trip.api.business.bo.visa.VisaSortDomain" id="VisaSortMap">
         <!--  -->
         <result property="id" column="id" />
         <!-- 分类名 -->
@@ -17,20 +17,19 @@
         <result property="updatedTime" column="updated_time" />
     </resultMap>
 
-    <!-- 签证分类信息新增 -->
-    <insert id="add" parameterType="com.yc.trip.api.business.dto.visa.VisaSort" useGeneratedKeys="true" keyProperty="id">
+    <!-- 新增签证分类信息 -->
+    <insert id="addVisaSort" parameterType="com.yc.trip.api.business.bo.visa.VisaSortDomain" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO `visa_sort`(
             name,
-            <if test="isDelete!=null">is_delete</if>
-        )
+            is_delete)
         VALUES(
             #{name,jdbcType=VARCHAR},
-            <if test="isDelete!=null">#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}</if>
+            #{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
         )	
     </insert>
 	
-    <!-- 签证分类信息 修改-->
-	<update id="update" parameterType="com.yc.trip.api.business.dto.visa.VisaSort">
+    <!-- 修改签证分类信息 -->
+	<update id="updateVisaSort" parameterType="com.yc.trip.api.business.bo.visa.VisaSortDomain">
         UPDATE `visa_sort`
         <set>
             <if test="name!=null and name!='' ">
@@ -49,27 +48,27 @@
             WHERE id=#{id,jdbcType=NUMERIC}	
 	</update>
 	
-    <!-- 签证分类信息 查询-->
-	<select id="get" parameterType="com.yc.trip.api.business.query.visa.VisaSortQuery" resultMap="VisaSortMap">
+    <!-- 查询签证分类信息 -->
+	<select id="getVisaSort" parameterType="com.yc.trip.api.business.bo.visa.VisaSortDomain" resultMap="VisaSortMap">
         SELECT id,name,is_delete,created_time,
            updated_time
         FROM `visa_sort`
         <where>
             <if test="id!=null ">
-                AND id=#{id,jdbcType=NUMERIC}
+                and id=#{id,jdbcType=NUMERIC}
             </if>
             <if test="name!=null and name!='' ">
-                AND name=#{name,jdbcType=VARCHAR}
+                and name=#{name,jdbcType=VARCHAR}
             </if>
             <if test="isDelete!=null ">
-                AND is_delete=#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
+                and is_delete=#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
             </if>
         </where>
         LIMIT 2	
 	</select>
 	
-    <!-- 签证分类信息列表查询 -->
-    <select id="queryList" parameterType="com.yc.trip.api.business.query.visa.VisaSortQuery" resultMap="VisaSortMap">
+    <!-- 查询签证分类信息列表 -->
+    <select id="queryVisaSortList" parameterType="com.yc.trip.api.business.bo.visa.VisaSortDomain" resultMap="VisaSortMap">
             SELECT t.id,t.name,t.is_delete,t.created_time,
             t.updated_time
             FROM `visa_sort` t 

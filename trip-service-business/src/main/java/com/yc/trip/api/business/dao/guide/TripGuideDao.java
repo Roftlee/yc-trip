@@ -2,36 +2,35 @@ package com.yc.trip.api.business.dao.guide;
 
 import java.util.List;
 
-import com.yc.trip.api.business.dto.guide.TripGuide;
-import com.yc.trip.api.business.query.guide.TripGuideQuery;
+import com.yc.trip.api.business.bo.guide.TripGuideDomain;
 
 /**
  * 旅游攻略信息Dao类
  * 
  * @author My-Toolkits
- * @since 2019-01-06 17:57
+ * @since 2019-03-21 22:27
  *
  */
 public interface TripGuideDao {
 
     /**
-     * 旅游攻略信息新增
+     * 新增旅游攻略信息
      */
-    void add(TripGuide tripGuide);
+    void addTripGuide(TripGuideDomain tripGuideDomain);
 
     /**
-     * 旅游攻略信息修改
+     * 修改旅游攻略信息
      */
-    void update(TripGuide tripGuide);
+    void updateTripGuide(TripGuideDomain tripGuideDomain);
     
     /**
-     * 旅游攻略信息查询
+     * 查询旅游攻略信息
      */
-    TripGuide get(TripGuideQuery tripGuideQuery);
+    TripGuideDomain getTripGuide(TripGuideDomain tripGuideDomain);
 
     /**
-     * 旅游攻略信息列表查询
+     * 查询旅游攻略信息列表
      */
-    List<TripGuide> queryList(TripGuideQuery tripGuideQuery);
+    List<TripGuideDomain> queryTripGuideList(TripGuideDomain tripGuideDomain);
 
 }

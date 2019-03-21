@@ -4,7 +4,7 @@
 <mapper namespace="com.yc.trip.api.business.dao.motorcade.MotorcadeDao">
 
     <!-- 对象与字段映射 -->
-    <resultMap type="com.yc.trip.api.business.dto.motorcade.Motorcade" id="MotorcadeMap">
+    <resultMap type="com.yc.trip.api.business.bo.motorcade.MotorcadeDomain" id="MotorcadeMap">
         <!--  -->
         <result property="id" column="id" />
         <!-- 供应商Id -->
@@ -25,28 +25,27 @@
         <result property="updatedTime" column="updated_time" />
     </resultMap>
 
-    <!-- 车队新增 -->
-    <insert id="add" parameterType="com.yc.trip.api.business.dto.motorcade.Motorcade" useGeneratedKeys="true" keyProperty="id">
+    <!-- 新增车队 -->
+    <insert id="addMotorcade" parameterType="com.yc.trip.api.business.bo.motorcade.MotorcadeDomain" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO `motorcade`(
             provider_id,
             store_id,
             motorcade_type,
             link_man,
             link_num,
-            <if test="isDelete!=null">is_delete</if>
-        )
+            is_delete)
         VALUES(
             #{providerId,jdbcType=NUMERIC},
             #{storeId,jdbcType=NUMERIC},
             #{motorcadeType, javaType=com.yc.trip.api.business.enums.motorcade.MotorcadeType, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC},
             #{linkMan,jdbcType=VARCHAR},
             #{linkNum,jdbcType=VARCHAR},
-            <if test="isDelete!=null">#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}</if>
+            #{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
         )	
     </insert>
 	
-    <!-- 车队 修改-->
-	<update id="update" parameterType="com.yc.trip.api.business.dto.motorcade.Motorcade">
+    <!-- 修改车队 -->
+	<update id="updateMotorcade" parameterType="com.yc.trip.api.business.bo.motorcade.MotorcadeDomain">
         UPDATE `motorcade`
         <set>
             <if test="providerId!=null ">
@@ -77,40 +76,40 @@
             WHERE id=#{id,jdbcType=NUMERIC}	
 	</update>
 	
-    <!-- 车队 查询-->
-	<select id="get" parameterType="com.yc.trip.api.business.query.motorcade.MotorcadeQuery" resultMap="MotorcadeMap">
+    <!-- 查询车队 -->
+	<select id="getMotorcade" parameterType="com.yc.trip.api.business.bo.motorcade.MotorcadeDomain" resultMap="MotorcadeMap">
         SELECT id,provider_id,store_id,motorcade_type,
            link_man,link_num,is_delete,created_time,
            updated_time
         FROM `motorcade`
         <where>
             <if test="id!=null ">
-                AND id=#{id,jdbcType=NUMERIC}
+                and id=#{id,jdbcType=NUMERIC}
             </if>
             <if test="providerId!=null ">
-                AND provider_id=#{providerId,jdbcType=NUMERIC}
+                and provider_id=#{providerId,jdbcType=NUMERIC}
             </if>
             <if test="storeId!=null ">
-                AND store_id=#{storeId,jdbcType=NUMERIC}
+                and store_id=#{storeId,jdbcType=NUMERIC}
             </if>
             <if test="motorcadeType!=null ">
-                AND motorcade_type=#{motorcadeType, javaType=com.yc.trip.api.business.enums.motorcade.MotorcadeType, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
+                and motorcade_type=#{motorcadeType, javaType=com.yc.trip.api.business.enums.motorcade.MotorcadeType, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
             </if>
             <if test="linkMan!=null and linkMan!='' ">
-                AND link_man=#{linkMan,jdbcType=VARCHAR}
+                and link_man=#{linkMan,jdbcType=VARCHAR}
             </if>
             <if test="linkNum!=null and linkNum!='' ">
-                AND link_num=#{linkNum,jdbcType=VARCHAR}
+                and link_num=#{linkNum,jdbcType=VARCHAR}
             </if>
             <if test="isDelete!=null ">
-                AND is_delete=#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
+                and is_delete=#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
             </if>
         </where>
         LIMIT 2	
 	</select>
 	
-    <!-- 车队列表查询 -->
-    <select id="queryList" parameterType="com.yc.trip.api.business.query.motorcade.MotorcadeQuery" resultMap="MotorcadeMap">
+    <!-- 查询车队列表 -->
+    <select id="queryMotorcadeList" parameterType="com.yc.trip.api.business.bo.motorcade.MotorcadeDomain" resultMap="MotorcadeMap">
             SELECT t.id,t.provider_id,t.store_id,t.motorcade_type,
             t.link_man,t.link_num,t.is_delete,t.created_time,
             t.updated_time

@@ -2,36 +2,35 @@ package com.yc.trip.api.business.dao.region;
 
 import java.util.List;
 
-import com.yc.trip.api.business.dto.region.RegionSort;
-import com.yc.trip.api.business.query.region.RegionSortQuery;
+import com.yc.trip.api.business.bo.region.RegionSortDomain;
 
 /**
  * 地区分类信息Dao类
  * 
  * @author My-Toolkits
- * @since 2019-01-06 17:30
+ * @since 2019-03-21 22:14
  *
  */
 public interface RegionSortDao {
 
     /**
-     * 地区分类信息新增
+     * 新增地区分类信息
      */
-    void add(RegionSort regionSort);
+    void addRegionSort(RegionSortDomain regionSortDomain);
 
     /**
-     * 地区分类信息修改
+     * 修改地区分类信息
      */
-    void update(RegionSort regionSort);
+    void updateRegionSort(RegionSortDomain regionSortDomain);
     
     /**
-     * 地区分类信息查询
+     * 查询地区分类信息
      */
-    RegionSort get(RegionSortQuery regionSortQuery);
+    RegionSortDomain getRegionSort(RegionSortDomain regionSortDomain);
 
     /**
-     * 地区分类信息列表查询
+     * 查询地区分类信息列表
      */
-    List<RegionSort> queryList(RegionSortQuery regionSortQuery);
+    List<RegionSortDomain> queryRegionSortList(RegionSortDomain regionSortDomain);
 
 }

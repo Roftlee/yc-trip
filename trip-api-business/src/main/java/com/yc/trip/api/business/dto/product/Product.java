@@ -4,12 +4,9 @@ import java.util.Date;
 import java.util.List;
 
 import org.go.api.core.bean.ResBean;
-import org.go.api.core.dto.AbstractEntityDto;
-import org.go.api.core.annotation.InsertRequired;
+import org.go.api.core.dto.AbstractBasePageRequestDto;
 
 import com.yc.trip.api.core.constants.ResCode;
-
-import java.io.Serializable;
 
 import com.yc.trip.api.core.enums.YesNoStatus;
 
@@ -24,14 +21,14 @@ import lombok.NoArgsConstructor;
  * 产品信息Dto类
  * 
  * @author My-Toolkits
- * @since 2019-01-08 21:01
+ * @since 2019-03-21 21:50
  */
 @Builder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper=false)
-public class Product extends AbstractEntityDto implements Serializable {
+public class Product extends AbstractBasePageRequestDto {
 
     private static final long serialVersionUID = -1;
 
@@ -44,7 +41,6 @@ public class Product extends AbstractEntityDto implements Serializable {
 	/**
 	 * 产品名称
 	 */
-	@InsertRequired
 	private String name;
 
 	/**
@@ -55,25 +51,21 @@ public class Product extends AbstractEntityDto implements Serializable {
 	/**
 	 * 所属分类Id
 	 */
-	@InsertRequired
 	private Long sortId;
 
 	/**
 	 * 所属地区Id
 	 */
-	@InsertRequired
 	private Long regionId;
 
 	/**
 	 * 所属地区分类Id
 	 */
-	@InsertRequired
 	private Long regionSortId;
 
 	/**
 	 * 所属供应商Id
 	 */
-	@InsertRequired
 	private Long providerId;
 
 	/**
@@ -89,7 +81,6 @@ public class Product extends AbstractEntityDto implements Serializable {
 	/**
 	 * 售价
 	 */
-	@InsertRequired
 	private Double price;
 
 	/**
@@ -100,7 +91,6 @@ public class Product extends AbstractEntityDto implements Serializable {
 	/**
 	 * 门店分成比例(百分比)
 	 */
-	@InsertRequired
 	private Integer commissionRate;
 
 	/**
@@ -126,7 +116,6 @@ public class Product extends AbstractEntityDto implements Serializable {
 	/**
 	 * 产品描述
 	 */
-	@InsertRequired
 	private String description;
 
 	/**
@@ -152,5 +141,33 @@ public class Product extends AbstractEntityDto implements Serializable {
 	 */
 	private Date updatedTime;
 
+    
+    //-------------------- 扩展属性--------------------------
+     /**
+     * id列表
+     */
+    private List<Long> ids;
 
+    /**
+     * 关键字
+     */
+    private String keywords;
+    
+    @Override
+    public ResBean validateParam() {
+        return ResCode.success;
+    }
+    
+    /**
+     * 流式设置排序字段
+     * @param orderby
+     * @return 
+     */
+    public Product orderBy(String orderby){
+        if(getPageNo() == null) setPageNo(1);
+        if(getPageSize() == null) setPageSize(1000);
+        setOrderby(orderby);
+        return this;
+    }
+        
 }

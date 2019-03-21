@@ -16,7 +16,7 @@ import com.google.common.collect.ImmutableMap;
  * CreditAllotStatus枚举类
  *
  * @author My-Toolkits
- * @since 2019-01-06 17:43
+ * @since 2019-03-21 22:18
  */
 public enum CreditAllotStatus implements BaseEnum<Enum<CreditAllotStatus>, Integer>{
     ALL(-1, "全部"),

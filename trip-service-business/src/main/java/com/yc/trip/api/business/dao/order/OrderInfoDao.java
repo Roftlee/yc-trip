@@ -2,36 +2,35 @@ package com.yc.trip.api.business.dao.order;
 
 import java.util.List;
 
-import com.yc.trip.api.business.dto.order.OrderInfo;
-import com.yc.trip.api.business.query.order.OrderInfoQuery;
+import com.yc.trip.api.business.bo.order.OrderInfoDomain;
 
 /**
  * 订单信息Dao类
  * 
  * @author My-Toolkits
- * @since 2019-01-06 17:15
+ * @since 2019-03-21 21:48
  *
  */
 public interface OrderInfoDao {
 
     /**
-     * 订单信息新增
+     * 新增订单信息
      */
-    void add(OrderInfo orderInfo);
+    void addOrderInfo(OrderInfoDomain orderInfoDomain);
 
     /**
-     * 订单信息修改
+     * 修改订单信息
      */
-    void update(OrderInfo orderInfo);
+    void updateOrderInfo(OrderInfoDomain orderInfoDomain);
     
     /**
-     * 订单信息查询
+     * 查询订单信息
      */
-    OrderInfo get(OrderInfoQuery orderInfoQuery);
+    OrderInfoDomain getOrderInfo(OrderInfoDomain orderInfoDomain);
 
     /**
-     * 订单信息列表查询
+     * 查询订单信息列表
      */
-    List<OrderInfo> queryList(OrderInfoQuery orderInfoQuery);
+    List<OrderInfoDomain> queryOrderInfoList(OrderInfoDomain orderInfoDomain);
 
 }

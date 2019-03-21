@@ -2,36 +2,35 @@ package com.yc.trip.api.business.dao.visa;
 
 import java.util.List;
 
-import com.yc.trip.api.business.dto.visa.VisaSort;
-import com.yc.trip.api.business.query.visa.VisaSortQuery;
+import com.yc.trip.api.business.bo.visa.VisaSortDomain;
 
 /**
  * 签证分类信息Dao类
  * 
  * @author My-Toolkits
- * @since 2019-01-06 18:06
+ * @since 2019-03-21 22:37
  *
  */
 public interface VisaSortDao {
 
     /**
-     * 签证分类信息新增
+     * 新增签证分类信息
      */
-    void add(VisaSort visaSort);
+    void addVisaSort(VisaSortDomain visaSortDomain);
 
     /**
-     * 签证分类信息修改
+     * 修改签证分类信息
      */
-    void update(VisaSort visaSort);
+    void updateVisaSort(VisaSortDomain visaSortDomain);
     
     /**
-     * 签证分类信息查询
+     * 查询签证分类信息
      */
-    VisaSort get(VisaSortQuery visaSortQuery);
+    VisaSortDomain getVisaSort(VisaSortDomain visaSortDomain);
 
     /**
-     * 签证分类信息列表查询
+     * 查询签证分类信息列表
      */
-    List<VisaSort> queryList(VisaSortQuery visaSortQuery);
+    List<VisaSortDomain> queryVisaSortList(VisaSortDomain visaSortDomain);
 
 }

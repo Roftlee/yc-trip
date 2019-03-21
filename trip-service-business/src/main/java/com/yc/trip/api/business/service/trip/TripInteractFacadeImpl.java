@@ -14,16 +14,16 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
 import com.yc.trip.api.core.constants.ResCode;
+import com.yc.trip.api.business.bo.trip.TripInteractDomain;
 import com.yc.trip.api.business.dao.trip.TripInteractDao;
 import com.yc.trip.api.business.dto.trip.TripInteract;
-import com.yc.trip.api.business.query.trip.TripInteractQuery;
 import com.yc.trip.api.business.facade.trip.TripInteractFacade;
 
 /**
  * 旅游互动信息相关接口实现
  * 
  * @author My-Toolkits
- * @since 2019-01-06 17:58
+ * @since 2019-03-21 22:29
  */
 @Service(version = "1.0.0")
 public class TripInteractFacadeImpl extends AbstractDubboNativeService implements TripInteractFacade {
@@ -37,14 +37,18 @@ public class TripInteractFacadeImpl extends AbstractDubboNativeService implement
      * @throws PendingException
      */
     @Override
-    public TripInteract add(TripInteract tripInteract) throws PendingException {
+    public TripInteract addTripInteract(TripInteract tripInteract) throws PendingException {
         try {
+            // 转换成domain对象
+            TripInteractDomain cond = BeanMapping.map(tripInteract, TripInteractDomain.class);
             // 新增时对各字段进行非空校验
-            tripInteract.validateInsertFields();
+            if (!cond.validateInsertFields()) {
+                ResCode.tripInteractDBParamInvalid.throwException("旅游互动信息新增时参数未通过校验");
+            }
             // 调数据库接口进行新增操作
-            tripInteractDao.add(tripInteract);
+            tripInteractDao.addTripInteract(cond);
             // 将新增后回返回（包含自增主键值）
-            return tripInteract;
+            return BeanMapping.map(cond, TripInteract.class);
         } catch (Exception ex) {
             // 对异常进行处理
             throw transferException(ex, ResCode.tripInteractDBError, "旅游互动信息新增失败");
@@ -57,14 +61,17 @@ public class TripInteractFacadeImpl extends AbstractDubboNativeService implement
      * @throws PendingException
      */
     @Override
-    public void update(TripInteract tripInteract) throws PendingException {
+    public TripInteract updateTripInteract(TripInteract tripInteract) throws PendingException {
         try {
+            // 转换成domain对象
+            TripInteractDomain cond = BeanMapping.map(tripInteract, TripInteractDomain.class);
             // 更新或删除操作时，不能所有参数都为空
-            if (tripInteract.isAllFiledsNull()) {
+            if (cond.isAllFiledsNull()) {
                 ResCode.tripInteractDBParamInvalid.throwException("旅游互动信息更新时参数未通过校验");
             }
             // 调数据库接口进行更新操作
-            tripInteractDao.update(tripInteract);
+            tripInteractDao.updateTripInteract(cond);
+            return BeanMapping.map(cond, TripInteract.class);
         } catch (Exception ex) {
             // 对异常进行处理
             throw transferException(ex, ResCode.tripInteractDBError, "旅游互动信息更新失败");
@@ -77,10 +84,14 @@ public class TripInteractFacadeImpl extends AbstractDubboNativeService implement
      * @throws PendingException
      */
     @Override
-    public TripInteract get(TripInteractQuery tripInteractQuery) throws PendingException {
+    public TripInteract getTripInteract(TripInteract tripInteract) throws PendingException {
         try {
+            // 转换成Domain对象
+            TripInteractDomain cond = BeanMapping.map(tripInteract, TripInteractDomain.class);
             // 调数据库接口查询对象
-            return tripInteractDao.get(tripInteractQuery);
+            TripInteractDomain resultBean = tripInteractDao.getTripInteract(cond);
+            // 转换返回结果
+            return BeanMapping.map(resultBean, TripInteract.class);
         } catch (Exception ex) {
             // 对异常进行处理
             throw transferException(ex, ResCode.tripInteractDBError, "旅游互动信息查询失败");
@@ -93,9 +104,9 @@ public class TripInteractFacadeImpl extends AbstractDubboNativeService implement
      * @throws PendingException
      */
     @Override
-    public TripInteract mustGet(TripInteractQuery tripInteractQuery) throws PendingException {
+    public TripInteract mustGet(TripInteract tripInteract) throws PendingException {
         // 查询单位信息
-        TripInteract result = get(tripInteractQuery);
+        TripInteract result = getTripInteract(tripInteract);
         // 若不存在，则抛出异常
         if(result == null){
             ResCode.tripInteractDBGetNull.throwException("未查询到旅游互动信息");
@@ -109,14 +120,18 @@ public class TripInteractFacadeImpl extends AbstractDubboNativeService implement
      * @throws PendingException
      */
     @Override
-    public List<TripInteract> queryList(TripInteractQuery tripInteractQuery) throws PendingException {
+    public List<TripInteract> queryTripInteractList(TripInteract tripInteract) throws PendingException {
         try {
+            // 转换成Domain对象
+            TripInteractDomain cond = BeanMapping.map(tripInteract, TripInteractDomain.class);
             // 在上下文中设置排序信息
-            if (StringUtil.isNotBlank(tripInteractQuery.getOrderby())) {
-                PageHelper.orderBy(tripInteractQuery.getOrderby());
+            if (StringUtil.isNotBlank(tripInteract.getOrderby())) {
+                PageHelper.orderBy(tripInteract.getOrderby());
             }
             // 调数据库接口查询列表
-            return tripInteractDao.queryList(tripInteractQuery);
+            List<TripInteractDomain> resultList = tripInteractDao.queryTripInteractList(cond);
+            // 转换返回结果
+            return BeanMapping.mapList(resultList, TripInteract.class);
         } catch (Exception ex) {
             // 对异常进行处理
             throw transferException(ex, ResCode.tripInteractDBError, "旅游互动信息列表查询失败");
@@ -129,22 +144,26 @@ public class TripInteractFacadeImpl extends AbstractDubboNativeService implement
      * @throws PendingException
      */
     @Override
-    public PageInfo<TripInteract> queryPage(TripInteractQuery tripInteractQuery) throws PendingException {
+    public PageInfo<TripInteract> queryTripInteractPage(TripInteract tripInteract) throws PendingException {
         try {
             // 对请求参数进行校验
-            if (tripInteractQuery.getPageNo() <= 0 || tripInteractQuery.getPageSize() <= 0) {
+            if (tripInteract.getPageNo() <= 0 || tripInteract.getPageSize() <= 0) {
                 ResCode.tripInteractDBParamInvalid.throwException("分页参数设置有误");
             }
             // 在上下文中设置分页信息
-            PageHelper.startPage(tripInteractQuery.getPageNo(), tripInteractQuery.getPageSize());
+            PageHelper.startPage(tripInteract.getPageNo(), tripInteract.getPageSize());
             // 在上下文中设置排序信息
-            if (StringUtil.isNotBlank(tripInteractQuery.getOrderby())) {
-                PageHelper.orderBy(tripInteractQuery.getOrderby());
+            if (StringUtil.isNotBlank(tripInteract.getOrderby())) {
+                PageHelper.orderBy(tripInteract.getOrderby());
             }
+            // 转换成Domain对象
+            TripInteractDomain cond = BeanMapping.map(tripInteract, TripInteractDomain.class);
             // 调数据库接口查询列表
-            List<TripInteract> resultList = tripInteractDao.queryList(tripInteractQuery);
-            // 返回分页结果
-            return new PageInfo<>(resultList);
+            List<TripInteractDomain> resultList = tripInteractDao.queryTripInteractList(cond);
+            // 生成分页对象
+            PageInfo<TripInteractDomain> pageInfo = new PageInfo<>(resultList);
+            // 对分页对象进行类型转换
+            return BeanMapping.mapPage(pageInfo, TripInteract.class);
         } catch (Exception ex) {
             // 对异常进行处理
             throw transferException(ex, ResCode.tripInteractDBError, "旅游互动信息分页查询失败");

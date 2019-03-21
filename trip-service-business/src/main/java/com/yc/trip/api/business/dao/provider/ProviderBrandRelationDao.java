@@ -2,36 +2,35 @@ package com.yc.trip.api.business.dao.provider;
 
 import java.util.List;
 
-import com.yc.trip.api.business.dto.provider.ProviderBrandRelation;
-import com.yc.trip.api.business.query.provider.ProviderBrandRelationQuery;
+import com.yc.trip.api.business.bo.provider.ProviderBrandRelationDomain;
 
 /**
  * 供应商品牌关联信息Dao类
  * 
  * @author My-Toolkits
- * @since 2019-01-06 17:25
+ * @since 2019-03-21 22:10
  *
  */
 public interface ProviderBrandRelationDao {
 
     /**
-     * 供应商品牌关联信息新增
+     * 新增供应商品牌关联信息
      */
-    void add(ProviderBrandRelation providerBrandRelation);
+    void addProviderBrandRelation(ProviderBrandRelationDomain providerBrandRelationDomain);
 
     /**
-     * 供应商品牌关联信息修改
+     * 修改供应商品牌关联信息
      */
-    void update(ProviderBrandRelation providerBrandRelation);
+    void updateProviderBrandRelation(ProviderBrandRelationDomain providerBrandRelationDomain);
     
     /**
-     * 供应商品牌关联信息查询
+     * 查询供应商品牌关联信息
      */
-    ProviderBrandRelation get(ProviderBrandRelationQuery providerBrandRelationQuery);
+    ProviderBrandRelationDomain getProviderBrandRelation(ProviderBrandRelationDomain providerBrandRelationDomain);
 
     /**
-     * 供应商品牌关联信息列表查询
+     * 查询供应商品牌关联信息列表
      */
-    List<ProviderBrandRelation> queryList(ProviderBrandRelationQuery providerBrandRelationQuery);
+    List<ProviderBrandRelationDomain> queryProviderBrandRelationList(ProviderBrandRelationDomain providerBrandRelationDomain);
 
 }

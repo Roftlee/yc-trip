@@ -2,38 +2,38 @@ package com.yc.trip.api.business.dao.product;
 
 import java.util.List;
 
+import com.yc.trip.api.business.bo.product.ProductDomain;
 import com.yc.trip.api.business.dto.product.Product;
-import com.yc.trip.api.business.query.product.ProductQuery;
 import com.yc.trip.api.business.request.common.PageRequest;
 
 /**
  * 产品信息Dao类
  * 
  * @author My-Toolkits
- * @since 2019-01-06 17:16
+ * @since 2019-03-21 21:50
  *
  */
 public interface ProductDao {
 
     /**
-     * 产品信息新增
+     * 新增产品信息
      */
-    void add(Product product);
+    void addProduct(ProductDomain productDomain);
 
     /**
-     * 产品信息修改
+     * 修改产品信息
      */
-    void update(Product product);
+    void updateProduct(ProductDomain productDomain);
     
     /**
-     * 产品信息查询
+     * 查询产品信息
      */
-    Product get(ProductQuery productQuery);
+    ProductDomain getProduct(ProductDomain productDomain);
 
     /**
-     * 产品信息列表查询
+     * 查询产品信息列表
      */
-    List<Product> queryList(ProductQuery productQuery);
+    List<ProductDomain> queryProductList(ProductDomain productDomain);
 
     /**
      * 随机查询产品列表

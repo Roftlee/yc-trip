@@ -2,36 +2,35 @@ package com.yc.trip.api.business.dao.visa;
 
 import java.util.List;
 
-import com.yc.trip.api.business.dto.visa.VisaAttachment;
-import com.yc.trip.api.business.query.visa.VisaAttachmentQuery;
+import com.yc.trip.api.business.bo.visa.VisaAttachmentDomain;
 
 /**
  * 签证附件信息Dao类
  * 
  * @author My-Toolkits
- * @since 2019-01-06 18:04
+ * @since 2019-03-21 22:36
  *
  */
 public interface VisaAttachmentDao {
 
     /**
-     * 签证附件信息新增
+     * 新增签证附件信息
      */
-    void add(VisaAttachment visaAttachment);
+    void addVisaAttachment(VisaAttachmentDomain visaAttachmentDomain);
 
     /**
-     * 签证附件信息修改
+     * 修改签证附件信息
      */
-    void update(VisaAttachment visaAttachment);
+    void updateVisaAttachment(VisaAttachmentDomain visaAttachmentDomain);
     
     /**
-     * 签证附件信息查询
+     * 查询签证附件信息
      */
-    VisaAttachment get(VisaAttachmentQuery visaAttachmentQuery);
+    VisaAttachmentDomain getVisaAttachment(VisaAttachmentDomain visaAttachmentDomain);
 
     /**
-     * 签证附件信息列表查询
+     * 查询签证附件信息列表
      */
-    List<VisaAttachment> queryList(VisaAttachmentQuery visaAttachmentQuery);
+    List<VisaAttachmentDomain> queryVisaAttachmentList(VisaAttachmentDomain visaAttachmentDomain);
 
 }

@@ -4,7 +4,7 @@
 <mapper namespace="com.yc.trip.api.business.dao.element.ElementDao">
 
     <!-- 对象与字段映射 -->
-    <resultMap type="com.yc.trip.api.business.dto.element.Element" id="ElementMap">
+    <resultMap type="com.yc.trip.api.business.bo.element.ElementDomain" id="ElementMap">
         <!--  -->
         <result property="id" column="id" />
         <!-- 权限名 -->
@@ -23,26 +23,25 @@
         <result property="updatedTime" column="updated_time" />
     </resultMap>
 
-    <!-- 权限信息新增 -->
-    <insert id="add" parameterType="com.yc.trip.api.business.dto.element.Element" useGeneratedKeys="true" keyProperty="id">
+    <!-- 新增权限信息 -->
+    <insert id="addElement" parameterType="com.yc.trip.api.business.bo.element.ElementDomain" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO `element`(
             name,
             element_type,
             parent_id,
             url,
-            <if test="isDelete!=null">is_delete</if>
-        )
+            is_delete)
         VALUES(
             #{name,jdbcType=VARCHAR},
             #{elementType, javaType=com.yc.trip.api.business.enums.element.ElementType, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC},
             #{parentId,jdbcType=NUMERIC},
             #{url,jdbcType=VARCHAR},
-            <if test="isDelete!=null">#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}</if>
+            #{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
         )	
     </insert>
 	
-    <!-- 权限信息 修改-->
-	<update id="update" parameterType="com.yc.trip.api.business.dto.element.Element">
+    <!-- 修改权限信息 -->
+	<update id="updateElement" parameterType="com.yc.trip.api.business.bo.element.ElementDomain">
         UPDATE `element`
         <set>
             <if test="name!=null and name!='' ">
@@ -70,36 +69,36 @@
             WHERE id=#{id,jdbcType=NUMERIC}	
 	</update>
 	
-    <!-- 权限信息 查询-->
-	<select id="get" parameterType="com.yc.trip.api.business.query.element.ElementQuery" resultMap="ElementMap">
+    <!-- 查询权限信息 -->
+	<select id="getElement" parameterType="com.yc.trip.api.business.bo.element.ElementDomain" resultMap="ElementMap">
         SELECT id,name,element_type,parent_id,
            url,is_delete,created_time,updated_time
         FROM `element`
         <where>
             <if test="id!=null ">
-                AND id=#{id,jdbcType=NUMERIC}
+                and id=#{id,jdbcType=NUMERIC}
             </if>
             <if test="name!=null and name!='' ">
-                AND name=#{name,jdbcType=VARCHAR}
+                and name=#{name,jdbcType=VARCHAR}
             </if>
             <if test="elementType!=null ">
-                AND element_type=#{elementType, javaType=com.yc.trip.api.business.enums.element.ElementType, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
+                and element_type=#{elementType, javaType=com.yc.trip.api.business.enums.element.ElementType, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
             </if>
             <if test="parentId!=null ">
-                AND parent_id=#{parentId,jdbcType=NUMERIC}
+                and parent_id=#{parentId,jdbcType=NUMERIC}
             </if>
             <if test="url!=null and url!='' ">
-                AND url=#{url,jdbcType=VARCHAR}
+                and url=#{url,jdbcType=VARCHAR}
             </if>
             <if test="isDelete!=null ">
-                AND is_delete=#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
+                and is_delete=#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
             </if>
         </where>
         LIMIT 2	
 	</select>
 	
-    <!-- 权限信息列表查询 -->
-    <select id="queryList" parameterType="com.yc.trip.api.business.query.element.ElementQuery" resultMap="ElementMap">
+    <!-- 查询权限信息列表 -->
+    <select id="queryElementList" parameterType="com.yc.trip.api.business.bo.element.ElementDomain" resultMap="ElementMap">
             SELECT t.id,t.name,t.element_type,t.parent_id,
             t.url,t.is_delete,t.created_time,t.updated_time
             FROM `element` t 

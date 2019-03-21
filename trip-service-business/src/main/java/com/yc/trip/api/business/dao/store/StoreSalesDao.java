@@ -2,36 +2,35 @@ package com.yc.trip.api.business.dao.store;
 
 import java.util.List;
 
-import com.yc.trip.api.business.dto.store.StoreSales;
-import com.yc.trip.api.business.query.store.StoreSalesQuery;
+import com.yc.trip.api.business.bo.store.StoreSalesDomain;
 
 /**
  * 门店销售信息Dao类
  * 
  * @author My-Toolkits
- * @since 2019-01-06 17:54
+ * @since 2019-03-21 22:24
  *
  */
 public interface StoreSalesDao {
 
     /**
-     * 门店销售信息新增
+     * 新增门店销售信息
      */
-    void add(StoreSales storeSales);
+    void addStoreSales(StoreSalesDomain storeSalesDomain);
 
     /**
-     * 门店销售信息修改
+     * 修改门店销售信息
      */
-    void update(StoreSales storeSales);
+    void updateStoreSales(StoreSalesDomain storeSalesDomain);
     
     /**
-     * 门店销售信息查询
+     * 查询门店销售信息
      */
-    StoreSales get(StoreSalesQuery storeSalesQuery);
+    StoreSalesDomain getStoreSales(StoreSalesDomain storeSalesDomain);
 
     /**
-     * 门店销售信息列表查询
+     * 查询门店销售信息列表
      */
-    List<StoreSales> queryList(StoreSalesQuery storeSalesQuery);
+    List<StoreSalesDomain> queryStoreSalesList(StoreSalesDomain storeSalesDomain);
 
 }

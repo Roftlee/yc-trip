@@ -6,12 +6,11 @@ import org.go.framework.core.exception.PendingException;
 
 import com.github.pagehelper.PageInfo;
 import com.yc.trip.api.business.dto.wx.WxApp;
-import com.yc.trip.api.business.query.wx.WxAppQuery;
 
 /**
  * 微信小程序信息相关接口
  * @author My-Toolkits
- * @since 2019-01-06 19:05
+ * @since 2019-03-21 22:39
  */
 public interface WxAppFacade {
 
@@ -19,37 +18,37 @@ public interface WxAppFacade {
      * 新增微信小程序信息
      * @throws PendingException 
      */
-    WxApp add(WxApp wxApp) throws PendingException;
+    WxApp addWxApp(WxApp wxApp) throws PendingException;
 
     /**
      * 修改微信小程序信息
      * @throws PendingException 
      */
-    void update(WxApp wxApp) throws PendingException;
+    WxApp updateWxApp(WxApp wxApp) throws PendingException;
     
     /**
      * 查询微信小程序信息
      * @throws PendingException 
      */
-    WxApp get(WxAppQuery wxAppQuery) throws PendingException;
+    WxApp getWxApp(WxApp wxApp) throws PendingException;
     
     /**
      * 查询微信小程序信息（若不存在，则抛出异常）
      * 
      * @throws PendingException
      */
-    WxApp mustGet(WxAppQuery wxAppQuery) throws PendingException;
+    WxApp mustGet(WxApp wxApp) throws PendingException;
 
     /**
      * 查询微信小程序信息列表
      * @throws PendingException 
      */
-    List<WxApp> queryList(WxAppQuery wxAppQuery) throws PendingException;
+    List<WxApp> queryWxAppList(WxApp wxApp) throws PendingException;
 
     /**
      * 查询微信小程序信息列表 ,分页查询
      * @throws PendingException 
      */
-    PageInfo<WxApp> queryPage(WxAppQuery wxAppQuery) throws PendingException;
+    PageInfo<WxApp> queryWxAppPage(WxApp wxApp) throws PendingException;
 
 }

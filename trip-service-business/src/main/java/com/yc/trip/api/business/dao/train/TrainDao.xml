@@ -4,7 +4,7 @@
 <mapper namespace="com.yc.trip.api.business.dao.train.TrainDao">
 
     <!-- 对象与字段映射 -->
-    <resultMap type="com.yc.trip.api.business.dto.train.Train" id="TrainMap">
+    <resultMap type="com.yc.trip.api.business.bo.train.TrainDomain" id="TrainMap">
         <!--  -->
         <result property="id" column="id" />
         <!-- 标题 -->
@@ -23,26 +23,25 @@
         <result property="updatedTime" column="updated_time" />
     </resultMap>
 
-    <!-- 培训信息新增 -->
-    <insert id="add" parameterType="com.yc.trip.api.business.dto.train.Train" useGeneratedKeys="true" keyProperty="id">
+    <!-- 新增培训信息 -->
+    <insert id="addTrain" parameterType="com.yc.trip.api.business.bo.train.TrainDomain" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO `train`(
             title,
             description,
             provider_id,
             video_url,
-            <if test="isDelete!=null">is_delete</if>
-        )
+            is_delete)
         VALUES(
             #{title,jdbcType=VARCHAR},
             #{description,jdbcType=VARCHAR},
             #{providerId,jdbcType=NUMERIC},
             #{videoUrl,jdbcType=VARCHAR},
-            <if test="isDelete!=null">#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}</if>
+            #{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
         )	
     </insert>
 	
-    <!-- 培训信息 修改-->
-	<update id="update" parameterType="com.yc.trip.api.business.dto.train.Train">
+    <!-- 修改培训信息 -->
+	<update id="updateTrain" parameterType="com.yc.trip.api.business.bo.train.TrainDomain">
         UPDATE `train`
         <set>
             <if test="title!=null and title!='' ">
@@ -70,36 +69,36 @@
             WHERE id=#{id,jdbcType=NUMERIC}	
 	</update>
 	
-    <!-- 培训信息 查询-->
-	<select id="get" parameterType="com.yc.trip.api.business.query.train.TrainQuery" resultMap="TrainMap">
+    <!-- 查询培训信息 -->
+	<select id="getTrain" parameterType="com.yc.trip.api.business.bo.train.TrainDomain" resultMap="TrainMap">
         SELECT id,title,description,provider_id,
            video_url,is_delete,created_time,updated_time
         FROM `train`
         <where>
             <if test="id!=null ">
-                AND id=#{id,jdbcType=NUMERIC}
+                and id=#{id,jdbcType=NUMERIC}
             </if>
             <if test="title!=null and title!='' ">
-                AND title=#{title,jdbcType=VARCHAR}
+                and title=#{title,jdbcType=VARCHAR}
             </if>
             <if test="description!=null and description!='' ">
-                AND description=#{description,jdbcType=VARCHAR}
+                and description=#{description,jdbcType=VARCHAR}
             </if>
             <if test="providerId!=null ">
-                AND provider_id=#{providerId,jdbcType=NUMERIC}
+                and provider_id=#{providerId,jdbcType=NUMERIC}
             </if>
             <if test="videoUrl!=null and videoUrl!='' ">
-                AND video_url=#{videoUrl,jdbcType=VARCHAR}
+                and video_url=#{videoUrl,jdbcType=VARCHAR}
             </if>
             <if test="isDelete!=null ">
-                AND is_delete=#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
+                and is_delete=#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
             </if>
         </where>
         LIMIT 2	
 	</select>
 	
-    <!-- 培训信息列表查询 -->
-    <select id="queryList" parameterType="com.yc.trip.api.business.query.train.TrainQuery" resultMap="TrainMap">
+    <!-- 查询培训信息列表 -->
+    <select id="queryTrainList" parameterType="com.yc.trip.api.business.bo.train.TrainDomain" resultMap="TrainMap">
             SELECT t.id,t.title,t.description,t.provider_id,
             t.video_url,t.is_delete,t.created_time,t.updated_time
             FROM `train` t 

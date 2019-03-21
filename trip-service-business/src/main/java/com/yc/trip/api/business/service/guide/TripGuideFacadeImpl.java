@@ -14,16 +14,16 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
 import com.yc.trip.api.core.constants.ResCode;
+import com.yc.trip.api.business.bo.guide.TripGuideDomain;
 import com.yc.trip.api.business.dao.guide.TripGuideDao;
 import com.yc.trip.api.business.dto.guide.TripGuide;
-import com.yc.trip.api.business.query.guide.TripGuideQuery;
 import com.yc.trip.api.business.facade.guide.TripGuideFacade;
 
 /**
  * 旅游攻略信息相关接口实现
  * 
  * @author My-Toolkits
- * @since 2019-01-06 17:57
+ * @since 2019-03-21 22:27
  */
 @Service(version = "1.0.0")
 public class TripGuideFacadeImpl extends AbstractDubboNativeService implements TripGuideFacade {
@@ -37,14 +37,18 @@ public class TripGuideFacadeImpl extends AbstractDubboNativeService implements T
      * @throws PendingException
      */
     @Override
-    public TripGuide add(TripGuide tripGuide) throws PendingException {
+    public TripGuide addTripGuide(TripGuide tripGuide) throws PendingException {
         try {
+            // 转换成domain对象
+            TripGuideDomain cond = BeanMapping.map(tripGuide, TripGuideDomain.class);
             // 新增时对各字段进行非空校验
-            tripGuide.validateInsertFields();
+            if (!cond.validateInsertFields()) {
+                ResCode.tripGuideDBParamInvalid.throwException("旅游攻略信息新增时参数未通过校验");
+            }
             // 调数据库接口进行新增操作
-            tripGuideDao.add(tripGuide);
+            tripGuideDao.addTripGuide(cond);
             // 将新增后回返回（包含自增主键值）
-            return tripGuide;
+            return BeanMapping.map(cond, TripGuide.class);
         } catch (Exception ex) {
             // 对异常进行处理
             throw transferException(ex, ResCode.tripGuideDBError, "旅游攻略信息新增失败");
@@ -57,14 +61,17 @@ public class TripGuideFacadeImpl extends AbstractDubboNativeService implements T
      * @throws PendingException
      */
     @Override
-    public void update(TripGuide tripGuide) throws PendingException {
+    public TripGuide updateTripGuide(TripGuide tripGuide) throws PendingException {
         try {
+            // 转换成domain对象
+            TripGuideDomain cond = BeanMapping.map(tripGuide, TripGuideDomain.class);
             // 更新或删除操作时，不能所有参数都为空
-            if (tripGuide.isAllFiledsNull()) {
+            if (cond.isAllFiledsNull()) {
                 ResCode.tripGuideDBParamInvalid.throwException("旅游攻略信息更新时参数未通过校验");
             }
             // 调数据库接口进行更新操作
-            tripGuideDao.update(tripGuide);
+            tripGuideDao.updateTripGuide(cond);
+            return BeanMapping.map(cond, TripGuide.class);
         } catch (Exception ex) {
             // 对异常进行处理
             throw transferException(ex, ResCode.tripGuideDBError, "旅游攻略信息更新失败");
@@ -77,10 +84,14 @@ public class TripGuideFacadeImpl extends AbstractDubboNativeService implements T
      * @throws PendingException
      */
     @Override
-    public TripGuide get(TripGuideQuery tripGuideQuery) throws PendingException {
+    public TripGuide getTripGuide(TripGuide tripGuide) throws PendingException {
         try {
+            // 转换成Domain对象
+            TripGuideDomain cond = BeanMapping.map(tripGuide, TripGuideDomain.class);
             // 调数据库接口查询对象
-            return tripGuideDao.get(tripGuideQuery);
+            TripGuideDomain resultBean = tripGuideDao.getTripGuide(cond);
+            // 转换返回结果
+            return BeanMapping.map(resultBean, TripGuide.class);
         } catch (Exception ex) {
             // 对异常进行处理
             throw transferException(ex, ResCode.tripGuideDBError, "旅游攻略信息查询失败");
@@ -93,9 +104,9 @@ public class TripGuideFacadeImpl extends AbstractDubboNativeService implements T
      * @throws PendingException
      */
     @Override
-    public TripGuide mustGet(TripGuideQuery tripGuideQuery) throws PendingException {
+    public TripGuide mustGet(TripGuide tripGuide) throws PendingException {
         // 查询单位信息
-        TripGuide result = get(tripGuideQuery);
+        TripGuide result = getTripGuide(tripGuide);
         // 若不存在，则抛出异常
         if(result == null){
             ResCode.tripGuideDBGetNull.throwException("未查询到旅游攻略信息");
@@ -109,14 +120,18 @@ public class TripGuideFacadeImpl extends AbstractDubboNativeService implements T
      * @throws PendingException
      */
     @Override
-    public List<TripGuide> queryList(TripGuideQuery tripGuideQuery) throws PendingException {
+    public List<TripGuide> queryTripGuideList(TripGuide tripGuide) throws PendingException {
         try {
+            // 转换成Domain对象
+            TripGuideDomain cond = BeanMapping.map(tripGuide, TripGuideDomain.class);
             // 在上下文中设置排序信息
-            if (StringUtil.isNotBlank(tripGuideQuery.getOrderby())) {
-                PageHelper.orderBy(tripGuideQuery.getOrderby());
+            if (StringUtil.isNotBlank(tripGuide.getOrderby())) {
+                PageHelper.orderBy(tripGuide.getOrderby());
             }
             // 调数据库接口查询列表
-            return tripGuideDao.queryList(tripGuideQuery);
+            List<TripGuideDomain> resultList = tripGuideDao.queryTripGuideList(cond);
+            // 转换返回结果
+            return BeanMapping.mapList(resultList, TripGuide.class);
         } catch (Exception ex) {
             // 对异常进行处理
             throw transferException(ex, ResCode.tripGuideDBError, "旅游攻略信息列表查询失败");
@@ -129,22 +144,26 @@ public class TripGuideFacadeImpl extends AbstractDubboNativeService implements T
      * @throws PendingException
      */
     @Override
-    public PageInfo<TripGuide> queryPage(TripGuideQuery tripGuideQuery) throws PendingException {
+    public PageInfo<TripGuide> queryTripGuidePage(TripGuide tripGuide) throws PendingException {
         try {
             // 对请求参数进行校验
-            if (tripGuideQuery.getPageNo() <= 0 || tripGuideQuery.getPageSize() <= 0) {
+            if (tripGuide.getPageNo() <= 0 || tripGuide.getPageSize() <= 0) {
                 ResCode.tripGuideDBParamInvalid.throwException("分页参数设置有误");
             }
             // 在上下文中设置分页信息
-            PageHelper.startPage(tripGuideQuery.getPageNo(), tripGuideQuery.getPageSize());
+            PageHelper.startPage(tripGuide.getPageNo(), tripGuide.getPageSize());
             // 在上下文中设置排序信息
-            if (StringUtil.isNotBlank(tripGuideQuery.getOrderby())) {
-                PageHelper.orderBy(tripGuideQuery.getOrderby());
+            if (StringUtil.isNotBlank(tripGuide.getOrderby())) {
+                PageHelper.orderBy(tripGuide.getOrderby());
             }
+            // 转换成Domain对象
+            TripGuideDomain cond = BeanMapping.map(tripGuide, TripGuideDomain.class);
             // 调数据库接口查询列表
-            List<TripGuide> resultList = tripGuideDao.queryList(tripGuideQuery);
-            // 返回分页结果
-            return new PageInfo<>(resultList);
+            List<TripGuideDomain> resultList = tripGuideDao.queryTripGuideList(cond);
+            // 生成分页对象
+            PageInfo<TripGuideDomain> pageInfo = new PageInfo<>(resultList);
+            // 对分页对象进行类型转换
+            return BeanMapping.mapPage(pageInfo, TripGuide.class);
         } catch (Exception ex) {
             // 对异常进行处理
             throw transferException(ex, ResCode.tripGuideDBError, "旅游攻略信息分页查询失败");
