@@ -4,7 +4,6 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.yc.trip.api.business.dto.user.User;
 import com.yc.trip.api.business.facade.user.UserFacade;
 import com.yc.trip.api.business.facade.user.UserPasswordFacade;
-import com.yc.trip.api.business.query.user.UserQuery;
 import com.yc.trip.api.business.request.auth.LoginRequest;
 import com.yc.trip.api.core.constants.ResCode;
 import com.yc.trip.api.core.enums.OperTargetType;
@@ -66,7 +65,7 @@ public class AuthController extends AbstractBaseController {
         try {
 
             // 查询用户信息
-            User user = userFacade.mustGet(UserQuery.builder().phone(loginRequest.getLoginName()).build());
+            User user = userFacade.mustGet(User.builder().phone(loginRequest.getLoginName()).build());
 
             if (YesNoStatus.YES.equals(user.getIsDelete())) {
                 ResCode.userDBError.throwException("用户被禁用");
@@ -98,7 +97,7 @@ public class AuthController extends AbstractBaseController {
         try {
 
             // 查询用户信息
-            User user = userFacade.mustGet(UserQuery.builder().phone(loginRequest.getLoginName()).build());
+            User user = userFacade.mustGet(User.builder().phone(loginRequest.getLoginName()).build());
 
             if (YesNoStatus.YES.equals(user.getIsDelete())) {
                 ResCode.userDBError.throwException("用户被禁用");

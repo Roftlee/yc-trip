@@ -13,8 +13,6 @@ import com.yc.trip.api.business.facade.sales.SpecialOfferProductFacade;
 import com.yc.trip.api.business.facade.sales.SpecialOfferProfFacade;
 import com.yc.trip.api.business.item.sales.SpecialOfferItem;
 import com.yc.trip.api.business.item.sales.SpecialOfferProductItem;
-import com.yc.trip.api.business.query.sales.SpecialOfferProductQuery;
-import com.yc.trip.api.business.query.sales.SpecialOfferQuery;
 import com.yc.trip.api.business.request.common.IdRequest;
 import com.yc.trip.api.business.request.common.KeywordsPageRequest;
 import com.yc.trip.api.business.request.sales.SpecialOfferAddRequest;
@@ -60,7 +58,7 @@ public class SpecialOfferProfFacadeImpl extends AbstractDubboIntegrationService 
     @RpcMethod("查询优惠活动列表")
     public PageInfo<SpecialOfferItem> querySpecialOfferPage(KeywordsPageRequest request) throws PendingException {
         // 查询可用优惠活动
-        PageInfo<SpecialOffer> pageInfo = specialOfferFacade.queryPage(SpecialOfferQuery.builder().isDelete(YesNoStatus.NO).build());
+        PageInfo<SpecialOffer> pageInfo = specialOfferFacade.querySpecialOfferPage(SpecialOffer.builder().isDelete(YesNoStatus.NO).build());
 
         return BeanMapping.mapPage(pageInfo, this::transferToSpecialOfferItem);
     }
@@ -72,11 +70,11 @@ public class SpecialOfferProfFacadeImpl extends AbstractDubboIntegrationService 
         return newTransactionTemplate.execute(status -> {
             try {
                 // 新增优惠活动记录
-                SpecialOffer newSpecialOffer = specialOfferFacade.add(BeanMapping.map(request, SpecialOffer.class));
+                SpecialOffer newSpecialOffer = specialOfferFacade.addSpecialOffer(BeanMapping.map(request, SpecialOffer.class));
 
                 // 新增优惠活动产品
                 for (Long productId : request.getProductIds()) {
-                    specialOfferProductFacade.add(SpecialOfferProduct.builder()
+                    specialOfferProductFacade.addSpecialOfferProduct(SpecialOfferProduct.builder()
                             .specialOfferId(newSpecialOffer.getId())
                             .productId(productId)
                             .build());
@@ -96,7 +94,7 @@ public class SpecialOfferProfFacadeImpl extends AbstractDubboIntegrationService 
     @Override
     @RpcMethod("获取优惠活动详情")
     public SpecialOfferItem getSpecialOffer(IdRequest request) throws PendingException {
-        return transferToSpecialOfferItem(specialOfferFacade.mustGet(SpecialOfferQuery.builder().id(request.getId()).build()));
+        return transferToSpecialOfferItem(specialOfferFacade.mustGet(SpecialOffer.builder().id(request.getId()).build()));
     }
 
     @Override
@@ -105,14 +103,14 @@ public class SpecialOfferProfFacadeImpl extends AbstractDubboIntegrationService 
         newTransactionTemplate.execute(status -> {
             try {
                 // 更新优惠活动记录
-                specialOfferFacade.update(BeanMapping.map(request, SpecialOffer.class));
+                specialOfferFacade.updateSpecialOffer(BeanMapping.map(request, SpecialOffer.class));
 
                 // 删除关联产品
                 specialOfferProductFacade.deleteSpecialOfferProduct(IdRequest.builder().id(request.getId()).build());
 
                 // 新增优惠活动产品
                 for (Long productId : request.getProductIds()) {
-                    specialOfferProductFacade.add(SpecialOfferProduct.builder()
+                    specialOfferProductFacade.addSpecialOfferProduct(SpecialOfferProduct.builder()
                             .specialOfferId(request.getId())
                             .productId(productId)
                             .build());
@@ -136,7 +134,7 @@ public class SpecialOfferProfFacadeImpl extends AbstractDubboIntegrationService 
             try {
 
                 // 设置删除
-                specialOfferFacade.update(SpecialOffer.builder().id(request.getId()).isDelete(YesNoStatus.YES).build());
+                specialOfferFacade.updateSpecialOffer(SpecialOffer.builder().id(request.getId()).isDelete(YesNoStatus.YES).build());
 
                 // 删除关联产品
                 specialOfferProductFacade.deleteSpecialOfferProduct(request);
@@ -166,7 +164,7 @@ public class SpecialOfferProfFacadeImpl extends AbstractDubboIntegrationService 
             // 优惠活动产品列表
             List<SpecialOfferProductItem> productItems = Lists.newArrayList();
 
-            specialOfferProductFacade.queryList(SpecialOfferProductQuery.builder().specialOfferId(specialOffer.getId()).build())
+            specialOfferProductFacade.querySpecialOfferProductList(SpecialOfferProduct.builder().specialOfferId(specialOffer.getId()).build())
                     .forEach(p -> {
                         // 查询产品信息
                         Product product = productCache.get(p.getProductId());

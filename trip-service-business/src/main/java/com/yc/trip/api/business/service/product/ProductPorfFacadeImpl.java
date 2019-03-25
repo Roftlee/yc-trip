@@ -6,7 +6,6 @@ import com.yc.trip.api.business.dto.product.Product;
 import com.yc.trip.api.business.facade.product.ProductFacade;
 import com.yc.trip.api.business.facade.product.ProductProfFacade;
 import com.yc.trip.api.business.item.product.ProductItem;
-import com.yc.trip.api.business.query.product.ProductQuery;
 import com.yc.trip.api.business.request.common.IdRequest;
 import com.yc.trip.api.business.request.common.PageRequest;
 import com.yc.trip.api.core.constants.R;
@@ -45,7 +44,7 @@ public class ProductPorfFacadeImpl extends AbstractDubboIntegrationService imple
     @RpcMethod("获取产品详情")
     public ProductItem getProductDetail(IdRequest request) throws PendingException {
 
-        return transferToProductItem(productFacade.mustGet(ProductQuery.builder().id(request.getId()).build()));
+        return transferToProductItem(productFacade.mustGet(Product.builder().id(request.getId()).build()));
     }
 
     /**

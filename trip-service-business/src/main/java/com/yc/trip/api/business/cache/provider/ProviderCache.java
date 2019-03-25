@@ -3,7 +3,6 @@ package com.yc.trip.api.business.cache.provider;
 import com.yc.trip.api.business.cache.AbstractBaseCustomCache;
 import com.yc.trip.api.business.dto.provider.Provider;
 import com.yc.trip.api.business.facade.provider.ProviderFacade;
-import com.yc.trip.api.business.query.provider.ProviderQuery;
 import org.go.framework.core.exception.PendingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,6 +26,6 @@ public class ProviderCache extends AbstractBaseCustomCache<Long, Provider> {
 
     @Override
     protected Provider query(Long providerId) throws PendingException {
-        return providerFacade.mustGet(ProviderQuery.builder().id(providerId).build());
+        return providerFacade.mustGet(Provider.builder().id(providerId).build());
     }
 }

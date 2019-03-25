@@ -3,7 +3,6 @@ package com.yc.trip.api.business.cache.product;
 import com.yc.trip.api.business.cache.AbstractBaseCustomCache;
 import com.yc.trip.api.business.dto.product.Product;
 import com.yc.trip.api.business.facade.product.ProductFacade;
-import com.yc.trip.api.business.query.product.ProductQuery;
 import org.go.framework.core.exception.PendingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,6 +27,6 @@ public class ProductCache extends AbstractBaseCustomCache<Long, Product> {
     @Override
     protected Product query(Long productId) throws PendingException {
 
-        return productFacade.mustGet(ProductQuery.builder().id(productId).build());
+        return productFacade.mustGet(Product.builder().id(productId).build());
     }
 }

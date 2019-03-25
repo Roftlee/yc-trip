@@ -4,7 +4,6 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.yc.oss.constants.ResCode;
 import com.yc.trip.api.business.dto.product.ProductSort;
 import com.yc.trip.api.business.facade.product.ProductSortFacade;
-import com.yc.trip.api.business.query.product.ProductSortQuery;
 import com.yc.trip.api.business.request.common.IdRequest;
 import com.yc.trip.api.business.request.common.KeywordsRequest;
 import com.yc.trip.api.business.request.product.ProductSortAddRequest;
@@ -46,7 +45,7 @@ public class ProductSortController extends AbstractBaseController {
     @MvcValidate
     public ResDto<List<ProductSort>> queryProductSortList(@RequestBody KeywordsRequest request) throws PendingException {
 
-        return new ResDto<>(productSortFacade.queryList(ProductSortQuery.builder().keywords(request.getKeywords()).isDelete(YesNoStatus.NO).build()));
+        return new ResDto<>(productSortFacade.queryProductSortList(ProductSort.builder().keywords(request.getKeywords()).isDelete(YesNoStatus.NO).build()));
     }
 
     /**
@@ -61,12 +60,12 @@ public class ProductSortController extends AbstractBaseController {
     public ResDto<ProductSort> addProductSort(@RequestBody ProductSortAddRequest request) throws PendingException {
 
         // 产品分类重名检测
-        ProductSort productSort = productSortFacade.get(ProductSortQuery.builder().name(request.getName()).build());
+        ProductSort productSort = productSortFacade.getProductSort(ProductSort.builder().name(request.getName()).build());
         if (productSort != null) {
             ResCode.paramError.throwException("产品分类已存在");
         }
 
-        return new ResDto<>(productSortFacade.add(BeanMapping.map(request, ProductSort.class)));
+        return new ResDto<>(productSortFacade.addProductSort(BeanMapping.map(request, ProductSort.class)));
     }
 
     /**
@@ -80,7 +79,7 @@ public class ProductSortController extends AbstractBaseController {
     @MvcValidate
     public ResDto<ProductSort> getProductSort(@RequestBody IdRequest request) throws PendingException {
 
-        return new ResDto<>(productSortFacade.mustGet(ProductSortQuery.builder().id(request.getId()).build()));
+        return new ResDto<>(productSortFacade.mustGet(ProductSort.builder().id(request.getId()).build()));
     }
 
     /**
@@ -95,13 +94,13 @@ public class ProductSortController extends AbstractBaseController {
     public ResDto<?> updateProductSort(@RequestBody ProductSortUpdateRequest request) throws PendingException {
 
         // 产品分类重名检测
-        ProductSort productSort = productSortFacade.get(ProductSortQuery.builder().name(request.getName()).build());
+        ProductSort productSort = productSortFacade.getProductSort(ProductSort.builder().name(request.getName()).build());
         if (productSort != null && !request.getId().equals(productSort.getId())) {
             ResCode.paramError.throwException("产品分类已存在");
         }
 
         // 更新记录
-        productSortFacade.update(BeanMapping.map(request, ProductSort.class));
+        productSortFacade.updateProductSort(BeanMapping.map(request, ProductSort.class));
 
         return new ResDto<>();
     }
@@ -118,7 +117,7 @@ public class ProductSortController extends AbstractBaseController {
     public ResDto<?> deleteProductSort(@RequestBody IdRequest request) throws PendingException {
 
         // 删除记录
-        productSortFacade.update(ProductSort.builder().id(request.getId()).isDelete(YesNoStatus.YES).build());
+        productSortFacade.updateProductSort(ProductSort.builder().id(request.getId()).isDelete(YesNoStatus.YES).build());
 
         return new ResDto<>();
     }

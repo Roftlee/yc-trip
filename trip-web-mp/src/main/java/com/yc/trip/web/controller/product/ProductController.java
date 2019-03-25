@@ -113,6 +113,6 @@ public class ProductController extends AbstractBaseController {
     @MvcValidate
     public ResDto<List<ProductSort>> queryProductSortList() throws PendingException {
 
-        return new ResDto<>(productSortFacade.queryList(ProductSortQuery.builder().isDelete(YesNoStatus.NO).build()));
+        return new ResDto<>(productSortFacade.queryProductSortList(ProductSort.builder().isDelete(YesNoStatus.NO).build()));
     }
 }

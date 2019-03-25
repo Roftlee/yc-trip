@@ -11,8 +11,6 @@ import com.yc.trip.api.business.dto.wx.WxApp;
 import com.yc.trip.api.business.enums.user.UserType;
 import com.yc.trip.api.business.facade.user.UserFacade;
 import com.yc.trip.api.business.facade.wx.WxAppFacade;
-import com.yc.trip.api.business.query.user.UserQuery;
-import com.yc.trip.api.business.query.wx.WxAppQuery;
 import com.yc.trip.api.business.request.auth.LoginRequest;
 import com.yc.trip.api.business.request.wx.WxCodeRequest;
 import com.yc.trip.api.business.request.wx.WxDecryptRequest;
@@ -73,7 +71,7 @@ public class WxAuthController extends AbstractBaseController {
     public ResDto<Code2SessionResponse> code2session(HttpServletRequest request, @RequestBody WxCodeRequest wxCodeRequest) throws PendingException {
 
         //获取微信小程序信息
-        WxApp wxApp = wxAppFacade.mustGet(WxAppQuery.builder().wxAppId(wxCodeRequest.getWxAppId()).build());
+        WxApp wxApp = wxAppFacade.mustGet(WxApp.builder().wxAppId(wxCodeRequest.getWxAppId()).build());
 
         //对code进行处理，并返回SessionToken
         MpCodeResponse mpCodeResponse = mpAuthService.getMpCode(MpCodeRequest.builder()
@@ -83,11 +81,11 @@ public class WxAuthController extends AbstractBaseController {
                 .build());
 
         // 获取用户信息
-        User user = userFacade.get(UserQuery.builder().openId(mpCodeResponse.getOpenId()).build());
+        User user = userFacade.getUser(User.builder().openId(mpCodeResponse.getOpenId()).build());
 
         // 用户不存在，新增用户信息
         if (user == null) {
-            user = userFacade.add(User.builder()
+            user = userFacade.addUser(User.builder()
                     .avatar(wxCodeRequest.getHeadImgUrl())
                     .openId(mpCodeResponse.getOpenId())
                     .name(wxCodeRequest.getNickName())
@@ -104,7 +102,7 @@ public class WxAuthController extends AbstractBaseController {
 
         if (StringUtil.isNotBlank(wxCodeRequest.getNickName()) || StringUtil.isNotBlank(wxCodeRequest.getHeadImgUrl())) {
             //更新用户信息
-            userFacade.update(User.builder()
+            userFacade.updateUser(User.builder()
                     .id(user.getId())
                     .name(EmojiUtil.filterEmoji(wxCodeRequest.getNickName()))
                     .avatar(wxCodeRequest.getHeadImgUrl())
@@ -147,7 +145,7 @@ public class WxAuthController extends AbstractBaseController {
     @RequestMapping(value = "/simulateLogin.do", method = RequestMethod.POST)
     @MvcValidate
     public ResDto<SessionUser> simulateLogin(@RequestBody LoginRequest loginRequest) throws PendingException {
-        SessionUser sessionUser = SessionUser.from(userFacade.mustGet(UserQuery.builder().phone(loginRequest.getLoginName()).build()));
+        SessionUser sessionUser = SessionUser.from(userFacade.mustGet(User.builder().phone(loginRequest.getLoginName()).build()));
         setSessionUser(sessionUser);
         return new ResDto<>(sessionUser);
     }

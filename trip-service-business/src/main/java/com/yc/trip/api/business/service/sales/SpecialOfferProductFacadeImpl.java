@@ -3,6 +3,7 @@ package com.yc.trip.api.business.service.sales;
 import java.util.List;
 
 
+import com.yc.trip.api.business.request.common.IdRequest;
 import org.go.api.core.integration.AbstractDubboNativeService;
 import org.go.api.core.util.BeanMapping;
 import org.go.framework.core.exception.PendingException;

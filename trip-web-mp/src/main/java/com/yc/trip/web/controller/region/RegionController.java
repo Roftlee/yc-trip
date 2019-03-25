@@ -6,8 +6,6 @@ import com.yc.trip.api.business.dto.region.Region;
 import com.yc.trip.api.business.dto.region.RegionSort;
 import com.yc.trip.api.business.facade.region.RegionFacade;
 import com.yc.trip.api.business.facade.region.RegionSortFacade;
-import com.yc.trip.api.business.query.region.RegionQuery;
-import com.yc.trip.api.business.query.region.RegionSortQuery;
 import com.yc.trip.api.business.request.common.IdPageRequest;
 import com.yc.trip.api.business.request.common.KeywordsPageRequest;
 import com.yc.trip.api.business.request.common.KeywordsRequest;
@@ -52,11 +50,11 @@ public class RegionController extends AbstractBaseController {
     public ResDto<PageInfo<Region>> queryHotRegionPage(@RequestBody KeywordsPageRequest request) throws PendingException {
 
         // 设置查询条件
-        RegionQuery query = BeanMapping.map(request, RegionQuery.class);
+        Region query = BeanMapping.map(request, Region.class);
         query.setIsDelete(YesNoStatus.NO);
         query.setIsHot(YesNoStatus.YES);
 
-        return new ResDto<>(regionFacade.queryPage(query));
+        return new ResDto<>(regionFacade.queryRegionPage(query));
     }
 
     /**
@@ -71,14 +69,14 @@ public class RegionController extends AbstractBaseController {
     public ResDto<PageInfo<Region>> querySortedRegionPage(@RequestBody IdPageRequest request) throws PendingException {
 
         // 设置查询条件
-        RegionQuery query = RegionQuery.builder()
+        Region query = Region.builder()
                 .regionSortId(request.getId())
                 .isDelete(YesNoStatus.NO)
                 .build();
         query.setPageNo(request.getPageNo());
         query.setPageSize(request.getPageSize());
 
-        return new ResDto<>(regionFacade.queryPage(query));
+        return new ResDto<>(regionFacade.queryRegionPage(query));
     }
 
     /**
@@ -92,6 +90,6 @@ public class RegionController extends AbstractBaseController {
     @MvcValidate
     public ResDto<List<RegionSort>> queryRegionSortList(@RequestBody KeywordsRequest request) throws PendingException {
 
-        return new ResDto<>(regionSortFacade.queryList(RegionSortQuery.builder().keywords(request.getKeywords()).isDelete(YesNoStatus.NO).build()));
+        return new ResDto<>(regionSortFacade.queryRegionSortList(RegionSort.builder().keywords(request.getKeywords()).isDelete(YesNoStatus.NO).build()));
     }
 }

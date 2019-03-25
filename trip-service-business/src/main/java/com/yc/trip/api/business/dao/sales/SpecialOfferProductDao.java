@@ -3,6 +3,7 @@ package com.yc.trip.api.business.dao.sales;
 import java.util.List;
 
 import com.yc.trip.api.business.bo.sales.SpecialOfferProductDomain;
+import com.yc.trip.api.business.request.common.IdRequest;
 
 /**
  * 优惠活动产品信息Dao类
