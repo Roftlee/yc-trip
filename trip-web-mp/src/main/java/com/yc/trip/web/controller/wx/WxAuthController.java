@@ -92,6 +92,7 @@ public class WxAuthController extends AbstractBaseController {
                     .phone("0")// 默认手机号为0
                     .sex(Sex.Male)
                     .userType(UserType.CUSTOMER)// 默认游客身份
+                    .isDelete(YesNoStatus.NO)
                     .build());
         }
 

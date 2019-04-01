@@ -46,12 +46,6 @@ public class AuthController extends AbstractBaseController {
     private UserPasswordFacade userPasswordFacade;// 用户密码服务
 
     /**
-     * redis缓存时间
-     */
-    private static final int REDIS_MINUTES = 1;
-
-
-    /**
      * 登录
      *
      * @param loginRequest
