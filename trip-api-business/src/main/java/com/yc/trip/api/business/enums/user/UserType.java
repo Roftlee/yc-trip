@@ -21,8 +21,8 @@ import com.google.common.collect.ImmutableMap;
 public enum UserType implements BaseEnum<Enum<UserType>, Integer>{
     ALL(-1, "全部"),
     ADMIN(1, "超管"),
-    PROVIDER(2, "供应商"),
-    STORE_MANGER(3, "门店老板"),
+    PROVIDER_MANAGER(2, "供应商"),
+    STORE_MANAGER(3, "门店老板"),
     PROVIDER_SALES(4, "供应商运营人员"),
     STORE_SALES(5, "门店运营人员"),
     CUSTOMER(9, "游客"),

@@ -4,7 +4,6 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.yc.trip.api.business.dto.user.MerchantAccount;
 import com.yc.trip.api.business.dto.user.User;
 import com.yc.trip.api.business.dto.user.UserPassword;
-import com.yc.trip.api.business.enums.user.MerchantType;
 import com.yc.trip.api.business.enums.user.UserType;
 import com.yc.trip.api.business.facade.user.MerchantAccountFacade;
 import com.yc.trip.api.business.facade.user.UserFacade;
@@ -76,13 +75,13 @@ public class AuthController extends AbstractBaseController {
             }
 
             // 供应商验证服务有效期
-            if (UserType.PROVIDER.equals(user.getUserType()) || UserType.PROVIDER_SALES.equals(user.getUserType())) {
+            if (UserType.PROVIDER_MANAGER.equals(user.getUserType()) || UserType.PROVIDER_SALES.equals(user.getUserType())) {
                 if (merchantAccountFacade.mustGet(MerchantAccount.builder().userId(user.getId()).build()).getEndTime().before(DateUtil.getDate())) {
                     ResCode.SYS_FAIL.throwException("账号已到期");
                 }
             }
             // 门店验证服务有效期
-            else if (UserType.STORE_MANGER.equals(user.getUserType()) || UserType.STORE_SALES.equals(user.getUserType())) {
+            else if (UserType.STORE_MANAGER.equals(user.getUserType()) || UserType.STORE_SALES.equals(user.getUserType())) {
                 if (merchantAccountFacade.mustGet(MerchantAccount.builder().userId(user.getId()).build()).getEndTime().before(DateUtil.getDate())) {
                     ResCode.SYS_FAIL.throwException("账号已到期");
                 }

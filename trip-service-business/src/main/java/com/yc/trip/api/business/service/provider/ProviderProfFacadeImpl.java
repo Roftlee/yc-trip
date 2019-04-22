@@ -22,9 +22,7 @@ import com.yc.trip.api.business.request.provider.ProviderAddRequest;
 import com.yc.trip.api.business.request.provider.ProviderPageRequest;
 import com.yc.trip.api.business.request.provider.ProviderUpdateRequest;
 import com.yc.trip.api.core.constants.R;
-import com.yc.trip.api.core.enums.Sex;
 import com.yc.trip.api.core.enums.YesNoStatus;
-import org.apache.commons.collections.CollectionUtils;
 import org.go.api.core.integration.AbstractDubboIntegrationService;
 import org.go.api.core.util.BeanMapping;
 import org.go.framework.base.annotation.RpcClass;
@@ -32,7 +30,6 @@ import org.go.framework.base.annotation.RpcMethod;
 import org.go.framework.base.transaction.GigoldTransactionTemplate;
 import org.go.framework.core.exception.PendingException;
 import org.go.framework.util.common.DateUtil;
-import org.go.framework.util.common.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -127,7 +124,7 @@ public class ProviderProfFacadeImpl extends AbstractDubboIntegrationService impl
                         .name(provider.getLinkMan())
                         .avatar(request.getAvatar())
                         .phone(provider.getLinkNum())
-                        .userType(UserType.PROVIDER)
+                        .userType(UserType.PROVIDER_MANAGER)
                         .isDelete(YesNoStatus.NO)
                         .build());
                 // 新增供应商主账号信息
@@ -173,7 +170,7 @@ public class ProviderProfFacadeImpl extends AbstractDubboIntegrationService impl
                         .name(request.getLinkMan())
                         .avatar(request.getAvatar())
                         .phone(request.getLinkNum())
-                        .userType(UserType.PROVIDER)
+                        .userType(UserType.PROVIDER_MANAGER)
                         .isDelete(YesNoStatus.NO)
                         .build());
                 // 删除品牌关联
