@@ -41,6 +41,11 @@ public class SessionUser implements Serializable {
     private UserType userType;
 
     /**
+     * 用户类型1超管2供应商4供应商销售人员5门店老板6门店一级销售7门店二级销售8VIP销售9游客(枚举:UserType)
+     */
+    private UserType userType;
+
+    /**
      * 将用户转换成会话用户对象
      *
      * @param user

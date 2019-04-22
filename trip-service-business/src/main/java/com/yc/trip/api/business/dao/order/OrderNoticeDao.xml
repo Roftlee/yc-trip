@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yc.trip.api.business.dao.order.OrderNoticeDao">
+
+    <!-- 对象与字段映射 -->
+    <resultMap type="com.yc.trip.api.business.bo.order.OrderNoticeDomain" id="OrderNoticeMap">
+
+        <result property="id" column="id" />
+
+        <result property="orderId" column="orderid" />
+
+        <result property="noticeFileName" column="notice_filename" />
+
+        <result property="realFileName" column="real_filename" />
+
+        <result property="userId" column="userid" />
+
+        <result property="uploadTime" column="upload_time" />
+    </resultMap>
+
+    <!-- 新增订单合同信息 -->
+    <insert id="addOrderNotice" parameterType="com.yc.trip.api.business.bo.order.OrderNoticeDomain" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO `order_notice`(
+            orderid,
+            notice_filename,
+            real_filename,
+            userid)
+        VALUES(
+            #{orderId,jdbcType=NUMERIC},
+            #{noticeFileName,jdbcType=VARCHAR},
+            #{realFileName,jdbcType=VARCHAR},
+            #{userId,jdbcType=NUMERIC})
+        )	
+    </insert>
+	
+
+	
+</mapper>

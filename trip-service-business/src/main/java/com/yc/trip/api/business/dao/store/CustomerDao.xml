@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yc.trip.api.business.dao.store.CustomerDao">
+
+    <!-- 对象与字段映射 -->
+    <resultMap type="com.yc.trip.api.business.bo.store.CustomerDomain" id="CustomerMap">
+        <!--  -->
+        <result property="userId" column="id" />
+        <result property="customer" column="real_name" />
+        <!-- 门店Id -->
+        <result property="phone" column="phone" />
+        <!-- 用户Id -->
+        <result property="address" column="address" />
+    </resultMap>
+
+
+    <!-- 查询门店客户信息列表 -->
+    <select id="queryCustomer" parameterType="com.yc.trip.api.business.bo.store.CustomerDomain" resultMap="CustomerMap">
+      select u.real_name,phone,address,s.store_name,u.id   from user u,store_customer sc,store s where u.id=sc.user_id and sc.store_id=s.id
+        <if test="customer!=null  and customer!=''">
+            and real_name like CONCAT('%', #{customer}, '%')
+        </if>
+        <if test="store!=null  and store!=''">
+            and s.id=#{store}
+        </if>
+        <if test="isDelete!=null ">
+            and is_delete=#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
+        </if>
+    </select>
+	
+</mapper>

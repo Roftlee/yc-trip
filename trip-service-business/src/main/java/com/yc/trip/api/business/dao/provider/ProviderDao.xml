@@ -200,5 +200,10 @@
             </if>
         </where>	
     </select>
+
+    <select id="getAllProvider" resultMap="ProviderMap">
+         SELECT t.id,t.provider_name
+            FROM `provider` t
+    </select>
 	
 </mapper>

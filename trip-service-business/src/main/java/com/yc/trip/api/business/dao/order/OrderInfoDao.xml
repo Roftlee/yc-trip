@@ -28,11 +28,11 @@
         <!-- 订单状态0待付款1待签约2待出行3待评价4已完成9已废除(枚举:OrderStatus) -->
         <result property="orderStatus" column="order_status"  javaType="com.yc.trip.api.business.enums.order.OrderStatus"  typeHandler="org.go.api.core.typehandler.UniversalEnumHandler" />
         <!-- 合同 -->
-        <result property="contract" column="contract" />
+        <!--<result property="contract" column="contract" />-->
         <!-- 确认编号 -->
         <result property="vertifyCode" column="vertify_code" />
         <!-- 通知书 -->
-        <result property="notification" column="notification" />
+        <!--<result property="notification" column="notification" />-->
         <!-- 是否删除0否1是(枚举:YesNoStatus[core]) -->
         <result property="isDelete" column="is_delete"  javaType="com.yc.trip.api.core.enums.YesNoStatus"  typeHandler="org.go.api.core.typehandler.UniversalEnumHandler" />
         <!-- 创建时间 -->
@@ -54,9 +54,7 @@
             store_id,
             sales_id,
             order_status,
-            contract,
             vertify_code,
-            notification,
             is_delete)
         VALUES(
             #{name,jdbcType=VARCHAR},
@@ -69,9 +67,7 @@
             #{storeId,jdbcType=NUMERIC},
             #{salesId,jdbcType=NUMERIC},
             #{orderStatus, javaType=com.yc.trip.api.business.enums.order.OrderStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC},
-            #{contract,jdbcType=VARCHAR},
             #{vertifyCode,jdbcType=VARCHAR},
-            #{notification,jdbcType=VARCHAR},
             #{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
         )	
     </insert>
@@ -110,15 +106,11 @@
             <if test="orderStatus!=null ">
             order_status=#{orderStatus, javaType=com.yc.trip.api.business.enums.order.OrderStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC},
             </if>
-            <if test="contract!=null and contract!='' ">
-            contract=#{contract,jdbcType=VARCHAR},
-            </if>
+
             <if test="vertifyCode!=null and vertifyCode!='' ">
             vertify_code=#{vertifyCode,jdbcType=VARCHAR},
             </if>
-            <if test="notification!=null and notification!='' ">
-            notification=#{notification,jdbcType=VARCHAR},
-            </if>
+
             <if test="isDelete!=null ">
             is_delete=#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC},
             </if>
@@ -136,8 +128,8 @@
 	<select id="getOrderInfo" parameterType="com.yc.trip.api.business.bo.order.OrderInfoDomain" resultMap="OrderInfoMap">
         SELECT id,name,product_id,amout,
            customer,phone,address,provider_id,
-           store_id,sales_id,order_status,contract,
-           vertify_code,notification,is_delete,created_time,
+           store_id,sales_id,order_status,
+           vertify_code,is_delete,created_time,
            updated_time
         FROM `order_info`
         <where>
@@ -174,14 +166,8 @@
             <if test="orderStatus!=null ">
                 and order_status=#{orderStatus, javaType=com.yc.trip.api.business.enums.order.OrderStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
             </if>
-            <if test="contract!=null and contract!='' ">
-                and contract=#{contract,jdbcType=VARCHAR}
-            </if>
             <if test="vertifyCode!=null and vertifyCode!='' ">
                 and vertify_code=#{vertifyCode,jdbcType=VARCHAR}
-            </if>
-            <if test="notification!=null and notification!='' ">
-                and notification=#{notification,jdbcType=VARCHAR}
             </if>
             <if test="isDelete!=null ">
                 and is_delete=#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
@@ -192,10 +178,10 @@
 	
     <!-- 查询订单信息列表 -->
     <select id="queryOrderInfoList" parameterType="com.yc.trip.api.business.bo.order.OrderInfoDomain" resultMap="OrderInfoMap">
-            SELECT t.id,t.name,t.product_id,t.amout,
+            SELECT t.orderid,t.name,t.product_id,t.amout,
             t.customer,t.phone,t.address,t.provider_id,
-            t.store_id,t.sales_id,t.order_status,t.contract,
-            t.vertify_code,t.notification,t.is_delete,t.created_time,
+            t.store_id,t.sales_id,t.order_status,
+            t.vertify_code,t.is_delete,t.created_time,
             t.updated_time
             FROM `order_info` t 
         <where>
@@ -229,14 +215,9 @@
             <if test="orderStatus!=null ">
                 AND order_status=#{orderStatus, javaType=com.yc.trip.api.business.enums.order.OrderStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
             </if>
-            <if test="contract!=null and contract!='' ">
-                AND contract=#{contract,jdbcType=VARCHAR}
-            </if>
+
             <if test="vertifyCode!=null and vertifyCode!='' ">
                 AND vertify_code=#{vertifyCode,jdbcType=VARCHAR}
-            </if>
-            <if test="notification!=null and notification!='' ">
-                AND notification=#{notification,jdbcType=VARCHAR}
             </if>
             <if test="isDelete!=null ">
                 AND is_delete=#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
@@ -247,18 +228,37 @@
                      OR customer LIKE CONCAT('%', #{keywords}, '%')
                      OR phone LIKE CONCAT('%', #{keywords}, '%')
                      OR address LIKE CONCAT('%', #{keywords}, '%')
-                     OR contract LIKE CONCAT('%', #{keywords}, '%')
                      OR vertify_code LIKE CONCAT('%', #{keywords}, '%')
-                     OR notification LIKE CONCAT('%', #{keywords}, '%')
                  )
             </if>
             <if test="ids!=null and ids.size!=0 ">
                 AND id IN
-                    <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">  
+                    <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">
                         #{item}
                     </foreach>
             </if>
         </where>	
+    </select>
+
+    <select id="queryOrderInfo" parameterType="com.yc.trip.api.business.bo.order.OrderInfoDomain" resultMap="OrderInfoMap">
+          select t.orderid,p.name, t.amout,customer,phone,provider_name provider_id,
+            store_name store_id,real_name sales_id,order_status  from `order_info` t,product p,provider pr,store s,store_sales ss,user  u where t.product_id=p.id and pr.id=t.provider_id
+          and s.id=t.store_id and  ss.store_id=s.id and ss.id=t.sales_id and ss.user_id=u.id
+        <if test="customer!=null and customer!='' ">
+            AND customer like CONCAT('%', #{customer}, '%')
+        </if>
+        <if test="orderid!=null  ">
+            AND orderid like CONCAT('%', #{orderid}, '%')
+        </if>
+        <if test="storeId!=null ">
+            AND store_id=#{storeId,jdbcType=VARCHAR}
+        </if>
+        <if test="providerId!=null ">
+            AND provider_id=#{providerId,jdbcType=NUMERIC}
+        </if>
+        <if test="orderStatus!=null ">
+            AND order_status=#{orderStatus, javaType=com.yc.trip.api.business.enums.order.OrderStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
+        </if>
     </select>
 	
 </mapper>

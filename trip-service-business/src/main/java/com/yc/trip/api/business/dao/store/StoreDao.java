@@ -33,4 +33,6 @@ public interface StoreDao {
      */
     List<StoreDomain> queryStoreList(StoreDomain storeDomain);
 
+    List<StoreDomain>  getAllStore();
+
 }

@@ -143,5 +143,9 @@
             </if>
         </where>	
     </select>
+
+    <select id="getAllStore" resultMap="StoreMap">
+        select t.id,t.store_name from  FROM `store` t
+    </select>
 	
 </mapper>
