@@ -115,8 +115,10 @@ public class WxAuthController extends AbstractBaseController {
             StoreSales storeSales = storeSalesFacade.getStoreSales(StoreSales.builder().userId(wxCodeRequest.getInviterId()).build());
             if (storeSales != null) {
                 storeCustomerFacade.addStoreCustomer(StoreCustomer.builder().userId(user.getId()).storeId(storeSales.getStoreId()).isVip(YesNoStatus.NO).build());
+            } else {
+                StoreCustomer storeCustomer = storeCustomerFacade.mustGet(StoreCustomer.builder().userId(wxCodeRequest.getInviterId()).build());
+                storeCustomerFacade.addStoreCustomer(StoreCustomer.builder().userId(user.getId()).storeId(storeCustomer.getStoreId()).isVip(YesNoStatus.NO).build());
             }
-            // TODO：
         }
 
         // 判断用户可用性
