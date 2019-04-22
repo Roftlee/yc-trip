@@ -9,10 +9,14 @@
         <result property="id" column="id" />
         <!-- 门店Id -->
         <result property="storeId" column="store_id" />
-        <!-- 是否VIP0否1是(枚举:YesNoStatus[core]) -->
-        <result property="isVip" column="is_vip"  javaType="com.yc.trip.api.core.enums.YesNoStatus"  typeHandler="org.go.api.core.typehandler.UniversalEnumHandler" />
         <!-- 用户Id -->
         <result property="userId" column="user_id" />
+        <!-- 是否VIP0否1是(枚举:YesNoStatus[core]) -->
+        <result property="isVip" column="is_vip"  javaType="com.yc.trip.api.core.enums.YesNoStatus"  typeHandler="org.go.api.core.typehandler.UniversalEnumHandler" />
+        <!-- 销售等级0普通用户1一级销售2二级销售3VIP销售(枚举:SalesLevel) -->
+        <result property="salesLevel" column="sales_level"  javaType="com.yc.trip.api.business.enums.store.SalesLevel"  typeHandler="org.go.api.core.typehandler.UniversalEnumHandler" />
+        <!-- 利润分成(百分比) -->
+        <result property="commissionRate" column="commission_rate" />
         <!-- 创建时间 -->
         <result property="createdTime" column="created_time" />
         <!-- 更新时间 -->
@@ -23,12 +27,16 @@
     <insert id="addStoreCustomer" parameterType="com.yc.trip.api.business.bo.store.StoreCustomerDomain" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO `store_customer`(
             store_id,
+            user_id,
             is_vip,
-            user_id)
+            sales_level,
+            commission_rate)
         VALUES(
             #{storeId,jdbcType=NUMERIC},
+            #{userId,jdbcType=NUMERIC},
             #{isVip, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC},
-            #{userId,jdbcType=NUMERIC}
+            #{salesLevel, javaType=com.yc.trip.api.business.enums.store.SalesLevel, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC},
+            #{commissionRate,jdbcType=NUMERIC}
         )	
     </insert>
 	
@@ -39,11 +47,17 @@
             <if test="storeId!=null ">
             store_id=#{storeId,jdbcType=NUMERIC},
             </if>
+            <if test="userId!=null ">
+            user_id=#{userId,jdbcType=NUMERIC},
+            </if>
             <if test="isVip!=null ">
             is_vip=#{isVip, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC},
             </if>
-            <if test="userId!=null ">
-            user_id=#{userId,jdbcType=NUMERIC},
+            <if test="salesLevel!=null ">
+            sales_level=#{salesLevel, javaType=com.yc.trip.api.business.enums.store.SalesLevel, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC},
+            </if>
+            <if test="commissionRate!=null ">
+            commission_rate=#{commissionRate,jdbcType=NUMERIC},
             </if>
             <if test="createdTime!=null ">
             created_time=#{createdTime,jdbcType=TIMESTAMP},
@@ -57,8 +71,9 @@
 	
     <!-- 查询门店客户信息 -->
 	<select id="getStoreCustomer" parameterType="com.yc.trip.api.business.bo.store.StoreCustomerDomain" resultMap="StoreCustomerMap">
-        SELECT id,store_id,is_vip,user_id,
-           created_time,updated_time
+        SELECT id,store_id,user_id,
+           is_vip,sales_level,commission_rate,created_time,
+           updated_time
         FROM `store_customer`
         <where>
             <if test="id!=null ">
@@ -67,11 +82,17 @@
             <if test="storeId!=null ">
                 and store_id=#{storeId,jdbcType=NUMERIC}
             </if>
+            <if test="userId!=null ">
+                and user_id=#{userId,jdbcType=NUMERIC}
+            </if>
             <if test="isVip!=null ">
                 and is_vip=#{isVip, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
             </if>
-            <if test="userId!=null ">
-                and user_id=#{userId,jdbcType=NUMERIC}
+            <if test="salesLevel!=null ">
+                and sales_level=#{salesLevel, javaType=com.yc.trip.api.business.enums.store.SalesLevel, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
+            </if>
+            <if test="commissionRate!=null ">
+                and commission_rate=#{commissionRate,jdbcType=NUMERIC}
             </if>
         </where>
         LIMIT 2	
@@ -79,18 +100,25 @@
 	
     <!-- 查询门店客户信息列表 -->
     <select id="queryStoreCustomerList" parameterType="com.yc.trip.api.business.bo.store.StoreCustomerDomain" resultMap="StoreCustomerMap">
-            SELECT t.id,t.store_id,t.is_vip,t.user_id,
-            t.created_time,t.updated_time
+            SELECT t.id,t.store_id,t.user_id,
+            t.is_vip,t.sales_level,t.commission_rate,t.created_time,
+            t.updated_time
             FROM `store_customer` t 
         <where>
             <if test="storeId!=null ">
                 AND store_id=#{storeId,jdbcType=NUMERIC}
             </if>
+            <if test="userId!=null ">
+                AND user_id=#{userId,jdbcType=NUMERIC}
+            </if>
             <if test="isVip!=null ">
                 AND is_vip=#{isVip, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
             </if>
-            <if test="userId!=null ">
-                AND user_id=#{userId,jdbcType=NUMERIC}
+            <if test="salesLevel!=null ">
+                AND sales_level=#{salesLevel, javaType=com.yc.trip.api.business.enums.store.SalesLevel, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
+            </if>
+            <if test="commissionRate!=null ">
+                AND commission_rate=#{commissionRate,jdbcType=NUMERIC}
             </if>
             <if test="keywords!=null and keywords!='' ">
                 AND (
