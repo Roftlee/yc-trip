@@ -20,7 +20,10 @@ import com.google.common.collect.ImmutableMap;
  */
 public enum SalesLevel implements BaseEnum<Enum<SalesLevel>, Integer>{
     ALL(-1, "全部"),
-    
+    CUSTOMER(0, "普通用户"),
+    STORE_SALES_LEVEL_ONE(1, "门店一级销售"),
+    STORE_SALES_LEVEL_TWO(2, "门店二级销售"),
+    SALES_VIP(3, "VIP销售"),
     ;
     
 

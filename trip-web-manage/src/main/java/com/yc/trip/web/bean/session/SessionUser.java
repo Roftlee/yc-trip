@@ -36,19 +36,9 @@ public class SessionUser implements Serializable {
     private String phone;
 
     /**
-     * 角色Id
+     * 用户类型
      */
-    private Long roleId;
-
-    /**
-     * 临期事项数目
-     */
-    private Integer advanceNum;
-
-    /**
-     * 超期事项数目
-     */
-    private Integer overdueNum;
+    private UserType userType;
 
     /**
      * 用户类型1超管2供应商4供应商销售人员5门店老板6门店一级销售7门店二级销售8VIP销售9游客(枚举:UserType)

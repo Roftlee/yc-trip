@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
  * 供应商信息Domain类
  * 
  * @author My-Toolkits
- * @since 2019-03-21 22:09
+ * @since 2019-04-22 19:58
  */
 @Data
 @Builder
@@ -62,12 +62,6 @@ public class ProviderDomain extends BaseDomain implements Serializable {
 	private String address;
 
 	/**
-	 * 有效天数
-	 */
-	@InsertRequired
-	private Integer totalDays;
-
-	/**
 	 * 到期时间
 	 */
 	@InsertRequired
@@ -78,6 +72,16 @@ public class ProviderDomain extends BaseDomain implements Serializable {
 	 */
 	@InsertRequired
 	private Integer subCount;
+
+	/**
+	 * 营业执照
+	 */
+	private String licenseUrl;
+
+	/**
+	 * 合同文件
+	 */
+	private String contractUrl;
 
 	/**
 	 * 是否删除0否1是(枚举:YesNoStatus[core])
@@ -99,6 +103,21 @@ public class ProviderDomain extends BaseDomain implements Serializable {
 
     
     //-------------------- 扩展属性--------------------------
+	/**
+	 * 品牌id
+	 */
+	private Long brandId;
+
+	/**
+	 * 可用子账号个数
+	 */
+	private Integer remainSubCount;
+
+	/**
+	 * 已使用子账号
+	 */
+	private Integer usedSubCount;
+
      /**
      * id列表
      */
@@ -108,5 +127,15 @@ public class ProviderDomain extends BaseDomain implements Serializable {
      * 关键字
      */
     private String keywords;
+
+	/**
+	 * 查询开始时间
+	 */
+	private Date queryStartTime;
+
+	/**
+	 * 查询结束时间
+	 */
+	private Date queryEndTime;
 
 }

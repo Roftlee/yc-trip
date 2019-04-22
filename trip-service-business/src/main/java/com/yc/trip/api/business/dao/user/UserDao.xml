@@ -19,6 +19,8 @@
         <result property="userType" column="user_type"  javaType="com.yc.trip.api.business.enums.user.UserType"  typeHandler="org.go.api.core.typehandler.UniversalEnumHandler" />
         <!-- 头像 -->
         <result property="avatar" column="avatar" />
+        <!-- 邀请人id -->
+        <result property="inviterId" column="inviter_id" />
         <!-- 是否删除0否1是(枚举:YesNoStatus[core]) -->
         <result property="isDelete" column="is_delete"  javaType="com.yc.trip.api.core.enums.YesNoStatus"  typeHandler="org.go.api.core.typehandler.UniversalEnumHandler" />
         <!-- 创建时间 -->
@@ -36,6 +38,7 @@
             phone,
             user_type,
             avatar,
+            inviter_id,
             is_delete)
         VALUES(
             #{openId,jdbcType=VARCHAR},
@@ -44,6 +47,7 @@
             #{phone,jdbcType=VARCHAR},
             #{userType, javaType=com.yc.trip.api.business.enums.user.UserType, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC},
             #{avatar,jdbcType=VARCHAR},
+            #{inviterId,jdbcType=NUMERIC},
             #{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
         )	
     </insert>
@@ -70,6 +74,9 @@
             <if test="avatar!=null and avatar!='' ">
             avatar=#{avatar,jdbcType=VARCHAR},
             </if>
+            <if test="inviterId!=null ">
+            inviter_id=#{inviterId,jdbcType=NUMERIC},
+            </if>
             <if test="isDelete!=null ">
             is_delete=#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC},
             </if>
@@ -89,8 +96,8 @@
     <!-- 查询用户信息 -->
 	<select id="getUser" parameterType="com.yc.trip.api.business.bo.user.UserDomain" resultMap="UserMap">
         SELECT id,open_id,name,sex,
-           phone,user_type,avatar,is_delete,
-           created_time,updated_time
+           phone,user_type,avatar,inviter_id,
+           is_delete,created_time,updated_time
         FROM `user`
         <where>
             <if test="id!=null ">
@@ -114,6 +121,9 @@
             <if test="avatar!=null and avatar!='' ">
                 and avatar=#{avatar,jdbcType=VARCHAR}
             </if>
+            <if test="inviterId!=null ">
+                and inviter_id=#{inviterId,jdbcType=NUMERIC}
+            </if>
             <if test="isDelete!=null ">
                 and is_delete=#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
             </if>
@@ -124,8 +134,8 @@
     <!-- 查询用户信息列表 -->
     <select id="queryUserList" parameterType="com.yc.trip.api.business.bo.user.UserDomain" resultMap="UserMap">
             SELECT t.id,t.open_id,t.name,t.sex,
-            t.phone,t.user_type,t.avatar,t.is_delete,
-            t.created_time,t.updated_time
+            t.phone,t.user_type,t.avatar,t.inviter_id,
+            t.is_delete,t.created_time,t.updated_time
             FROM `user` t 
         <where>
             <if test="openId!=null and openId!='' ">
@@ -145,6 +155,9 @@
             </if>
             <if test="avatar!=null and avatar!='' ">
                 AND avatar=#{avatar,jdbcType=VARCHAR}
+            </if>
+            <if test="inviterId!=null ">
+                AND inviter_id=#{inviterId,jdbcType=NUMERIC}
             </if>
             <if test="isDelete!=null ">
                 AND is_delete=#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}

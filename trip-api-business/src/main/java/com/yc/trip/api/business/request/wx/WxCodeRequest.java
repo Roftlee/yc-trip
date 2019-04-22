@@ -43,6 +43,12 @@ public class WxCodeRequest extends AbstractBaseRequestDto {
      */
     private String wxAppId;
 
+    /**
+     * 邀请人id
+     */
+    @MvcOptional
+    private Long inviterId;
+
     @Override
     public ResBean validateParam() {
         if (StringUtils.isBlank(code)) {

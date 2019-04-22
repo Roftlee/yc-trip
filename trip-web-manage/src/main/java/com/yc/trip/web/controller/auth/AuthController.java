@@ -2,6 +2,7 @@ package com.yc.trip.web.controller.auth;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.yc.trip.api.business.dto.user.User;
+import com.yc.trip.api.business.dto.user.UserPassword;
 import com.yc.trip.api.business.facade.user.UserFacade;
 import com.yc.trip.api.business.facade.user.UserPasswordFacade;
 import com.yc.trip.api.business.request.auth.LoginRequest;
@@ -9,6 +10,7 @@ import com.yc.trip.api.core.constants.ResCode;
 import com.yc.trip.api.core.enums.OperTargetType;
 import com.yc.trip.api.core.enums.OperType;
 import com.yc.trip.api.core.enums.YesNoStatus;
+import com.yc.trip.api.core.util.PwdUtils;
 import com.yc.trip.web.annotation.LogConfiguration;
 import com.yc.trip.web.bean.session.SessionUser;
 import com.yc.trip.web.controller.base.AbstractBaseController;
@@ -63,6 +65,12 @@ public class AuthController extends AbstractBaseController {
 
             if (YesNoStatus.YES.equals(user.getIsDelete())) {
                 ResCode.userDBError.throwException("用户被禁用");
+            }
+
+            UserPassword userPassword = userPasswordFacade.mustGet(UserPassword.builder().userId(user.getId()).build());
+            String encryptPwd = PwdUtils.encrypt(user.getId() + "", loginRequest.getPassword(), userPassword.getSalt());
+            if (!userPassword.getPassword().equals(encryptPwd)) {
+                ResCode.userNameOrPswError.throwException();
             }
 
             SessionUser sessionUser = SessionUser.from(user);

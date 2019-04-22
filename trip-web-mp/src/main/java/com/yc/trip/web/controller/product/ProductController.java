@@ -118,7 +118,7 @@ public class ProductController extends AbstractBaseController {
     }
 
     /**
-     * 首页-查询产品分类列表
+     * 查询产品分类列表
      *
      * @return
      * @throws PendingException
