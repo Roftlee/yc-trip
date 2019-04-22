@@ -136,6 +136,7 @@ public class ProviderProfFacadeImpl extends AbstractDubboIntegrationService impl
                         .merchantId(provider.getId())
                         .merchantType(MerchantType.PROVIDER)
                         .accountType(AccountType.PRIMARY)
+                        .endTime(provider.getEndTime())
                         .build());
 
                 // 处理品牌关联

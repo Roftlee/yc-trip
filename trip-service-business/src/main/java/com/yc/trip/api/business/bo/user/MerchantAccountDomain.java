@@ -22,7 +22,7 @@ import lombok.NoArgsConstructor;
  * 商户账号信息Domain类
  * 
  * @author My-Toolkits
- * @since 2019-04-22 20:40
+ * @since 2019-04-22 21:54
  */
 @Data
 @Builder
@@ -62,6 +62,12 @@ public class MerchantAccountDomain extends BaseDomain implements Serializable {
 	 */
 	@InsertRequired
 	private AccountType accountType;
+
+	/**
+	 * 账号有效截止日期
+	 */
+	@InsertRequired
+	private Date endTime;
 
 	/**
 	 * 是否删除(枚举:YesNoStatus[core])

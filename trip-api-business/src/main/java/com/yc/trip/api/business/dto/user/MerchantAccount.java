@@ -23,7 +23,7 @@ import lombok.NoArgsConstructor;
  * 商户账号信息Dto类
  * 
  * @author My-Toolkits
- * @since 2019-04-22 20:40
+ * @since 2019-04-22 21:54
  */
 @Builder
 @Data
@@ -59,6 +59,11 @@ public class MerchantAccount extends AbstractBasePageRequestDto {
 	 * 账号类型1主账号2子账号(枚举:AccountType)
 	 */
 	private AccountType accountType;
+
+	/**
+	 * 账号有效截止日期
+	 */
+	private Date endTime;
 
 	/**
 	 * 是否删除(枚举:YesNoStatus[core])

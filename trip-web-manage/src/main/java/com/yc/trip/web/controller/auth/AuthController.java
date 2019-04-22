@@ -1,8 +1,12 @@
 package com.yc.trip.web.controller.auth;
 
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.yc.trip.api.business.dto.user.MerchantAccount;
 import com.yc.trip.api.business.dto.user.User;
 import com.yc.trip.api.business.dto.user.UserPassword;
+import com.yc.trip.api.business.enums.user.MerchantType;
+import com.yc.trip.api.business.enums.user.UserType;
+import com.yc.trip.api.business.facade.user.MerchantAccountFacade;
 import com.yc.trip.api.business.facade.user.UserFacade;
 import com.yc.trip.api.business.facade.user.UserPasswordFacade;
 import com.yc.trip.api.business.request.auth.LoginRequest;
@@ -18,6 +22,7 @@ import org.go.api.core.dto.ResDto;
 import org.go.framework.base.annotation.MvcValidate;
 import org.go.framework.cache.CacheService;
 import org.go.framework.core.exception.PendingException;
+import org.go.framework.util.common.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -47,6 +52,9 @@ public class AuthController extends AbstractBaseController {
     @Reference(version = "1.0.0")
     private UserPasswordFacade userPasswordFacade;// 用户密码服务
 
+    @Reference(version = "1.0.0")
+    private MerchantAccountFacade merchantAccountFacade;// 商户账号服务
+
     /**
      * 登录
      *
@@ -65,6 +73,19 @@ public class AuthController extends AbstractBaseController {
 
             if (YesNoStatus.YES.equals(user.getIsDelete())) {
                 ResCode.userDBError.throwException("用户被禁用");
+            }
+
+            // 供应商验证服务有效期
+            if (UserType.PROVIDER.equals(user.getUserType()) || UserType.PROVIDER_SALES.equals(user.getUserType())) {
+                if (merchantAccountFacade.mustGet(MerchantAccount.builder().userId(user.getId()).build()).getEndTime().before(DateUtil.getDate())) {
+                    ResCode.SYS_FAIL.throwException("账号已到期");
+                }
+            }
+            // 门店验证服务有效期
+            else if (UserType.STORE_MANGER.equals(user.getUserType()) || UserType.STORE_SALES.equals(user.getUserType())) {
+                if (merchantAccountFacade.mustGet(MerchantAccount.builder().userId(user.getId()).build()).getEndTime().before(DateUtil.getDate())) {
+                    ResCode.SYS_FAIL.throwException("账号已到期");
+                }
             }
 
             UserPassword userPassword = userPasswordFacade.mustGet(UserPassword.builder().userId(user.getId()).build());

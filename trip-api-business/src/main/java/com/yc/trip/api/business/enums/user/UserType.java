@@ -25,9 +25,6 @@ public enum UserType implements BaseEnum<Enum<UserType>, Integer>{
     STORE_MANGER(3, "门店老板"),
     PROVIDER_SALES(4, "供应商运营人员"),
     STORE_SALES(5, "门店运营人员"),
-    STORE_SALES_LEVEL_ONE(6, "门店一级销售"),
-    STORE_SALES_LEVEL_TWO(7, "门店二级销售"),
-    SALES_VIP(8, "VIP销售"),
     CUSTOMER(9, "游客"),
     ;
     

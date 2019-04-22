@@ -53,7 +53,6 @@ public class UserDomain extends BaseDomain implements Serializable {
 	/**
 	 * 性别0男1女(枚举:Sex[core])
 	 */
-	@InsertRequired
 	private Sex sex;
 
 	/**

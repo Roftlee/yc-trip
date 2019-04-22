@@ -15,6 +15,8 @@
         <result property="merchantType" column="merchant_type"  javaType="com.yc.trip.api.business.enums.user.MerchantType"  typeHandler="org.go.api.core.typehandler.UniversalEnumHandler" />
         <!-- 账号类型1主账号2子账号(枚举:AccountType) -->
         <result property="accountType" column="account_type"  javaType="com.yc.trip.api.business.enums.user.AccountType"  typeHandler="org.go.api.core.typehandler.UniversalEnumHandler" />
+        <!-- 账号有效截止日期 -->
+        <result property="endTime" column="end_time" />
         <!-- 是否删除(枚举:YesNoStatus[core]) -->
         <result property="isDelete" column="is_delete"  javaType="com.yc.trip.api.core.enums.YesNoStatus"  typeHandler="org.go.api.core.typehandler.UniversalEnumHandler" />
         <!-- 创建时间 -->
@@ -30,12 +32,14 @@
             user_id,
             merchant_type,
             account_type,
+            end_time,
             is_delete)
         VALUES(
             #{merchantId,jdbcType=NUMERIC},
             #{userId,jdbcType=NUMERIC},
             #{merchantType, javaType=com.yc.trip.api.business.enums.user.MerchantType, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC},
             #{accountType, javaType=com.yc.trip.api.business.enums.user.AccountType, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC},
+            #{endTime,jdbcType=DATE},
             #{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
         )	
     </insert>
@@ -56,6 +60,9 @@
             <if test="accountType!=null ">
             account_type=#{accountType, javaType=com.yc.trip.api.business.enums.user.AccountType, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC},
             </if>
+            <if test="endTime!=null ">
+            end_time=#{endTime,jdbcType=DATE},
+            </if>
             <if test="isDelete!=null ">
             is_delete=#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC},
             </if>
@@ -72,7 +79,8 @@
     <!-- 查询商户账号信息 -->
 	<select id="getMerchantAccount" parameterType="com.yc.trip.api.business.bo.user.MerchantAccountDomain" resultMap="MerchantAccountMap">
         SELECT id,merchant_id,user_id,merchant_type,
-           account_type,is_delete,created_time,updated_time
+           account_type,end_time,is_delete,created_time,
+           updated_time
         FROM `merchant_account`
         <where>
             <if test="id!=null ">
@@ -100,7 +108,8 @@
     <!-- 查询商户账号信息列表 -->
     <select id="queryMerchantAccountList" parameterType="com.yc.trip.api.business.bo.user.MerchantAccountDomain" resultMap="MerchantAccountMap">
             SELECT t.id,t.merchant_id,t.user_id,t.merchant_type,
-            t.account_type,t.is_delete,t.created_time,t.updated_time
+            t.account_type,t.end_time,t.is_delete,t.created_time,
+            t.updated_time
             FROM `merchant_account` t 
         <where>
             <if test="merchantId!=null ">
