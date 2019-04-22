@@ -122,7 +122,6 @@ public class ProductDomain extends BaseDomain implements Serializable {
 	/**
 	 * 产品描述
 	 */
-	@InsertRequired
 	private String description;
 
 	/**

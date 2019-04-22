@@ -51,10 +51,14 @@ public class SessionUser implements Serializable {
     private UserType userType;
 
     /**
+     * 所属门店id
+     */
+    private Long storeId;
+
+    /**
      * 小程序用户sessionKey
      */
     private String sessionKey;
-
 
     /**
      * 将用户转换成会话用户对象

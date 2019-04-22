@@ -6,9 +6,13 @@ import com.yc.mp.api.request.security.MpDecryptRequest;
 import com.yc.mp.api.response.auth.MpCodeResponse;
 import com.yc.mp.api.service.auth.MpAuthService;
 import com.yc.mp.api.service.security.MpSecurityService;
+import com.yc.trip.api.business.dto.store.StoreCustomer;
+import com.yc.trip.api.business.dto.store.StoreSales;
 import com.yc.trip.api.business.dto.user.User;
 import com.yc.trip.api.business.dto.wx.WxApp;
 import com.yc.trip.api.business.enums.user.UserType;
+import com.yc.trip.api.business.facade.store.StoreCustomerFacade;
+import com.yc.trip.api.business.facade.store.StoreSalesFacade;
 import com.yc.trip.api.business.facade.user.UserFacade;
 import com.yc.trip.api.business.facade.wx.WxAppFacade;
 import com.yc.trip.api.business.request.auth.LoginRequest;
@@ -17,7 +21,6 @@ import com.yc.trip.api.business.request.wx.WxDecryptRequest;
 import com.yc.trip.api.core.constants.ResCode;
 import com.yc.trip.api.core.enums.Sex;
 import com.yc.trip.api.core.enums.YesNoStatus;
-import com.yc.trip.api.core.util.EmojiUtil;
 import com.yc.trip.web.bean.session.SessionUser;
 import com.yc.trip.web.controller.base.AbstractBaseController;
 import com.yc.trip.web.service.session.SessionService;
@@ -25,7 +28,6 @@ import com.yc.trip.web.wx.Code2SessionResponse;
 import org.go.api.core.dto.ResDto;
 import org.go.framework.base.annotation.MvcValidate;
 import org.go.framework.core.exception.PendingException;
-import org.go.framework.util.common.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -58,6 +60,12 @@ public class WxAuthController extends AbstractBaseController {
     @Reference(version = "1.0.0")
     private WxAppFacade wxAppFacade;//微信小程序服务
 
+    @Reference(version = "1.0.0")
+    private StoreCustomerFacade storeCustomerFacade;// 门店游客服务
+
+    @Reference(version = "1.0.0")
+    private StoreSalesFacade storeSalesFacade;// 门店销售服务
+
     /**
      * 微信小程序Code登录接口
      *
@@ -82,6 +90,10 @@ public class WxAuthController extends AbstractBaseController {
 
         // 获取用户信息
         User user = userFacade.getUser(User.builder().openId(mpCodeResponse.getOpenId()).build());
+        User inviter = null;
+        if (wxCodeRequest.getInviterId() != null && wxCodeRequest.getInviterId() != 0) {
+            inviter = userFacade.mustGet(User.builder().id(wxCodeRequest.getInviterId()).build());
+        }
 
         // 用户不存在，新增用户信息
         if (user == null) {
@@ -94,20 +106,22 @@ public class WxAuthController extends AbstractBaseController {
                     .userType(UserType.CUSTOMER)// 默认游客身份
                     .isDelete(YesNoStatus.NO)
                     .build());
+
+            // 通过邀请人分享链接进入小程序的用户，处理邀请人信息
+            if (inviter != null) {
+
+            }
+        } else {// TODO：已注册用户通过邀请人分享的链接进入小程序时如何处理？
+            StoreSales storeSales = storeSalesFacade.getStoreSales(StoreSales.builder().userId(wxCodeRequest.getInviterId()).build());
+            if (storeSales != null) {
+                storeCustomerFacade.addStoreCustomer(StoreCustomer.builder().userId(user.getId()).storeId(storeSales.getStoreId()).isVip(YesNoStatus.NO).build());
+            }
+            // TODO：
         }
 
         // 判断用户可用性
         if (YesNoStatus.YES.equals(user.getIsDelete())) {
             ResCode.userDBError.throwException("用户已被禁用");
-        }
-
-        if (StringUtil.isNotBlank(wxCodeRequest.getNickName()) || StringUtil.isNotBlank(wxCodeRequest.getHeadImgUrl())) {
-            //更新用户信息
-            userFacade.updateUser(User.builder()
-                    .id(user.getId())
-                    .name(EmojiUtil.filterEmoji(wxCodeRequest.getNickName()))
-                    .avatar(wxCodeRequest.getHeadImgUrl())
-                    .build());
         }
 
         SessionUser sessionUser = SessionUser.from(user);
