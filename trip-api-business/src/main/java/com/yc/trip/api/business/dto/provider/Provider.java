@@ -21,7 +21,7 @@ import lombok.NoArgsConstructor;
  * 供应商信息Dto类
  * 
  * @author My-Toolkits
- * @since 2019-03-21 22:09
+ * @since 2019-04-22 19:58
  */
 @Builder
 @Data
@@ -67,6 +67,16 @@ public class Provider extends AbstractBasePageRequestDto {
 	 * 子账号个数
 	 */
 	private Integer subCount;
+
+	/**
+	 * 营业执照
+	 */
+	private String licenseUrl;
+
+	/**
+	 * 合同文件
+	 */
+	private String contractUrl;
 
 	/**
 	 * 是否删除0否1是(枚举:YesNoStatus[core])

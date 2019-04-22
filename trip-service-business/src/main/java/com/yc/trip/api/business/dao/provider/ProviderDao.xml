@@ -19,6 +19,10 @@
         <result property="endTime" column="end_time" />
         <!-- 子账号个数 -->
         <result property="subCount" column="sub_count" />
+        <!-- 营业执照 -->
+        <result property="licenseUrl" column="license_url" />
+        <!-- 合同文件 -->
+        <result property="contractUrl" column="contract_url" />
         <!-- 是否删除0否1是(枚举:YesNoStatus[core]) -->
         <result property="isDelete" column="is_delete"  javaType="com.yc.trip.api.core.enums.YesNoStatus"  typeHandler="org.go.api.core.typehandler.UniversalEnumHandler" />
         <!-- 创建时间 -->
@@ -40,6 +44,8 @@
             address,
             end_time,
             sub_count,
+            license_url,
+            contract_url,
             is_delete)
         VALUES(
             #{providerName,jdbcType=VARCHAR},
@@ -48,6 +54,8 @@
             #{address,jdbcType=VARCHAR},
             #{endTime,jdbcType=TIMESTAMP},
             #{subCount,jdbcType=NUMERIC},
+            #{licenseUrl,jdbcType=VARCHAR},
+            #{contractUrl,jdbcType=VARCHAR},
             #{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
         )	
     </insert>
@@ -74,6 +82,12 @@
             <if test="subCount!=null ">
             sub_count=#{subCount,jdbcType=NUMERIC},
             </if>
+            <if test="licenseUrl!=null and licenseUrl!='' ">
+            license_url=#{licenseUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="contractUrl!=null and contractUrl!='' ">
+            contract_url=#{contractUrl,jdbcType=VARCHAR},
+            </if>
             <if test="isDelete!=null ">
             is_delete=#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC},
             </if>
@@ -90,8 +104,8 @@
     <!-- 查询供应商信息 -->
 	<select id="getProvider" parameterType="com.yc.trip.api.business.bo.provider.ProviderDomain" resultMap="ProviderMap">
         SELECT id,provider_name,link_man,link_num,
-           address,end_time,sub_count,
-           is_delete,created_time,updated_time
+           address,end_time,sub_count,license_url,
+           contract_url,is_delete,created_time,updated_time
         FROM `provider`
         <where>
             <if test="id!=null ">
@@ -112,6 +126,12 @@
             <if test="subCount!=null ">
                 and sub_count=#{subCount,jdbcType=NUMERIC}
             </if>
+            <if test="licenseUrl!=null and licenseUrl!='' ">
+                and license_url=#{licenseUrl,jdbcType=VARCHAR}
+            </if>
+            <if test="contractUrl!=null and contractUrl!='' ">
+                and contract_url=#{contractUrl,jdbcType=VARCHAR}
+            </if>
             <if test="isDelete!=null ">
                 and is_delete=#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
             </if>
@@ -122,7 +142,7 @@
     <!-- 查询供应商信息列表 -->
     <select id="queryProviderList" parameterType="com.yc.trip.api.business.bo.provider.ProviderDomain" resultMap="ProviderMap">
             SELECT t.id,t.provider_name,t.link_man,t.link_num,
-            t.address,t.end_time,t.sub_count,
+            t.address,t.end_time,t.sub_count,t.license_url, t.contract_url,
             t.is_delete,t.created_time,t.updated_time, t.sub_count as remain_sub_count, t.sub_count as used_sub_count
             FROM `provider` t 
         <where>
@@ -141,12 +161,23 @@
             <if test="subCount!=null ">
                 AND sub_count=#{subCount,jdbcType=NUMERIC}
             </if>
+            <if test="licenseUrl!=null and licenseUrl!='' ">
+                AND license_url=#{licenseUrl,jdbcType=VARCHAR}
+            </if>
+            <if test="contractUrl!=null and contractUrl!='' ">
+                AND contract_url=#{contractUrl,jdbcType=VARCHAR}
+            </if>
             <if test="isDelete!=null ">
                 AND is_delete=#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
             </if>
             <if test="keywords!=null and keywords!='' ">
                 AND (
                      provider_name LIKE CONCAT('%', #{keywords}, '%')
+                     OR link_man LIKE CONCAT('%', #{keywords}, '%')
+                     OR link_num LIKE CONCAT('%', #{keywords}, '%')
+                     OR address LIKE CONCAT('%', #{keywords}, '%')
+                     OR license_url LIKE CONCAT('%', #{keywords}, '%')
+                     OR contract_url LIKE CONCAT('%', #{keywords}, '%')
                  )
             </if>
             <if test="ids!=null and ids.size!=0 ">
