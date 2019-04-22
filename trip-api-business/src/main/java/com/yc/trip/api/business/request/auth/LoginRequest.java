@@ -26,7 +26,7 @@ public class LoginRequest extends AbstractBaseRequestDto {
     private String loginName;
 
     /**
-     * 公钥
+     * 登陆密码
      */
     private String password;
 

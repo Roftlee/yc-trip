@@ -15,8 +15,6 @@
         <result property="linkNum" column="link_num" />
         <!-- 供应商地址 -->
         <result property="address" column="address" />
-        <!-- 有效天数 -->
-        <result property="totalDays" column="total_days" />
         <!-- 到期时间 -->
         <result property="endTime" column="end_time" />
         <!-- 子账号个数 -->
@@ -27,6 +25,10 @@
         <result property="createdTime" column="created_time" />
         <!-- 更新时间 -->
         <result property="updatedTime" column="updated_time" />
+        <!-- 可用子账号个数 -->
+        <result property="remainSubCount" column="remain_sub_count"/>
+        <!-- 已使用子账号 -->
+        <result property="usedSubCount" column="used_sub_count"/>
     </resultMap>
 
     <!-- 新增供应商信息 -->
@@ -36,7 +38,6 @@
             link_man,
             link_num,
             address,
-            total_days,
             end_time,
             sub_count,
             is_delete)
@@ -45,7 +46,6 @@
             #{linkMan,jdbcType=VARCHAR},
             #{linkNum,jdbcType=VARCHAR},
             #{address,jdbcType=VARCHAR},
-            #{totalDays,jdbcType=NUMERIC},
             #{endTime,jdbcType=TIMESTAMP},
             #{subCount,jdbcType=NUMERIC},
             #{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
@@ -67,9 +67,6 @@
             </if>
             <if test="address!=null and address!='' ">
             address=#{address,jdbcType=VARCHAR},
-            </if>
-            <if test="totalDays!=null ">
-            total_days=#{totalDays,jdbcType=NUMERIC},
             </if>
             <if test="endTime!=null ">
             end_time=#{endTime,jdbcType=TIMESTAMP},
@@ -93,7 +90,7 @@
     <!-- 查询供应商信息 -->
 	<select id="getProvider" parameterType="com.yc.trip.api.business.bo.provider.ProviderDomain" resultMap="ProviderMap">
         SELECT id,provider_name,link_man,link_num,
-           address,total_days,end_time,sub_count,
+           address,end_time,sub_count,
            is_delete,created_time,updated_time
         FROM `provider`
         <where>
@@ -112,9 +109,6 @@
             <if test="address!=null and address!='' ">
                 and address=#{address,jdbcType=VARCHAR}
             </if>
-            <if test="totalDays!=null ">
-                and total_days=#{totalDays,jdbcType=NUMERIC}
-            </if>
             <if test="subCount!=null ">
                 and sub_count=#{subCount,jdbcType=NUMERIC}
             </if>
@@ -128,8 +122,8 @@
     <!-- 查询供应商信息列表 -->
     <select id="queryProviderList" parameterType="com.yc.trip.api.business.bo.provider.ProviderDomain" resultMap="ProviderMap">
             SELECT t.id,t.provider_name,t.link_man,t.link_num,
-            t.address,t.total_days,t.end_time,t.sub_count,
-            t.is_delete,t.created_time,t.updated_time
+            t.address,t.end_time,t.sub_count,
+            t.is_delete,t.created_time,t.updated_time, t.sub_count as remain_sub_count, t.sub_count as used_sub_count
             FROM `provider` t 
         <where>
             <if test="providerName!=null and providerName!='' ">
@@ -144,9 +138,6 @@
             <if test="address!=null and address!='' ">
                 AND address=#{address,jdbcType=VARCHAR}
             </if>
-            <if test="totalDays!=null ">
-                AND total_days=#{totalDays,jdbcType=NUMERIC}
-            </if>
             <if test="subCount!=null ">
                 AND sub_count=#{subCount,jdbcType=NUMERIC}
             </if>
@@ -156,9 +147,6 @@
             <if test="keywords!=null and keywords!='' ">
                 AND (
                      provider_name LIKE CONCAT('%', #{keywords}, '%')
-                     OR link_man LIKE CONCAT('%', #{keywords}, '%')
-                     OR link_num LIKE CONCAT('%', #{keywords}, '%')
-                     OR address LIKE CONCAT('%', #{keywords}, '%')
                  )
             </if>
             <if test="ids!=null and ids.size!=0 ">
@@ -166,6 +154,18 @@
                     <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">  
                         #{item}
                     </foreach>
+            </if>
+            <if test="brandId!=null ">
+                AND EXISTS (select 1 from provider_brand_relation r where r.brand_id = #{brandId} and r.provider_id = t.id)
+            </if>
+            <if test="remainSubCount!=null">
+                AND sub_count=#{remainSubCount}
+            </if>
+            <if test="queryStartTime!=null">
+                AND t.created_time >= #{queryStartTime}
+            </if>
+            <if test="queryEndTime!=null">
+                <![CDATA[ AND t.created_time <= #{queryEndTime"} ]]>
             </if>
         </where>	
     </select>

@@ -2,11 +2,13 @@ package com.yc.trip.api.business.service.product;
 
 import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.PageInfo;
+import com.yc.corpwechat.api.item.tag.CorpTagUserItem;
 import com.yc.trip.api.business.cache.product.ProductCache;
 import com.yc.trip.api.business.cache.region.RegionCache;
 import com.yc.trip.api.business.dto.product.Product;
 import com.yc.trip.api.business.facade.product.ProductFacade;
 import com.yc.trip.api.business.facade.product.ProductProfFacade;
+import com.yc.trip.api.business.facade.user.UserFacade;
 import com.yc.trip.api.business.item.product.ProductDetailItem;
 import com.yc.trip.api.business.item.product.ProductItem;
 import com.yc.trip.api.business.request.common.IdRequest;
@@ -44,6 +46,9 @@ public class ProductPorfFacadeImpl extends AbstractDubboIntegrationService imple
     @Autowired
     private RegionCache regionCache;// 地区缓存
 
+    @Autowired
+    private UserFacade userFacade;// 用户信息服务
+
     @Override
     @RpcMethod("查询猜你喜欢产品列表分页")
     public PageInfo<ProductItem> querySuggestedProductPage(PageRequest request) throws PendingException {
@@ -67,6 +72,10 @@ public class ProductPorfFacadeImpl extends AbstractDubboIntegrationService imple
         Product query = BeanMapping.map(request, Product.class);
         query.setIsDelete(YesNoStatus.NO);
         query.setOrderby("created_time desc");
+
+        // 当前获取用户信息
+
+
         PageInfo<Product> pageInfo = productFacade.queryProductPage(query);
 
         return BeanMapping.mapPage(pageInfo, this::transferToProductItem);
