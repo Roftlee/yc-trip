@@ -33,4 +33,7 @@ public interface ProviderDao {
      */
     List<ProviderDomain> queryProviderList(ProviderDomain providerDomain);
 
+
+    List<ProviderDomain> getAllProvider();
+
 }

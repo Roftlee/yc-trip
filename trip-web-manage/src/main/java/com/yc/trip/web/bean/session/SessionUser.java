@@ -1,6 +1,7 @@
 package com.yc.trip.web.bean.session;
 
 import com.yc.trip.api.business.dto.user.User;
+import com.yc.trip.api.business.enums.user.UserType;
 import lombok.*;
 
 import java.io.Serializable;
@@ -50,6 +51,11 @@ public class SessionUser implements Serializable {
     private Integer overdueNum;
 
     /**
+     * 用户类型1超管2供应商4供应商销售人员5门店老板6门店一级销售7门店二级销售8VIP销售9游客(枚举:UserType)
+     */
+    private UserType userType;
+
+    /**
      * 将用户转换成会话用户对象
      *
      * @param user
@@ -60,6 +66,7 @@ public class SessionUser implements Serializable {
                 .userId(user.getId())
                 .name(user.getName())
                 .phone(user.getPhone())
+                .userType(user.getUserType())
                 .build();
     }
 }

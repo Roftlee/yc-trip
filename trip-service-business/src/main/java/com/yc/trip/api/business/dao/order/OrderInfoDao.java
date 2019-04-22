@@ -33,4 +33,11 @@ public interface OrderInfoDao {
      */
     List<OrderInfoDomain> queryOrderInfoList(OrderInfoDomain orderInfoDomain);
 
+    /**
+     * 后台管理系统中搜索功能
+     * @param orderInfoDomain
+     * @return
+     */
+    List<OrderInfoDomain>  queryOrderInfo(OrderInfoDomain orderInfoDomain);
+
 }

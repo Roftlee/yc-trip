@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yc.trip.api.business.dao.sales.SaleDao">
+
+    <!-- 对象与字段映射 -->
+    <resultMap type="com.yc.trip.api.business.bo.sales.SalesDomain" id="SalesMap">
+        <!--  -->
+        <result property="id" column="id" />
+
+        <result property="userId" column="user_id" />
+
+        <result property="store" column="store_name" />
+
+        <result property="phone" column="phone" />
+
+        <result property="address" column="address" />
+        <result property="userName" column="real_name"/>
+
+        <!-- 是否删除0否1是(枚举:YesNoStatus[core]) -->
+        <result property="isDelete" column="is_delete"  javaType="com.yc.trip.api.core.enums.YesNoStatus"  typeHandler="org.go.api.core.typehandler.UniversalEnumHandler" />
+
+        <result property="inviteUserId" column="invite_User_Id" />
+
+        <result property="salesLevel" column="sales_Level" />
+        <result property="commissionRate" column="commission_Rate" />
+
+        <result property="orderCnt" column="orderCnt" />
+    </resultMap>
+
+
+
+	<select id="querySale" parameterType="com.yc.trip.api.business.bo.sales.SalesDomain" resultMap="SalesMap">
+        SELECT   ss.user_id,u.real_name,ss.id,s.store_name,u.phone,u.address,(select real_name from user a where a.id=ss.invite_User_Id) invite_User_Id,sales_Level,commission_Rate
+        ,(select count(1) from order_info  where user_id in (select user_id from store_sales sq where s1.invite_User_Id =u.user_id))  ordercnt
+        FROM `store_sales ss,user u,store s`
+      where   ss.user_Id=u.id and s.id=ss.store_id
+            <if test="userName!=null and userName!='' ">
+                and u.real_name like CONCAT('%', #{userName}, '%')
+            </if>
+        <if test="store!=null and store!='' ">
+            and s.id=#{store}
+        </if>
+        <if test="commissionRate!=null and commissionRate!='' ">
+            and commission_Rate=#{commissionRate}
+        </if>
+        <if test="sales_Level!=null and sales_Level!='' ">
+            and sales_Level=#{sales_Level}
+        </if>
+            <if test="isDelete!=null ">
+                and is_delete=#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
+            </if>
+	</select>
+
+
+
+	
+</mapper>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yc.trip.api.business.dao.comment.CommentDao">
+
+    <!-- 对象与字段映射 -->
+    <resultMap type="com.yc.trip.api.business.bo.comment.CommentDomain" id="comment">
+
+        <result property="id" column="id" />
+
+        <result property="orderId" column="orderid" />
+
+        <result property="comment" column="comment" />
+
+        <result property="createdTime" column="created_time" />
+
+        <result property="commentStatus" column="comment_status" />
+
+        <result property="commentPic1" column="comment_pic_1" />
+        <result property="commentPic2" column="comment_pic_2" />
+        <result property="commentPic3" column="comment_pic_3" />
+        <result property="commentPic4" column="comment_pic_4" />
+        <result property="commentPic5" column="comment_pic_5" />
+        <result property="grade" column="grade" />
+        <result property="planGrade" column="plan_Grade" />
+        <result property="guideGrade" column="guide_Grade" />
+        <result property="goodsGrade" column="goods_Grade" />
+        <result property="trafficGrade" column="traffic_Grade" />
+    </resultMap>
+
+    <select id="queryCommentList"  resultMap="comment" parameterType="com.yc.trip.api.business.bo.comment.CommentDomain">
+        select t.orderid,p.name, t.amout,customer,phone,provider_name provider_id,
+        store_name store_id,real_name sales_id,order_status ,comment_status,grade from `order_info` t,product p,provider pr,store s,store_sales ss,user  u,product_comment  pc where t.product_id=p.id and pr.id=t.provider_id
+        and s.id=t.store_id and  ss.store_id=s.id and ss.id=t.sales_id and ss.user_id=u.id and pc.orderid=t.orderid
+        <if test="customer!=null and customer!='' ">
+            AND customer like CONCAT('%', #{customer}, '%')
+        </if>
+
+        <if test="storeId!=null ">
+            AND store_id=#{storeId,jdbcType=VARCHAR}
+        </if>
+        <if test="providerId!=null ">
+            AND provider_id=#{providerId,jdbcType=NUMERIC}
+        </if>
+        <if test="orderStatus!=null ">
+            AND order_status=#{orderStatus, javaType=com.yc.trip.api.business.enums.order.OrderStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
+        </if>
+    </select>
+
+    <select id="getCommentByOrderId"  resultMap="comment" parameterType="string">
+        select   o.orderid,o.customer,phone,c.created_time,grade,plan_Grade,guide_Grade,goods_Grade,traffic_Grade,comment_pic_1,comment_pic_2,comment_pic_3,comment_pic_4,comment_pic_5,comment from  product_comment c,order_info o where  c.orderid=o.orderid and  orderid=#{value};
+    </select>
+
+    <update id="updateCommentStatus"  parameterMap="comment">
+        update product_comment  set comment_status=#{commentStatus} where orderid=#{orderId}
+    </update>
+	
+
+	
+</mapper>

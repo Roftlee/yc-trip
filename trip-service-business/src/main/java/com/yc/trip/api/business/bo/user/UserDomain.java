@@ -91,6 +91,8 @@ public class UserDomain extends BaseDomain implements Serializable {
 	 */
 	private Date updatedTime;
 
+	private String address;
+
     
     //-------------------- 扩展属性--------------------------
      /**

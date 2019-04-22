@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yc.trip.api.business.dao.order.OrderConstractDao">
+
+    <!-- 对象与字段映射 -->
+    <resultMap type="com.yc.trip.api.business.bo.order.OrderConstractDomain" id="OrderConstractMap">
+        <!--  -->
+        <result property="id" column="id" />
+        <!-- 订单Id -->
+        <result property="orderId" column="orderid" />
+        <!-- 可分配积分 -->
+        <result property="constrctPic" column="constract_pic" />
+        <!-- 销售推介人分成比例(百分比) -->
+        <result property="userId" column="userid" />
+        <!-- 推介人积分 -->
+        <result property="updateTime" column="update_time" />
+    </resultMap>
+
+    <!-- 新增订单合同信息 -->
+    <insert id="addOrderConstrct" parameterType="com.yc.trip.api.business.bo.order.OrderConstractDomain" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO `order_constract`(
+            orderid,
+            constract_pic,
+            userid)
+        VALUES(
+            #{orderId,jdbcType=NUMERIC},
+            #{constrctPic,jdbcType=VARCHAR},
+            #{userId,jdbcType=NUMERIC})
+        )	
+    </insert>
+	
+
+	
+</mapper>

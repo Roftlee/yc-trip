@@ -131,6 +131,12 @@ public class OrderInfoDomain extends BaseDomain implements Serializable {
 	 */
 	private Date updatedTime;
 
+
+	/**
+	 * 生成订单编号
+	 */
+	private String orderid;
+
     
     //-------------------- 扩展属性--------------------------
      /**
