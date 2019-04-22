@@ -22,7 +22,7 @@ import lombok.NoArgsConstructor;
  * 用户信息Domain类
  * 
  * @author My-Toolkits
- * @since 2019-03-21 22:31
+ * @since 2019-04-22 16:52
  */
 @Data
 @Builder
@@ -72,6 +72,11 @@ public class UserDomain extends BaseDomain implements Serializable {
 	 * 头像
 	 */
 	private String avatar;
+
+	/**
+	 * 邀请人id
+	 */
+	private Long inviterId;
 
 	/**
 	 * 是否删除0否1是(枚举:YesNoStatus[core])
