@@ -9,8 +9,11 @@ import com.yc.trip.api.business.facade.provider.ProviderFacade;
 import com.yc.trip.api.business.facade.provider.ProviderProfFacade;
 import com.yc.trip.api.business.facade.user.UserFacade;
 import com.yc.trip.api.business.item.provider.ProviderItem;
+import com.yc.trip.api.business.request.common.IdRequest;
 import com.yc.trip.api.business.request.provider.ProviderAddRequest;
 import com.yc.trip.api.business.request.provider.ProviderPageRequest;
+import com.yc.trip.api.business.request.provider.ProviderUpdateRequest;
+import com.yc.trip.api.core.enums.YesNoStatus;
 import com.yc.trip.web.controller.base.AbstractBaseController;
 import org.go.api.core.dto.ResDto;
 import org.go.framework.base.annotation.MvcValidate;
@@ -50,6 +53,7 @@ public class ProviderController extends AbstractBaseController {
 
     /**
      * 查询供应商列表分页
+     *
      * @param request
      * @return
      * @throws PendingException
@@ -68,6 +72,7 @@ public class ProviderController extends AbstractBaseController {
 
     /**
      * 新增供应商
+     *
      * @param request
      * @return
      * @throws PendingException
@@ -81,6 +86,48 @@ public class ProviderController extends AbstractBaseController {
             ResCode.SYS_FAIL.throwException("当前用户没有权限");
         }
 
-        return new ResDto<>(providerProfFacade.queryProviderPage(request));
+        providerProfFacade.addProvider(request);
+
+        return new ResDto<>();
+    }
+
+    /**
+     * 更新供应商
+     *
+     * @param request
+     * @return
+     * @throws PendingException
+     */
+    @RequestMapping(value = "/updateProvider.do", method = RequestMethod.POST)
+    @MvcValidate
+    ResDto<?> updateProvider(@RequestBody ProviderUpdateRequest request) throws PendingException {
+
+        // 验证用户权限
+        if (UserType.ADMIN.equals(getSessionUser().getUserType())) {
+            ResCode.SYS_FAIL.throwException("当前用户没有权限");
+        }
+
+        providerProfFacade.updateProvider(request);
+
+        return new ResDto<>();
+    }
+
+    /**
+     * 删除供应商
+     *
+     * @param request
+     * @return
+     * @throws PendingException
+     */
+    @RequestMapping(value = "/deleteProvider.do", method = RequestMethod.POST)
+    @MvcValidate
+    ResDto<?> deleteProvider(@RequestBody IdRequest request) throws PendingException {
+
+        // 验证用户权限
+        if (UserType.ADMIN.equals(getSessionUser().getUserType())) {
+            ResCode.SYS_FAIL.throwException("当前用户没有权限");
+        }
+
+        return new ResDto<>(providerFacade.updateProvider(Provider.builder().id(request.getId()).isDelete(YesNoStatus.YES).build()));
     }
 }

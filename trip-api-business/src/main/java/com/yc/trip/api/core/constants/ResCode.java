@@ -178,6 +178,9 @@ public class ResCode extends Res {
     public static final ResBean specialOfferProductDBError = new ResBean("B3902","数据库操作异常");
     public static final ResBean specialOfferProductDBGetNull = new ResBean("B3903","未查询到优惠活动产品信息");
 
+    public static final ResBean merchantAccountDBParamInvalid= new ResBean("B4001","参数未通过校验");
+    public static final ResBean merchantAccountDBError = new ResBean("B4002","数据库操作异常");
+    public static final ResBean merchantAccountDBGetNull = new ResBean("B4003","未查询到商户账号信息");
 
     // ========================== business服务返回码 ===============================
 

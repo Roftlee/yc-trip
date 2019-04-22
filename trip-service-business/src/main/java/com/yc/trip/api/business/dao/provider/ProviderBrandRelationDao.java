@@ -3,6 +3,7 @@ package com.yc.trip.api.business.dao.provider;
 import java.util.List;
 
 import com.yc.trip.api.business.bo.provider.ProviderBrandRelationDomain;
+import com.yc.trip.api.business.request.common.IdRequest;
 
 /**
  * 供应商品牌关联信息Dao类
@@ -33,4 +34,8 @@ public interface ProviderBrandRelationDao {
      */
     List<ProviderBrandRelationDomain> queryProviderBrandRelationList(ProviderBrandRelationDomain providerBrandRelationDomain);
 
+    /**
+     * 删除供应商品牌关联信息列表
+     */
+    void deleteProviderBrandRelation(IdRequest idRequest);
 }

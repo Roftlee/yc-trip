@@ -3,6 +3,7 @@ package com.yc.trip.api.business.service.provider;
 import java.util.List;
 
 
+import com.yc.trip.api.business.request.common.IdRequest;
 import org.go.api.core.integration.AbstractDubboNativeService;
 import org.go.api.core.util.BeanMapping;
 import org.go.framework.core.exception.PendingException;
@@ -170,4 +171,19 @@ public class ProviderBrandRelationFacadeImpl extends AbstractDubboNativeService 
         }
     }
 
+    /**
+     * 删除供应商品牌关联信息列表
+     *
+     * @throws PendingException
+     */
+    @Override
+    public void deleteProviderBrandRelation(IdRequest idRequest) throws PendingException {
+        try {
+            // 调数据库接口进行新增操作
+            providerBrandRelationDao.deleteProviderBrandRelation(idRequest);
+        } catch (Exception ex) {
+            // 对异常进行处理
+            throw transferException(ex, ResCode.providerBrandRelationDBError, "删除供应商品牌关联信息列表失败");
+        }
+    }
 }

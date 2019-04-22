@@ -9,20 +9,26 @@ import org.go.api.core.bean.ResBean;
 import org.go.api.core.dto.AbstractBaseRequestDto;
 import org.go.framework.base.annotation.MvcOptional;
 
+import java.util.Date;
 import java.util.List;
 
 /**
- * ProviderAddRequest
+ * ProviderUpdateRequest
  *
  * @author: AsiQue
- * @date: 2019.04.22 19:49
+ * @date: 2019.04.22 21:26
  */
 @Builder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class ProviderAddRequest extends AbstractBaseRequestDto {
+public class ProviderUpdateRequest extends AbstractBaseRequestDto {
+
+    /**
+     * 供应商id
+     */
+    private Long id;
 
     /**
      * 供应商名称
@@ -32,6 +38,7 @@ public class ProviderAddRequest extends AbstractBaseRequestDto {
     /**
      * 头像
      */
+    @MvcOptional
     private String avatar;
 
     /**
@@ -69,17 +76,21 @@ public class ProviderAddRequest extends AbstractBaseRequestDto {
     private String contractUrl;
 
     /**
-     * 购买天数
-     */
-    private Integer purchaseDates;
-
-    /**
      * 关联品牌id列表
      */
     private List<Long> brandIds;
 
+    /**
+     * 子账号列表
+     */
+    @MvcOptional
+    private List<MerchantAccount> accounts;
+
     @Override
     public ResBean validateParam() {
+        if (id == null || id <= 0) {
+            return ResCode.PARA_NULL.info("供应商id不能为空");
+        }
         if (StringUtils.isBlank(providerName)) {
             return ResCode.PARA_NULL.info("供应商名称不能为空");
         }
@@ -88,9 +99,6 @@ public class ProviderAddRequest extends AbstractBaseRequestDto {
         }
         if (subCount == null || subCount <= 0) {
             return ResCode.PARA_NULL.info("子账号个数不能为空");
-        }
-        if (purchaseDates == null || purchaseDates <= 0) {
-            return ResCode.PARA_NULL.info("购买天数不能为空");
         }
         if (CollectionUtils.isEmpty(brandIds)) {
             return ResCode.PARA_NULL.info("关联品牌id列表不能为空");

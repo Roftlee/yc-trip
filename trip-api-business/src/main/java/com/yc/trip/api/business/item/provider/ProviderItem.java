@@ -66,6 +66,16 @@ public class ProviderItem implements Serializable {
     private Integer usedSubCount;
 
     /**
+     * 营业执照
+     */
+    private String licenseUrl;
+
+    /**
+     * 合同文件
+     */
+    private String contractUrl;
+
+    /**
      * 注册时间
      */
     private Date createdTime;

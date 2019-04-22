@@ -2,6 +2,7 @@ package com.yc.trip.api.business.facade.provider;
 
 import java.util.List;
 
+import com.yc.trip.api.business.request.common.IdRequest;
 import org.go.framework.core.exception.PendingException;
 
 import com.github.pagehelper.PageInfo;
@@ -51,4 +52,9 @@ public interface ProviderBrandRelationFacade {
      */
     PageInfo<ProviderBrandRelation> queryProviderBrandRelationPage(ProviderBrandRelation providerBrandRelation) throws PendingException;
 
+    /**
+     * 删除供应商品牌关联信息列表
+     * @throws PendingException
+     */
+    void deleteProviderBrandRelation(IdRequest idRequest) throws PendingException;
 }

@@ -91,5 +91,10 @@
             </if>
         </where>	
     </select>
+
+    <!-- 删除供应商品牌关联信息列表 -->
+    <delete id="deleteProviderBrandRelation" parameterType="com.yc.trip.api.business.request.common.IdRequest">
+        delete from provider_brand_relation where provider_id = #{id}
+    </delete>
 	
 </mapper>
