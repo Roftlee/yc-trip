@@ -68,12 +68,6 @@ public class StoreDomain extends BaseDomain implements Serializable {
 	private String address;
 
 	/**
-	 * 有效天数
-	 */
-	@InsertRequired
-	private Integer totalDays;
-
-	/**
 	 * 到期时间
 	 */
 	@InsertRequired
@@ -99,7 +93,17 @@ public class StoreDomain extends BaseDomain implements Serializable {
 
     
     //-------------------- 扩展属性--------------------------
-     /**
+	/**
+	 * 开始时间
+	 */
+	private Date queryStartTime;
+
+	/**
+	 * 结束时间
+	 */
+	private Date queryEndTime;
+
+	/**
      * id列表
      */
     private List<Long> ids;

@@ -17,8 +17,6 @@
         <result property="linkNum" column="link_num" />
         <!-- 门店地址 -->
         <result property="address" column="address" />
-        <!-- 有效天数 -->
-        <result property="totalDays" column="total_days" />
         <!-- 到期时间 -->
         <result property="endTime" column="end_time" />
         <!-- 是否删除0否1是(枚举:YesNoStatus[core]) -->
@@ -37,7 +35,6 @@
             link_man,
             link_num,
             address,
-            total_days,
             end_time,
             is_delete)
         VALUES(
@@ -46,7 +43,6 @@
             #{linkMan,jdbcType=VARCHAR},
             #{linkNum,jdbcType=VARCHAR},
             #{address,jdbcType=VARCHAR},
-            #{totalDays,jdbcType=NUMERIC},
             #{endTime,jdbcType=TIMESTAMP},
             #{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
         )	
@@ -71,9 +67,6 @@
             <if test="address!=null and address!='' ">
             address=#{address,jdbcType=VARCHAR},
             </if>
-            <if test="totalDays!=null ">
-            total_days=#{totalDays,jdbcType=NUMERIC},
-            </if>
             <if test="endTime!=null ">
             end_time=#{endTime,jdbcType=TIMESTAMP},
             </if>
@@ -93,7 +86,7 @@
     <!-- 查询门店信息 -->
 	<select id="getStore" parameterType="com.yc.trip.api.business.bo.store.StoreDomain" resultMap="StoreMap">
         SELECT id,store_name,brand_id,link_man,
-           link_num,address,total_days,end_time,
+           link_num,address,end_time,
            is_delete,created_time,updated_time
         FROM `store`
         <where>
@@ -115,9 +108,6 @@
             <if test="address!=null and address!='' ">
                 and address=#{address,jdbcType=VARCHAR}
             </if>
-            <if test="totalDays!=null ">
-                and total_days=#{totalDays,jdbcType=NUMERIC}
-            </if>
             <if test="isDelete!=null ">
                 and is_delete=#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
             </if>
@@ -128,7 +118,7 @@
     <!-- 查询门店信息列表 -->
     <select id="queryStoreList" parameterType="com.yc.trip.api.business.bo.store.StoreDomain" resultMap="StoreMap">
             SELECT t.id,t.store_name,t.brand_id,t.link_man,
-            t.link_num,t.address,t.total_days,t.end_time,
+            t.link_num,t.address,t.end_time,
             t.is_delete,t.created_time,t.updated_time
             FROM `store` t 
         <where>
@@ -147,18 +137,12 @@
             <if test="address!=null and address!='' ">
                 AND address=#{address,jdbcType=VARCHAR}
             </if>
-            <if test="totalDays!=null ">
-                AND total_days=#{totalDays,jdbcType=NUMERIC}
-            </if>
             <if test="isDelete!=null ">
                 AND is_delete=#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
             </if>
             <if test="keywords!=null and keywords!='' ">
                 AND (
                      store_name LIKE CONCAT('%', #{keywords}, '%')
-                     OR link_man LIKE CONCAT('%', #{keywords}, '%')
-                     OR link_num LIKE CONCAT('%', #{keywords}, '%')
-                     OR address LIKE CONCAT('%', #{keywords}, '%')
                  )
             </if>
             <if test="ids!=null and ids.size!=0 ">
@@ -166,6 +150,12 @@
                     <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">  
                         #{item}
                     </foreach>
+            </if>
+            <if test="queryStartTime!=null">
+                AND t.created_time >= #{queryStartTime}
+            </if>
+            <if test="queryEndTime!=null">
+                <![CDATA[ AND t.created_time <= #{queryEndTime"} ]]>
             </if>
         </where>	
     </select>

@@ -64,11 +64,6 @@ public class Store extends AbstractBasePageRequestDto {
 	private String address;
 
 	/**
-	 * 有效天数
-	 */
-	private Integer totalDays;
-
-	/**
 	 * 到期时间
 	 */
 	private Date endTime;
@@ -93,6 +88,16 @@ public class Store extends AbstractBasePageRequestDto {
 
     
     //-------------------- 扩展属性--------------------------
+	/**
+	 * 开始时间
+	 */
+	private Date queryStartTime;
+
+	/**
+	 * 结束时间
+	 */
+	private Date queryEndTime;
+
      /**
      * id列表
      */

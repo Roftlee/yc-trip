@@ -120,13 +120,20 @@ public class ProviderProfFacadeImpl extends AbstractDubboIntegrationService impl
                 Provider provider = providerFacade.addProvider(toAdd);
 
                 // 新增供应商主账号用户信息
-                User user = userFacade.addUser(User.builder()
-                        .name(provider.getLinkMan())
-                        .avatar(request.getAvatar())
-                        .phone(provider.getLinkNum())
-                        .userType(UserType.PROVIDER_MANAGER)
-                        .isDelete(YesNoStatus.NO)
-                        .build());
+                // 查询手机号是否已注册用户
+                User user = userFacade.getUser(User.builder().phone(request.getLinkNum()).build());
+                // 用户不存在时，新增用户
+                if (user == null) {
+                    user = userFacade.addUser(User.builder()
+                            .name(provider.getLinkMan())
+                            .avatar(request.getAvatar())
+                            .phone(provider.getLinkNum())
+                            .userType(UserType.PROVIDER_MANAGER)
+                            .isDelete(YesNoStatus.NO)
+                            .build());
+                } else {// 用户存在时，更新用户信息
+                    userFacade.updateUser(User.builder().id(user.getId()).userType(UserType.PROVIDER_MANAGER).build());
+                }
                 // 新增供应商主账号信息
                 merchantAccountFacade.addMerchantAccount(MerchantAccount.builder()
                         .userId(user.getId())
@@ -134,6 +141,7 @@ public class ProviderProfFacadeImpl extends AbstractDubboIntegrationService impl
                         .merchantType(MerchantType.PROVIDER)
                         .accountType(AccountType.PRIMARY)
                         .endTime(provider.getEndTime())
+                        .isDelete(YesNoStatus.NO)
                         .build());
 
                 // 处理品牌关联
@@ -162,23 +170,29 @@ public class ProviderProfFacadeImpl extends AbstractDubboIntegrationService impl
         newTransactionTemplate.execute(status -> {
             try {
                 // 更新供应商信息
-                Provider toUpdate = BeanMapping.map(request, Provider.class);
-                Provider provider = providerFacade.updateProvider(toUpdate);
+                providerFacade.updateProvider(BeanMapping.map(request, Provider.class));
+
+                // 查询供应商主账号信息
+                MerchantAccount primaryAccount = merchantAccountFacade.mustGet(MerchantAccount.builder()
+                        .merchantId(request.getId())
+                        .merchantType(MerchantType.PROVIDER)
+                        .accountType(AccountType.PRIMARY)
+                        .isDelete(YesNoStatus.NO)
+                        .build());
 
                 // 更新供应商主账号用户信息
-                User user = userFacade.updateUser(User.builder()
+                userFacade.updateUser(User.builder()
+                        .id(primaryAccount.getUserId())
                         .name(request.getLinkMan())
                         .avatar(request.getAvatar())
                         .phone(request.getLinkNum())
-                        .userType(UserType.PROVIDER_MANAGER)
-                        .isDelete(YesNoStatus.NO)
                         .build());
                 // 删除品牌关联
                 providerBrandRelationFacade.deleteProviderBrandRelation(IdRequest.builder().id(request.getId()).build());
                 // 处理品牌关联
                 for (Long brandId : request.getBrandIds()) {
                     providerBrandRelationFacade.addProviderBrandRelation(ProviderBrandRelation.builder()
-                            .providerId(provider.getId())
+                            .providerId(request.getId())
                             .brandId(brandId)
                             .build());
                 }

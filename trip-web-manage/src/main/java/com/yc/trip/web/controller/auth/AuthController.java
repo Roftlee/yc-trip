@@ -74,6 +74,10 @@ public class AuthController extends AbstractBaseController {
                 ResCode.userDBError.throwException("用户被禁用");
             }
 
+            if (UserType.CUSTOMER.equals(user.getUserType())) {
+                ResCode.SYS_FAIL.throwException("当前账号没有权限");
+            }
+
             // 供应商验证服务有效期
             if (UserType.PROVIDER_MANAGER.equals(user.getUserType()) || UserType.PROVIDER_SALES.equals(user.getUserType())) {
                 if (merchantAccountFacade.mustGet(MerchantAccount.builder().userId(user.getId()).build()).getEndTime().before(DateUtil.getDate())) {
