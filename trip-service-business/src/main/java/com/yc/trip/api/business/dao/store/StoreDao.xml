@@ -19,6 +19,10 @@
         <result property="address" column="address" />
         <!-- 到期时间 -->
         <result property="endTime" column="end_time" />
+        <!-- 营业执照 -->
+        <result property="licenseUrl" column="license_url" />
+        <!-- 合同文件 -->
+        <result property="contractUrl" column="contract_url" />
         <!-- 是否删除0否1是(枚举:YesNoStatus[core]) -->
         <result property="isDelete" column="is_delete"  javaType="com.yc.trip.api.core.enums.YesNoStatus"  typeHandler="org.go.api.core.typehandler.UniversalEnumHandler" />
         <!-- 创建时间 -->
@@ -36,6 +40,8 @@
             link_num,
             address,
             end_time,
+            license_url,
+            contract_url,
             is_delete)
         VALUES(
             #{storeName,jdbcType=VARCHAR},
@@ -44,6 +50,8 @@
             #{linkNum,jdbcType=VARCHAR},
             #{address,jdbcType=VARCHAR},
             #{endTime,jdbcType=TIMESTAMP},
+            #{licenseUrl,jdbcType=VARCHAR},
+            #{contractUrl,jdbcType=VARCHAR},
             #{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
         )	
     </insert>
@@ -70,6 +78,12 @@
             <if test="endTime!=null ">
             end_time=#{endTime,jdbcType=TIMESTAMP},
             </if>
+            <if test="licenseUrl!=null and licenseUrl!='' ">
+            license_url=#{licenseUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="contractUrl!=null and contractUrl!='' ">
+            contract_url=#{contractUrl,jdbcType=VARCHAR},
+            </if>
             <if test="isDelete!=null ">
             is_delete=#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC},
             </if>
@@ -86,8 +100,8 @@
     <!-- 查询门店信息 -->
 	<select id="getStore" parameterType="com.yc.trip.api.business.bo.store.StoreDomain" resultMap="StoreMap">
         SELECT id,store_name,brand_id,link_man,
-           link_num,address,end_time,
-           is_delete,created_time,updated_time
+           link_num,address,end_time,license_url,
+           contract_url,is_delete,created_time,updated_time
         FROM `store`
         <where>
             <if test="id!=null ">
@@ -108,6 +122,12 @@
             <if test="address!=null and address!='' ">
                 and address=#{address,jdbcType=VARCHAR}
             </if>
+            <if test="licenseUrl!=null and licenseUrl!='' ">
+                and license_url=#{licenseUrl,jdbcType=VARCHAR}
+            </if>
+            <if test="contractUrl!=null and contractUrl!='' ">
+                and contract_url=#{contractUrl,jdbcType=VARCHAR}
+            </if>
             <if test="isDelete!=null ">
                 and is_delete=#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}
             </if>
@@ -118,8 +138,8 @@
     <!-- 查询门店信息列表 -->
     <select id="queryStoreList" parameterType="com.yc.trip.api.business.bo.store.StoreDomain" resultMap="StoreMap">
             SELECT t.id,t.store_name,t.brand_id,t.link_man,
-            t.link_num,t.address,t.end_time,
-            t.is_delete,t.created_time,t.updated_time
+            t.link_num,t.address,t.end_time,t.license_url,
+            t.contract_url,t.is_delete,t.created_time,t.updated_time
             FROM `store` t 
         <where>
             <if test="storeName!=null and storeName!='' ">
@@ -136,6 +156,12 @@
             </if>
             <if test="address!=null and address!='' ">
                 AND address=#{address,jdbcType=VARCHAR}
+            </if>
+            <if test="licenseUrl!=null and licenseUrl!='' ">
+                AND license_url=#{licenseUrl,jdbcType=VARCHAR}
+            </if>
+            <if test="contractUrl!=null and contractUrl!='' ">
+                AND contract_url=#{contractUrl,jdbcType=VARCHAR}
             </if>
             <if test="isDelete!=null ">
                 AND is_delete=#{isDelete, javaType=com.yc.trip.api.core.enums.YesNoStatus, typeHandler=org.go.api.core.typehandler.UniversalEnumHandler, jdbcType=NUMERIC}

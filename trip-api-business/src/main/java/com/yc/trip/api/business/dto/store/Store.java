@@ -21,7 +21,7 @@ import lombok.NoArgsConstructor;
  * 门店信息Dto类
  * 
  * @author My-Toolkits
- * @since 2019-04-23 22:03
+ * @since 2019-04-23 23:49
  */
 @Builder
 @Data
@@ -67,6 +67,16 @@ public class Store extends AbstractBasePageRequestDto {
 	 * 到期时间
 	 */
 	private Date endTime;
+
+	/**
+	 * 营业执照
+	 */
+	private String licenseUrl;
+
+	/**
+	 * 合同文件
+	 */
+	private String contractUrl;
 
 	/**
 	 * 是否删除0否1是(枚举:YesNoStatus[core])

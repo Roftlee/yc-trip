@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
  * 门店信息Domain类
  * 
  * @author My-Toolkits
- * @since 2019-04-23 22:03
+ * @since 2019-04-23 23:49
  */
 @Data
 @Builder
@@ -72,6 +72,16 @@ public class StoreDomain extends BaseDomain implements Serializable {
 	 */
 	@InsertRequired
 	private Date endTime;
+
+	/**
+	 * 营业执照
+	 */
+	private String licenseUrl;
+
+	/**
+	 * 合同文件
+	 */
+	private String contractUrl;
 
 	/**
 	 * 是否删除0否1是(枚举:YesNoStatus[core])
