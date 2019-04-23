@@ -10,8 +10,6 @@ import com.yc.trip.api.business.request.brand.BrandAddRequest;
 import com.yc.trip.api.business.request.brand.BrandUpdateRequest;
 import com.yc.trip.api.business.request.common.IdRequest;
 import com.yc.trip.api.business.request.common.PageRequest;
-import com.yc.trip.api.business.request.store.BrandAddRequest;
-import com.yc.trip.api.business.request.store.BrandUpdateRequest;
 import com.yc.trip.api.core.enums.YesNoStatus;
 import com.yc.trip.web.controller.base.AbstractBaseController;
 import org.go.api.core.dto.ResDto;
