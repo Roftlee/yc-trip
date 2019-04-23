@@ -8,6 +8,7 @@ import org.go.api.core.dto.AbstractBasePageRequestDto;
 
 import com.yc.trip.api.core.constants.ResCode;
 
+import com.yc.trip.api.core.enums.YesNoStatus;
 
 
 import lombok.AllArgsConstructor;
@@ -20,7 +21,7 @@ import lombok.NoArgsConstructor;
  * 门店信息Dto类
  * 
  * @author My-Toolkits
- * @since 2019-03-21 22:22
+ * @since 2019-04-23 22:03
  */
 @Builder
 @Data
@@ -41,6 +42,11 @@ public class Store extends AbstractBasePageRequestDto {
 	 * 门店名称
 	 */
 	private String storeName;
+
+	/**
+	 * 关联品牌id
+	 */
+	private Long brandId;
 
 	/**
 	 * 联系人
@@ -66,6 +72,12 @@ public class Store extends AbstractBasePageRequestDto {
 	 * 到期时间
 	 */
 	private Date endTime;
+
+	/**
+	 * 是否删除0否1是(枚举:YesNoStatus[core])
+	 * 默认值：0
+	 */
+	private YesNoStatus isDelete;
 
 	/**
 	 * 创建时间

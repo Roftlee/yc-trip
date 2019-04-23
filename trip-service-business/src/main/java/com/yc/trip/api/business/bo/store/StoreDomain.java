@@ -7,6 +7,7 @@ import java.util.List;
 import org.go.api.core.annotation.InsertRequired;
 import org.go.api.core.bo.BaseDomain;
 
+import com.yc.trip.api.core.enums.YesNoStatus;
 
 
 import lombok.AllArgsConstructor;
@@ -19,7 +20,7 @@ import lombok.NoArgsConstructor;
  * 门店信息Domain类
  * 
  * @author My-Toolkits
- * @since 2019-03-21 22:22
+ * @since 2019-04-23 22:03
  */
 @Data
 @Builder
@@ -41,6 +42,12 @@ public class StoreDomain extends BaseDomain implements Serializable {
 	 */
 	@InsertRequired
 	private String storeName;
+
+	/**
+	 * 关联品牌id
+	 */
+	@InsertRequired
+	private Long brandId;
 
 	/**
 	 * 联系人
@@ -71,6 +78,12 @@ public class StoreDomain extends BaseDomain implements Serializable {
 	 */
 	@InsertRequired
 	private Date endTime;
+
+	/**
+	 * 是否删除0否1是(枚举:YesNoStatus[core])
+	 * 默认值：0
+	 */
+	private YesNoStatus isDelete;
 
 	/**
 	 * 创建时间
