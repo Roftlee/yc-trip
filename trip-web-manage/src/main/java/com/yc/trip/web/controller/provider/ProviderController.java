@@ -23,6 +23,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 /**
  * ProviderController
  *
@@ -68,6 +70,19 @@ public class ProviderController extends AbstractBaseController {
         }
 
         return new ResDto<>(providerProfFacade.queryProviderPage(request));
+    }
+
+    /**
+     * 查询供应商列表
+     *
+     * @return
+     * @throws PendingException
+     */
+    @RequestMapping(value = "/queryProviderList.do", method = RequestMethod.POST)
+    @MvcValidate
+    ResDto<List<Provider>> queryProviderList() throws PendingException {
+
+        return new ResDto<>(providerFacade.queryProviderList(Provider.builder().isDelete(YesNoStatus.NO).build()));
     }
 
     /**
