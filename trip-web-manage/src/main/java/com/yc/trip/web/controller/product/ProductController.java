@@ -3,8 +3,10 @@ package com.yc.trip.web.controller.product;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.github.pagehelper.PageInfo;
 import com.yc.trip.api.business.dto.product.Product;
+import com.yc.trip.api.business.enums.user.UserType;
 import com.yc.trip.api.business.facade.product.ProductFacade;
 import com.yc.trip.api.business.facade.product.ProductProfFacade;
+import com.yc.trip.api.business.facade.user.MerchantAccountFacade;
 import com.yc.trip.api.business.item.product.ProductDetailItem;
 import com.yc.trip.api.business.item.product.ProductItem;
 import com.yc.trip.api.business.request.common.IdRequest;
@@ -37,6 +39,9 @@ public class ProductController extends AbstractBaseController {
     @Reference(version = "1.0.0")
     private ProductProfFacade productProfFacade;// 产品高级服务
 
+    @Reference(version = "1.0.0")
+    private MerchantAccountFacade merchantAccountFacade;// 商户账号服务
+
     /**
      * 产品-查询产品列表分页
      *
@@ -47,6 +52,10 @@ public class ProductController extends AbstractBaseController {
     @RequestMapping(value = "/queryProductPage.do", method = RequestMethod.POST)
     @MvcValidate
     public ResDto<PageInfo<ProductItem>> queryProductPage(@RequestBody ProductPageRequest request) throws PendingException {
+        // 非超管用户需要设置供应商信息
+        if (!UserType.ADMIN.equals(getSessionUser().getUserType())) {
+            request.setProviderId(getSessionUser().getMerchantId());
+        }
 
         return new ResDto<>(productProfFacade.queryProductPage(request));
     }
@@ -59,8 +68,13 @@ public class ProductController extends AbstractBaseController {
      * @throws PendingException
      */
     @RequestMapping(value = "/addProduct.do", method = RequestMethod.POST)
-    @MvcValidate
     public ResDto<?> addProduct(@RequestBody ProductAddRequest request) throws PendingException {
+        // 如果没有设置供应商信息，需要设置供应商信息
+        if (request.getProviderId() == null || request.getProviderId() == 0) {
+            request.setProviderId(getSessionUser().getMerchantId());
+        }
+        // 校验参数
+        validateThrow(request);
 
         productProfFacade.addProduct(request);
         return new ResDto<>();
