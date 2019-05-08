@@ -90,9 +90,14 @@ public class WxAuthController extends AbstractBaseController {
 
         // 获取用户信息
         User user = userFacade.getUser(User.builder().openId(mpCodeResponse.getOpenId()).build());
+        // 获取邀请人信息
         User inviter = null;
         if (wxCodeRequest.getInviterId() != null && wxCodeRequest.getInviterId() != 0) {
             inviter = userFacade.mustGet(User.builder().id(wxCodeRequest.getInviterId()).build());
+
+            if (YesNoStatus.YES.equals(inviter.getIsDelete())) {
+                ResCode.SYS_FAIL.throwException("邀请人已被禁用");
+            }
         }
 
         // 用户不存在，新增用户信息
@@ -104,20 +109,12 @@ public class WxAuthController extends AbstractBaseController {
                     .phone("0")// 默认手机号为0
                     .sex(Sex.Male)
                     .userType(UserType.CUSTOMER)// 默认游客身份
+                    .inviterId(wxCodeRequest.getInviterId())
                     .isDelete(YesNoStatus.NO)
                     .build());
-
-            // 通过邀请人分享链接进入小程序的用户，处理邀请人信息
-            if (inviter != null) {
-
-            }
-        } else {// TODO：已注册用户通过邀请人分享的链接进入小程序时如何处理？
-            StoreSales storeSales = storeSalesFacade.getStoreSales(StoreSales.builder().userId(wxCodeRequest.getInviterId()).build());
-            if (storeSales != null) {
-                storeCustomerFacade.addStoreCustomer(StoreCustomer.builder().userId(user.getId()).storeId(storeSales.getStoreId()).isVip(YesNoStatus.NO).build());
-            } else {
-                StoreCustomer storeCustomer = storeCustomerFacade.mustGet(StoreCustomer.builder().userId(wxCodeRequest.getInviterId()).build());
-                storeCustomerFacade.addStoreCustomer(StoreCustomer.builder().userId(user.getId()).storeId(storeCustomer.getStoreId()).isVip(YesNoStatus.NO).build());
+        } else {// 已注册用户但未绑定邀请人的，通过邀请人分享的链接进入小程序时绑定邀请人
+            if (user.getInviterId() == null || user.getInviterId() == 0) {
+                user = userFacade.updateUser(User.builder().id(user.getId()).inviterId(wxCodeRequest.getInviterId()).build());
             }
         }
 
